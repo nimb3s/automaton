@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nimb3s.Automaton.Messages",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nimb3s.Automaton.Job.Endpoint", "src\Nimb3s.Automaton.Job.Endpoint\Nimb3s.Automaton.Job.Endpoint.csproj", "{D79C2977-70BE-43BB-8F6F-D9EE8E3E0753}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Nimb3s.Automaton.Database", "src\Nimb3s.Automaton.Database\Nimb3s.Automaton.Database.sqlproj", "{4340356C-1BE1-4747-9F06-A6AFC4E7AAE9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,12 @@ Global
 		{D79C2977-70BE-43BB-8F6F-D9EE8E3E0753}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D79C2977-70BE-43BB-8F6F-D9EE8E3E0753}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D79C2977-70BE-43BB-8F6F-D9EE8E3E0753}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4340356C-1BE1-4747-9F06-A6AFC4E7AAE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4340356C-1BE1-4747-9F06-A6AFC4E7AAE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4340356C-1BE1-4747-9F06-A6AFC4E7AAE9}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{4340356C-1BE1-4747-9F06-A6AFC4E7AAE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4340356C-1BE1-4747-9F06-A6AFC4E7AAE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4340356C-1BE1-4747-9F06-A6AFC4E7AAE9}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

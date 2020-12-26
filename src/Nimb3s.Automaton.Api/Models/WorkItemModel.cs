@@ -28,13 +28,6 @@ namespace Nimb3s.Automaton.Api.Models
         Completed
     }
 
-    /// <summary>
-    /// The http request to be executed as part of an automation job work item.
-    /// </summary>
-    public class HttpRequestModel
-    {
-
-    }
 
     /// <summary>
     /// An automation job work item. A work item is composed of one or more HTTP Requests that neeed to be executed
@@ -59,9 +52,9 @@ namespace Nimb3s.Automaton.Api.Models
         public WorkItemStatus WorkItemStatus { get; set; }
 
         /// <summary>
-        /// The collection of <see cref="HttpRequestModel"/> to exeute.
+        /// The collection of <see cref="WorkItemHttpRequestModel"/> to exeute.
         /// </summary>
         [Required]
-        public IEnumerable<HttpRequestModel> HttpRequests { get; set; }
+        public IEnumerable<WorkItemHttpRequestModel> HttpRequests { get; set; }
     }
 }
