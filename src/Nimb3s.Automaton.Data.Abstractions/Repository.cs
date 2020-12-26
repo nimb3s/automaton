@@ -19,11 +19,6 @@ namespace Nimb3s.Data.Abstractions
 
             foreach (var property in properties)
             {
-                //// Skip reference types (but still include string!)
-                //if (property.PropertyType.IsClass && property.PropertyType != typeof(string))
-                //    continue;
-
-                // Skip methods without a public setter
                 if (property.GetSetMethod() == null)
                     continue;
 

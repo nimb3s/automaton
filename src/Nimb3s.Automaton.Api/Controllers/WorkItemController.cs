@@ -40,7 +40,7 @@ namespace Nimb3s.Automaton.Api.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpPost("api/automationjob/{automationJobId}/[controller]")]
-        public async Task<ActionResult> Post(string automationJobId, [FromBody] WorkItemModel workItem)
+        public async Task<ActionResult> Post(Guid automationJobId, [FromBody] WorkItemModel workItem)
         {
             if (workItem.WorkItemStatus != WorkItemStatus.Queued)
             {
@@ -52,7 +52,7 @@ namespace Nimb3s.Automaton.Api.Controllers
             }
 
             workItem.AutomationJobId = automationJobId;
-            workItem.WorkItemId = Guid.NewGuid().ToString();
+            workItem.WorkItemId = Guid.NewGuid();
             workItem.WorkItemStatus = WorkItemStatus.Queued;
 
             //TODO: if(automation job is not AutomationJobStatus.Queueing then reject the request
@@ -62,7 +62,7 @@ namespace Nimb3s.Automaton.Api.Controllers
             {
                 AutomationJobId = workItem.AutomationJobId,
                 WorkItemId = workItem.WorkItemId,
-                WorkItemStatus = Enum.GetName(typeof(WorkItemStatus), workItem.WorkItemStatus)
+                WorkItemStatusId = 0// Enum.GetName(typeof(WorkItemStatus), )
             });
 
             return Created($"/api/automationjob/{workItem.AutomationJobId}/workitem/{workItem.WorkItemId}", workItem);

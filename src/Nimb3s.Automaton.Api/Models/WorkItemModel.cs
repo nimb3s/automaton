@@ -38,12 +38,12 @@ namespace Nimb3s.Automaton.Api.Models
         /// The automation job id.
         /// </summary>
         [Required]
-        public string AutomationJobId { get; set; }
+        public Guid AutomationJobId { get; set; }
 
         /// <summary>
         /// The work item id.
         /// </summary>
-        public string WorkItemId { get; set; }
+        public Guid WorkItemId { get; set; }
 
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Nimb3s.Automaton.Core.Repositories;
 using Nimb3s.Automaton.Messages;
 using NServiceBus;
 using NServiceBus.Logging;
@@ -14,10 +15,18 @@ namespace Nimb3s.Automaton.Job.Endpoint
         static ILog log = LogManager.GetLogger<JobSumittedHandler>();
 
         #region MessageHandler
-        public Task Handle(UserSubmittedWorkItemMessage message, IMessageHandlerContext context)
+        public async Task Handle(UserSubmittedWorkItemMessage message, IMessageHandlerContext context)
         {
+            WorkItemRepository workItemRepository = new WorkItemRepository();
+
+            await workItemRepository.AddAsync(new Core.Entities.WorkItemEntity
+            {
+                Id = message.WorkItemId,
+                JobId = message.AutomationJobId,
+                WorkItemStatusId = message.WorkItemStatusId
+            });
+
             log.Info($"MESSAGE: {nameof(UserSubmittedWorkItemMessage)}; HANDLED BY: {nameof(JobSumittedHandler)}: {JsonConvert.SerializeObject(message)}");
-            return Task.CompletedTask;
         }
         #endregion
     }

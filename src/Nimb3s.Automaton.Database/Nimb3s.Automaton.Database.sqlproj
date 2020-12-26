@@ -70,5 +70,6 @@
     <Build Include="Job\Tables\WorkItemHttpRequestStatus.sql" />
     <Build Include="Job\Tables\WorkItemStatus.sql" />
     <Build Include="Job\Stored Procedures\p_InsertJob.sql" />
+    <Build Include="Job\Stored Procedures\p_InsertWorkItem.sql" />
   </ItemGroup>
 </Project>
