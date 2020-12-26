@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nimb3s.Automaton.Api", "src\Nimb3s.Automaton.Api\Nimb3s.Automaton.Api.csproj", "{6D2F2BC9-7762-44A8-AFE9-401C2A8C03D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nimb3s.Automaton.Api", "src\Nimb3s.Automaton.Api\Nimb3s.Automaton.Api.csproj", "{6D2F2BC9-7762-44A8-AFE9-401C2A8C03D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nimb3s.Automaton.Messages", "src\Nimb3s.Automaton.Messages\Nimb3s.Automaton.Messages.csproj", "{E306B901-B147-4153-87DF-DE4EB0019EF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nimb3s.Automaton.Messages", "src\Nimb3s.Automaton.Messages\Nimb3s.Automaton.Messages.csproj", "{E306B901-B147-4153-87DF-DE4EB0019EF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nimb3s.Automaton.Job.Endpoint", "src\Nimb3s.Automaton.Job.Endpoint\Nimb3s.Automaton.Job.Endpoint.csproj", "{D79C2977-70BE-43BB-8F6F-D9EE8E3E0753}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nimb3s.Automaton.Job.Endpoint", "src\Nimb3s.Automaton.Job.Endpoint\Nimb3s.Automaton.Job.Endpoint.csproj", "{D79C2977-70BE-43BB-8F6F-D9EE8E3E0753}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Nimb3s.Automaton.Database", "src\Nimb3s.Automaton.Database\Nimb3s.Automaton.Database.sqlproj", "{4340356C-1BE1-4747-9F06-A6AFC4E7AAE9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nimb3s.Data.Abstractions", "src\Nimb3s.Automaton.Data.Abstractions\Nimb3s.Data.Abstractions.csproj", "{F2DA65BC-6306-4522-AA68-7DFC74AD1DEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{4340356C-1BE1-4747-9F06-A6AFC4E7AAE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4340356C-1BE1-4747-9F06-A6AFC4E7AAE9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4340356C-1BE1-4747-9F06-A6AFC4E7AAE9}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{F2DA65BC-6306-4522-AA68-7DFC74AD1DEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2DA65BC-6306-4522-AA68-7DFC74AD1DEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2DA65BC-6306-4522-AA68-7DFC74AD1DEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2DA65BC-6306-4522-AA68-7DFC74AD1DEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
