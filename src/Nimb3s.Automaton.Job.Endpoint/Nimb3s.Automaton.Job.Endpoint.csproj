@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Nimb3s.Automaton.Core\Nimb3s.Automaton.Core.csproj" />
     <ProjectReference Include="..\Nimb3s.Automaton.Messages\Nimb3s.Automaton.Messages.csproj" />
   </ItemGroup>
 

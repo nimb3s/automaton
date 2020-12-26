@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace Nimb3s.Data.Abstractions
 {
     public static class Extensions
     {
-        public static Dictionary<string, object> ToKeyValuePair<T>(this IEntity<string> obj)
+        public static Dictionary<string, object> ToKeyValuePair<T>(this IEntity<Guid> obj)
         {
             Dictionary<string, object> paramCollection = new Dictionary<string, object>();
 
@@ -36,7 +37,7 @@ namespace Nimb3s.Data.Abstractions
             return paramCollection;
         }
 
-        public static Dictionary<string, object> ToPrimaryKey<T>(this IEntity<string> obj, string[] primaryKeyNames)
+        public static Dictionary<string, object> ToPrimaryKey<T>(this IEntity<Guid> obj, string[] primaryKeyNames)
         {
             Dictionary<string, object> paramCollection = new Dictionary<string, object>();
 
@@ -58,15 +59,17 @@ namespace Nimb3s.Data.Abstractions
 
 
     public abstract class Repository<T> : IRepository<T> 
-        where T: IEntity<string>, IDisposable
+        where T: IEntity<Guid>, IDisposable
     {
         private readonly string[] validEntityKeyNames = { "id" };
-        private readonly string entityName = nameof(T);
+        private readonly string entityName = typeof(T).Name.Replace("Entity", string.Empty);
         private readonly IDbConnection dbConnection;
 
         public virtual string Schema => "dbo";
-
-
+        public Repository()
+        {
+            this.dbConnection = new SqlConnection("Data Source=.\\SQLEXPRESS;Initial Catalog=Automaton;Integrated Security=true");
+        }
 
         public Repository(IDbConnection dbConnection)
         {

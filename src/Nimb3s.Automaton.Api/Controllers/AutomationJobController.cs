@@ -51,7 +51,7 @@ namespace Nimb3s.Automaton.Api.Controllers
                 });
             }
 
-            automationJob.AutomationJobId = Guid.NewGuid().ToString();
+            automationJob.AutomationJobId = Guid.NewGuid();
 
             //TODO: if(automation job is not AutomationJobStatus.Queueing then reject the request
             //TODO: if client is trying to set automation job to finished queueing or done do not let them return forbidden?
