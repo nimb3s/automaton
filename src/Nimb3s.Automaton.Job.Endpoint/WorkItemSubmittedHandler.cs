@@ -23,8 +23,17 @@ namespace Nimb3s.Automaton.Job.Endpoint
             {
                 Id = message.WorkItemId,
                 JobId = message.AutomationJobId,
-                WorkItemStatusId = message.WorkItemStatusId
+                WorkItemStatusId = (short)message.WorkItemStatus
             });
+
+
+            foreach (var item in message.HttpRequests)
+            {
+                await context.Send(new UserSubmittedHttpRequestMessage
+                {
+                    HttpRequest = item
+                }).ConfigureAwait(false);
+            }
 
             log.Info($"MESSAGE: {nameof(UserSubmittedWorkItemMessage)}; HANDLED BY: {nameof(JobSumittedHandler)}: {JsonConvert.SerializeObject(message)}");
         }

@@ -1,4 +1,4 @@
-﻿create procedure job.p_InsertJob
+﻿CREATE procedure job.p_InsertJob
  @Id uniqueidentifier,
  @JobName varchar(10),
  @JobStatusId smallint

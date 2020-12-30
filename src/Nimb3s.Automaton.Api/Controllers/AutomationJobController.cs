@@ -61,18 +61,21 @@ namespace Nimb3s.Automaton.Api.Controllers
             {
                 AutomationJobId = automationJob.AutomationJobId,
                 AutomationJobName = automationJob.Name,
-                AutomationJobStatus = Enum.GetName(typeof(AutomationJobStatus), automationJob.AutomationJobStatus)
+                AutomationJobStatus = automationJob.AutomationJobStatus
             });
 
             return Created($"/api/automationjob/{automationJob.AutomationJobId}", automationJob);
         }
 
+        /*
         // PUT api/<AutomationRequest>/asdf-asdf-asdf-asdf
         /// <summary>
         /// Creates a <see cref="WorkItemModel"/> item.
         /// </summary>
         /// <response code="201">Returns the newly created <see cref="WorkItemModel"/></response>
         /// <response code="400">When the jobid for this resource is not found</response> 
+        ///
+        */
         //[ProducesResponseType(StatusCodes.Status200OK)]
         //[ProducesResponseType(StatusCodes.Status201Created)]
         //[ProducesResponseType(StatusCodes.Status404NotFound)]

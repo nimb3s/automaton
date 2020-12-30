@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Nimb3s.Automaton.Api.Models;
 using Nimb3s.Automaton.Messages;
 using NServiceBus;
@@ -55,6 +56,79 @@ namespace Nimb3s.Automaton.Api.Controllers
             workItem.WorkItemId = Guid.NewGuid();
             workItem.WorkItemStatus = WorkItemStatus.Queued;
 
+            workItem.HttpRequests = new List<HttpRequestModel>
+            {
+                new HttpRequestModel
+                {
+                    HttpRequestId = Guid.NewGuid(),
+                    WorkItemHttpRequestStatus = WorkItemHttpRequestStatus.Queued,
+                    Url = "http://test.something.com/something/asf/asf/adf",
+                    Method = HttpMethods.Post,
+                    ContentType = "application/json",
+                    Content = JsonConvert.SerializeObject(new
+                    {
+                        Id = Guid.NewGuid(),
+                        Status = "some status"
+                    }),
+                        AuthenticationConfig = new HttpAuthenticationConfig
+                        {
+                            AuthenticationType = HttpAuthenticationType.OAuth20,
+                            AuthenticationOptions = new OAuth20AuthenticationConfig
+                            {
+                                Grant = new OAuth20ClientGrant
+                                {
+                                    ClientId = Guid.NewGuid().ToString(),
+                                    ClientSecret = Guid.NewGuid().ToString()
+                                }
+                            }
+                        }
+                },
+                new HttpRequestModel
+                {
+                    HttpRequestId = Guid.NewGuid(),
+                    WorkItemHttpRequestStatus = WorkItemHttpRequestStatus.Queued,
+                    Url = "http://test.something.com/something/asf/asf/adf",
+                    Method = HttpMethods.Post,
+                    ContentType = "application/json",
+                    Content = JsonConvert.SerializeObject(new
+                    {
+                        Id = Guid.NewGuid(),
+                        Status = "some status"
+                    }),
+                    AuthenticationConfig = new HttpAuthenticationConfig
+                    {
+                        AuthenticationType = HttpAuthenticationType.OAuth20,
+                        AuthenticationOptions = new OAuth20AuthenticationConfig
+                        {
+                            Grant = new OAuth20PasswordGrant
+                            {
+                                ClientId = Guid.NewGuid().ToString(),
+                                ClientSecret = Guid.NewGuid().ToString(),
+                                Username = "some username",
+                                UserPassword = "some password"
+                            }
+                        }
+                    }
+                },
+                new HttpRequestModel
+                {
+                    HttpRequestId = Guid.NewGuid(),
+                    WorkItemHttpRequestStatus = WorkItemHttpRequestStatus.Queued,
+                    Url = "http://test.something.com/something/asf/asf/adf",
+                    Method = HttpMethods.Post,
+                    ContentType = "application/json",
+                    Content = JsonConvert.SerializeObject(new
+                    {
+                        Id = Guid.NewGuid(),
+                        Status = "some status"
+                    }),
+                    AuthenticationConfig = new HttpAuthenticationConfig
+                    {
+                        AuthenticationType = HttpAuthenticationType.None
+                    }
+                }
+            };
+
             //TODO: if(automation job is not AutomationJobStatus.Queueing then reject the request
             //TODO: if client is trying to set automation job to finished queueing or done do not let them return forbidden?
 
@@ -62,7 +136,19 @@ namespace Nimb3s.Automaton.Api.Controllers
             {
                 AutomationJobId = workItem.AutomationJobId,
                 WorkItemId = workItem.WorkItemId,
-                WorkItemStatusId = 0// Enum.GetName(typeof(WorkItemStatus), )
+                WorkItemStatus = workItem.WorkItemStatus,
+                HttpRequests = workItem.HttpRequests.Select(i => new Messages.HttpRequest
+                {
+                    AuthenticationConfig = i.AuthenticationConfig,
+                    Content = i.Content,
+                    ContentHeaders = i.ContentHeaders,
+                    ContentType = i.ContentType,
+                    HttpRequestId = Guid.NewGuid(),
+                    Method = i.Method,
+                    RequestHeaders = i.RequestHeaders,
+                    Url = i.Url,
+                    WorkItemHttpRequestStatus = i.WorkItemHttpRequestStatus
+                }).ToList()
             });
 
             return Created($"/api/automationjob/{workItem.AutomationJobId}/workitem/{workItem.WorkItemId}", workItem);
