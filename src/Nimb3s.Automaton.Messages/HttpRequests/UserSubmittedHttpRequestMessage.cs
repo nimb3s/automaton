@@ -2,35 +2,12 @@
 using System;
 using System.Collections.Generic;
 
-namespace Nimb3s.Automaton.Messages
+namespace Nimb3s.Automaton.Messages.HttpRequests
 {
-    public class UserSubmittedWorkItemMessage : IMessage
+    public class UserSubmittedHttpRequestMessage : IMessage
     {
-        public Guid AutomationJobId { get; set; }
         public Guid WorkItemId { get; set; }
-        public WorkItemStatus WorkItemStatus { get; set; }
-        public IEnumerable<HttpRequest> HttpRequests { get; set; }
-    }
-
-    /// <summary>
-    /// The <see cref="WorkItemModel"/> status. When a work item starts or finishes.
-    /// </summary>
-    public enum WorkItemStatus
-    {
-        /// <summary>
-        /// When a work item is queued.
-        /// </summary>
-        Queued,
-
-        /// <summary>
-        /// When a work item starts running.
-        /// </summary>
-        Started,
-
-        /// <summary>
-        /// When a work item completes.
-        /// </summary>
-        Completed
+        public HttpRequest HttpRequest { get; set; }
     }
 
     /// <summary>
@@ -54,18 +31,14 @@ namespace Nimb3s.Automaton.Messages
         /// <summary>
         /// The HTTP request status.
         /// </summary>
-        public WorkItemHttpRequestStatus WorkItemHttpRequestStatus { get; set; }
-
+        public HttpRequestStatus HttpRequestStatus { get; set; }
     }
 
-    /// <summary>
-    /// The HTTP request execution status. If request started or comleted execution.
-    /// </summary>
-    public enum WorkItemHttpRequestStatus
+    public enum HttpRequestStatus
     {
         Queued,
         Started,
-        Completed,
+        Completed
     }
 
     public class HttpAuthenticationConfig

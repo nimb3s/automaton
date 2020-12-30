@@ -10,6 +10,7 @@ using NServiceBus;
 using Nimb3s.Automaton.Messages;
 using Nimb3s.Automaton.Api.Models;
 using Newtonsoft.Json;
+using Nimb3s.Automaton.Messages.Jobs;
 
 namespace Nimb3s.Automaton.Api
 {
@@ -28,6 +29,7 @@ namespace Nimb3s.Automaton.Api
                     var transport = endpointConfiguration.UseTransport<LearningTransport>();
                     transport.Routing().RouteToEndpoint(
                         assembly: typeof(UserSubmittedAutomationJobMessage).Assembly,
+                        @namespace: typeof(UserSubmittedAutomationJobMessage).Namespace,
                         destination: "Nimb3s.Automaton.Job.Endpoint"
                     );
 

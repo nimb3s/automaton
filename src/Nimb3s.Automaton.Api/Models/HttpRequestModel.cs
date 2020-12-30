@@ -1,4 +1,6 @@
 ﻿using Nimb3s.Automaton.Messages;
+using Nimb3s.Automaton.Messages.HttpRequests;
+using Nimb3s.Automaton.Messages.Jobs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -29,6 +31,6 @@ namespace Nimb3s.Automaton.Api.Models
         /// <summary>
         /// The HTTP request status.
         /// </summary>
-        public WorkItemHttpRequestStatus WorkItemHttpRequestStatus { get; set; }
+        public WorkItemStatus WorkItemStatus { get; set; }
     }
 }

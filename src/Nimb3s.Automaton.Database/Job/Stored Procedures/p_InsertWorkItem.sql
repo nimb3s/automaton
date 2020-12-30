@@ -1,4 +1,4 @@
-﻿CREATE procedure job.p_InsertWorkItem
+﻿CREATE PROCEDURE job.p_InsertWorkItem
  @Id uniqueidentifier,
  @JobId uniqueidentifier,
  @WorkItemStatusId smallint

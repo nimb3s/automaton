@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Nimb3s.Automaton.Api.Models;
 using Nimb3s.Automaton.Messages;
+using Nimb3s.Automaton.Messages.Jobs;
 using NServiceBus;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace Nimb3s.Automaton.Api.Controllers
         ///     {
         ///     }
         /// </remarks>
-        /// <response code="200">Returns ok when the automation job is reset to <see cref="AutomationJobStatus.Queueing"/> or <see cref="AutomationJobStatus.Started"/> </response>
+        /// <response code="200">Returns ok when the automation job is reset to <see cref="JobStatus.Queueing"/> or <see cref="JobStatus.Started"/> </response>
         /// <response code="201">Returns the newly created <see cref="AutomationJobModel"/></response>
         /// <response code="400">If the item is not found</response> 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -42,16 +43,16 @@ namespace Nimb3s.Automaton.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] AutomationJobModel automationJob)
         {
-            if(automationJob.AutomationJobStatus != AutomationJobStatus.Queueing)
+            if(automationJob.AutomationJobStatus != JobStatus.Queueing)
             {
                 return BadRequest(new
                 {
                     automationJob.AutomationJobStatus,
-                    WorkItemStatus_Error = $"You can only set this property to {Enum.GetName(typeof(AutomationJobStatus), AutomationJobStatus.Queueing)}"
+                    WorkItemStatus_Error = $"You can only set this property to {Enum.GetName(typeof(JobStatus), JobStatus.Queueing)}"
                 });
             }
 
-            automationJob.AutomationJobId = Guid.NewGuid();
+            automationJob.JobId = Guid.NewGuid();
 
             //TODO: if(automation job is not AutomationJobStatus.Queueing then reject the request
             //TODO: if client is trying to set automation job to finished queueing or done do not let them return forbidden?
@@ -59,12 +60,12 @@ namespace Nimb3s.Automaton.Api.Controllers
             
             await messageSession.Send(new UserSubmittedAutomationJobMessage
             {
-                AutomationJobId = automationJob.AutomationJobId,
-                AutomationJobName = automationJob.Name,
-                AutomationJobStatus = automationJob.AutomationJobStatus
+                JobId = automationJob.JobId,
+                JobName = automationJob.Name,
+                JobStatus = automationJob.AutomationJobStatus
             });
 
-            return Created($"/api/automationjob/{automationJob.AutomationJobId}", automationJob);
+            return Created($"/api/automationjob/{automationJob.JobId}", automationJob);
         }
 
         /*

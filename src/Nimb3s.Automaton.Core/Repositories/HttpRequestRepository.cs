@@ -7,13 +7,13 @@ using System.Text;
 
 namespace Nimb3s.Automaton.Core.Repositories
 {
-    public class WorkItemRepository : Repository<WorkItemEntity>
+    public class HttpRequestRepository : Repository<HttpRequestEntity>
     {
-        public override string Schema => "[Job]";
+        public override string Schema => "[Http]";
 
-        public WorkItemRepository() { }
+        public HttpRequestRepository() { }
 
-        public WorkItemRepository(IDbConnection dbConnection) 
+        public HttpRequestRepository(IDbConnection dbConnection) 
             :base(dbConnection) 
         {
         }

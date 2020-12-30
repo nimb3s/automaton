@@ -9,7 +9,7 @@ namespace Nimb3s.Automaton.Core.Repositories
 {
     public class JobRepository : Repository<JobEntity>
     {
-        public override string Schema => "Job";
+        public override string Schema => "[Job]";
 
         public JobRepository() { }
 

@@ -13,7 +13,7 @@ namespace Nimb3s.Automaton.Core.Entities
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+
         }
     }
 }

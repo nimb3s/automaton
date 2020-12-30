@@ -1,11 +1,9 @@
 ﻿using Newtonsoft.Json;
 using Nimb3s.Automaton.Core.Repositories;
-using Nimb3s.Automaton.Messages;
+using Nimb3s.Automaton.Messages.HttpRequests;
+using Nimb3s.Automaton.Messages.Jobs;
 using NServiceBus;
 using NServiceBus.Logging;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Nimb3s.Automaton.Job.Endpoint
@@ -26,11 +24,11 @@ namespace Nimb3s.Automaton.Job.Endpoint
                 WorkItemStatusId = (short)message.WorkItemStatus
             });
 
-
             foreach (var item in message.HttpRequests)
             {
                 await context.Send(new UserSubmittedHttpRequestMessage
                 {
+                    WorkItemId = message.WorkItemId,
                     HttpRequest = item
                 }).ConfigureAwait(false);
             }

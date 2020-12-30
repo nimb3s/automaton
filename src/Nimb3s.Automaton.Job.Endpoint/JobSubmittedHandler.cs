@@ -2,6 +2,7 @@
 using Nimb3s.Automaton.Core.Entities;
 using Nimb3s.Automaton.Core.Repositories;
 using Nimb3s.Automaton.Messages;
+using Nimb3s.Automaton.Messages.Jobs;
 using NServiceBus;
 using NServiceBus.Logging;
 using System;
@@ -22,9 +23,9 @@ namespace Nimb3s.Automaton.Job.Endpoint
 
             await repo.AddAsync(new JobEntity
             {
-                Id = message.AutomationJobId,
-                JobStatusId = 0,//message.AutomationJobStatus,
-                JobName = message.AutomationJobName
+                Id = message.JobId,
+                JobStatusId = (short)message.JobStatus,
+                JobName = message.JobName
             });
 
             log.Info($"MESSAGE: {nameof(UserSubmittedAutomationJobMessage)}; HANDLED BY: {nameof(JobSumittedHandler)}: {JsonConvert.SerializeObject(message)}");

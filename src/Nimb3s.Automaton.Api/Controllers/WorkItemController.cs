@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Nimb3s.Automaton.Api.Models;
 using Nimb3s.Automaton.Messages;
+using Nimb3s.Automaton.Messages.HttpRequests;
+using Nimb3s.Automaton.Messages.Jobs;
 using NServiceBus;
 using System;
 using System.Collections.Generic;
@@ -43,25 +45,25 @@ namespace Nimb3s.Automaton.Api.Controllers
         [HttpPost("api/automationjob/{automationJobId}/[controller]")]
         public async Task<ActionResult> Post(Guid automationJobId, [FromBody] WorkItemModel workItem)
         {
-            if (workItem.WorkItemStatus != WorkItemStatus.Queued)
+            if (workItem.WorkItemStatus != Messages.Jobs.WorkItemStatus.Queued)
             {
-                return BadRequest(new
+                return base.BadRequest(new
                 {
                     workItem.WorkItemStatus,
-                    WorkItemStatus_Error = $"You can only set this property to {Enum.GetName(typeof(WorkItemStatus), WorkItemStatus.Queued)}"
+                    WorkItemStatus_Error = $"You can only set this property to {Enum.GetName(typeof(Messages.Jobs.WorkItemStatus), Messages.Jobs.WorkItemStatus.Queued)}"
                 });
             }
 
             workItem.AutomationJobId = automationJobId;
             workItem.WorkItemId = Guid.NewGuid();
-            workItem.WorkItemStatus = WorkItemStatus.Queued;
+            workItem.WorkItemStatus = Messages.Jobs.WorkItemStatus.Queued;
 
             workItem.HttpRequests = new List<HttpRequestModel>
             {
                 new HttpRequestModel
                 {
                     HttpRequestId = Guid.NewGuid(),
-                    WorkItemHttpRequestStatus = WorkItemHttpRequestStatus.Queued,
+                    WorkItemStatus = WorkItemStatus.Queued,
                     Url = "http://test.something.com/something/asf/asf/adf",
                     Method = HttpMethods.Post,
                     ContentType = "application/json",
@@ -86,7 +88,7 @@ namespace Nimb3s.Automaton.Api.Controllers
                 new HttpRequestModel
                 {
                     HttpRequestId = Guid.NewGuid(),
-                    WorkItemHttpRequestStatus = WorkItemHttpRequestStatus.Queued,
+                    WorkItemStatus = WorkItemStatus.Queued,
                     Url = "http://test.something.com/something/asf/asf/adf",
                     Method = HttpMethods.Post,
                     ContentType = "application/json",
@@ -113,7 +115,7 @@ namespace Nimb3s.Automaton.Api.Controllers
                 new HttpRequestModel
                 {
                     HttpRequestId = Guid.NewGuid(),
-                    WorkItemHttpRequestStatus = WorkItemHttpRequestStatus.Queued,
+                    WorkItemStatus = WorkItemStatus.Queued,
                     Url = "http://test.something.com/something/asf/asf/adf",
                     Method = HttpMethods.Post,
                     ContentType = "application/json",
@@ -137,7 +139,7 @@ namespace Nimb3s.Automaton.Api.Controllers
                 AutomationJobId = workItem.AutomationJobId,
                 WorkItemId = workItem.WorkItemId,
                 WorkItemStatus = workItem.WorkItemStatus,
-                HttpRequests = workItem.HttpRequests.Select(i => new Messages.HttpRequest
+                HttpRequests = workItem.HttpRequests.Select(i => new Messages.HttpRequests.HttpRequest
                 {
                     AuthenticationConfig = i.AuthenticationConfig,
                     Content = i.Content,
@@ -147,7 +149,7 @@ namespace Nimb3s.Automaton.Api.Controllers
                     Method = i.Method,
                     RequestHeaders = i.RequestHeaders,
                     Url = i.Url,
-                    WorkItemHttpRequestStatus = i.WorkItemHttpRequestStatus
+                    HttpRequestStatus = HttpRequestStatus.Queued
                 }).ToList()
             });
 
