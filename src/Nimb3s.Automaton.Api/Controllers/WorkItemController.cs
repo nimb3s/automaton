@@ -26,7 +26,7 @@ namespace Nimb3s.Automaton.Api.Controllers
         }
 
 
-        // POST api/automationjob/{automationJobId}/[controller]
+        // POST api/automationjob/{jobId}/[controller]
         /// <summary>
         /// Creates a <see cref="WorkItemModel"/> item.
         /// </summary>
@@ -42,8 +42,8 @@ namespace Nimb3s.Automaton.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpPost("api/automationjob/{automationJobId}/[controller]")]
-        public async Task<ActionResult> Post(Guid automationJobId, [FromBody] WorkItemModel workItem)
+        [HttpPost("api/automaton/{jobId}/[controller]")]
+        public async Task<ActionResult> Post(Guid jobId, [FromBody] WorkItemModel workItem)
         {
             if (workItem.WorkItemStatus != Messages.Jobs.WorkItemStatus.Queued)
             {
@@ -54,7 +54,7 @@ namespace Nimb3s.Automaton.Api.Controllers
                 });
             }
 
-            workItem.AutomationJobId = automationJobId;
+            workItem.JobId = jobId;
             workItem.WorkItemId = Guid.NewGuid();
             workItem.WorkItemStatus = Messages.Jobs.WorkItemStatus.Queued;
 
@@ -136,7 +136,7 @@ namespace Nimb3s.Automaton.Api.Controllers
 
             await messageSession.Send(new UserSubmittedWorkItemMessage
             {
-                AutomationJobId = workItem.AutomationJobId,
+                JobId = workItem.JobId,
                 WorkItemId = workItem.WorkItemId,
                 WorkItemStatus = workItem.WorkItemStatus,
                 HttpRequests = workItem.HttpRequests.Select(i => new Messages.HttpRequests.HttpRequest
@@ -153,7 +153,7 @@ namespace Nimb3s.Automaton.Api.Controllers
                 }).ToList()
             });
 
-            return Created($"/api/automationjob/{workItem.AutomationJobId}/workitem/{workItem.WorkItemId}", workItem);
+            return Created($"/api/automationjob/{workItem.JobId}/workitem/{workItem.WorkItemId}", workItem);
         }
 
         //// DELETE api/<AutomationRequest>/5

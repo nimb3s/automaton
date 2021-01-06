@@ -15,7 +15,7 @@ namespace Nimb3s.Automaton.Api.Models
         /// The automation job id.
         /// </summary>
         [Required]
-        public Guid AutomationJobId { get; set; }
+        public Guid JobId { get; set; }
 
         /// <summary>
         /// The work item id.

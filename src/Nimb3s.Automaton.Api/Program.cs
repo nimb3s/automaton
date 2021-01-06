@@ -25,11 +25,11 @@ namespace Nimb3s.Automaton.Api
             Host.CreateDefaultBuilder(args)
                 .UseNServiceBus(context =>
                 {
-                    var endpointConfiguration = new EndpointConfiguration(typeof(AutomationJobModel).Assembly.GetName().Name);
+                    var endpointConfiguration = new EndpointConfiguration(typeof(JobModel).Assembly.GetName().Name);
                     var transport = endpointConfiguration.UseTransport<LearningTransport>();
                     transport.Routing().RouteToEndpoint(
-                        assembly: typeof(UserSubmittedAutomationJobMessage).Assembly,
-                        @namespace: typeof(UserSubmittedAutomationJobMessage).Namespace,
+                        assembly: typeof(UserQueueingJobMessage).Assembly,
+                        //@namespace: typeof(UserQueueingJobMessage).Namespace,
                         destination: "Nimb3s.Automaton.Job.Endpoint"
                     );
 

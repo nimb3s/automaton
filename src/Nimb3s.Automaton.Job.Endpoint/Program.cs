@@ -25,6 +25,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
 
             endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
 
+           
             var endpointInstance = await NServiceBus.Endpoint.Start(endpointConfiguration)
                 .ConfigureAwait(false);
             Console.WriteLine("Press any key to exit");

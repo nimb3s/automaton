@@ -74,7 +74,6 @@
     <Build Include="Job\Stored Procedures\p_InsertWorkItem.sql" />
     <Build Include="Schemas\Http.sql" />
     <Build Include="Http\Tables\HttpRequest.sql" />
-    <Build Include="Http\Stored Procedures\p_InsertWorkItem.sql" />
     <Build Include="Http\Tables\HttpRequestStatus.sql" />
   </ItemGroup>
 </Project>

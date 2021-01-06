@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Nimb3s.Automaton.Job.Endpoint
 {
-    public class WorkItemSubmittedHandler : IHandleMessages<UserSubmittedWorkItemMessage>
+    public class WorkItemSubmittedHandler //: IHandleMessages<UserSubmittedWorkItemMessage>
     {
         static ILog log = LogManager.GetLogger<JobSumittedHandler>();
 
@@ -20,7 +20,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
             await workItemRepository.AddAsync(new Core.Entities.WorkItemEntity
             {
                 Id = message.WorkItemId,
-                JobId = message.AutomationJobId,
+                JobId = message.JobId,
                 WorkItemStatusId = (short)message.WorkItemStatus
             });
 

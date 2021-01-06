@@ -3,11 +3,12 @@ using System;
 
 namespace Nimb3s.Automaton.Messages.Jobs
 {
-    public class UserSubmittedAutomationJobMessage : IMessage
+    public class UserQueueingJobMessage : IMessage
     {
         public Guid JobId { get; set; }
         public string JobName { get; set; }
         public JobStatus JobStatus { get; set; }
+        public int ExpectedWorkItemCount { get; set; }
     }
 
     /// <summary>

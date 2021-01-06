@@ -6,6 +6,7 @@ namespace Nimb3s.Automaton.Messages.HttpRequests
 {
     public class UserSubmittedHttpRequestMessage : IMessage
     {
+        public Guid JobId { get; set; }
         public Guid WorkItemId { get; set; }
         public HttpRequest HttpRequest { get; set; }
     }

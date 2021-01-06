@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Nimb3s.Automaton.Job.Endpoint
 {
-    public class UserSubmittedHttpRequestHandler : IHandleMessages<UserSubmittedHttpRequestMessage>
+    public class UserSubmittedHttpRequestHandler //: IHandleMessages<UserSubmittedHttpRequestMessage>
     {
         static ILog log = LogManager.GetLogger<UserSubmittedHttpRequestHandler>();
 

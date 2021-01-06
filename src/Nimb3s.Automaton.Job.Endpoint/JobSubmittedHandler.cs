@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace Nimb3s.Automaton.Job.Endpoint
 {
-    public class JobSumittedHandler :IHandleMessages<UserSubmittedAutomationJobMessage>
+    public class JobSumittedHandler //:IHandleMessages<UserQueueingJobMessage>
     {
         static ILog log = LogManager.GetLogger<JobSumittedHandler>();
 
         #region MessageHandler
-        public async Task Handle(UserSubmittedAutomationJobMessage message, IMessageHandlerContext context)
+        public async Task Handle(UserQueueingJobMessage message, IMessageHandlerContext context)
         {
             JobRepository repo = new JobRepository();
 
@@ -28,7 +28,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
                 JobName = message.JobName
             });
 
-            log.Info($"MESSAGE: {nameof(UserSubmittedAutomationJobMessage)}; HANDLED BY: {nameof(JobSumittedHandler)}: {JsonConvert.SerializeObject(message)}");
+            log.Info($"MESSAGE: {nameof(UserQueueingJobMessage)}; HANDLED BY: {nameof(JobSumittedHandler)}: {JsonConvert.SerializeObject(message)}");
         }
         #endregion
     }

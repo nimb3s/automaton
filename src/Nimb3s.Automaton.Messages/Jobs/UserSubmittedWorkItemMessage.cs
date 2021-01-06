@@ -7,7 +7,7 @@ namespace Nimb3s.Automaton.Messages.Jobs
 {
     public class UserSubmittedWorkItemMessage : IMessage
     {
-        public Guid AutomationJobId { get; set; }
+        public Guid JobId { get; set; }
         public Guid WorkItemId { get; set; }
         public WorkItemStatus WorkItemStatus { get; set; }
         public IEnumerable<HttpRequest> HttpRequests { get; set; }
