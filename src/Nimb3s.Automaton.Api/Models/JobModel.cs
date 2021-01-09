@@ -29,8 +29,5 @@ namespace Nimb3s.Automaton.Api.Models
         /// The automation job status.
         /// </summary>
         public JobStatus JobStatus { get; set; }
-
-        [Required]
-        public int ExpectedWorkItemCount { get; set; }
     }
 }

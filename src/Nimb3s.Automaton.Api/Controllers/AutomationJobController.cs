@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Nimb3s.Automaton.Api.Models;
 using Nimb3s.Automaton.Messages;
 using Nimb3s.Automaton.Messages.Jobs;
+using Nimb3s.Automaton.Messages.User;
 using NServiceBus;
 using System;
 using System.Collections.Generic;
@@ -60,9 +61,7 @@ namespace Nimb3s.Automaton.Api.Controllers
             await messageSession.Send(new UserQueueingJobMessage
             {
                 JobId = job.JobId,
-                JobName = job.Name,
-                JobStatus = job.JobStatus,
-                ExpectedWorkItemCount = job.ExpectedWorkItemCount
+                JobName = job.Name
             });
 
             return Created($"/api/automationjob/{job.JobId}", job);
@@ -93,7 +92,6 @@ namespace Nimb3s.Automaton.Api.Controllers
             await messageSession.Send(new UserFinishedQueueingJobMessage
             {
                 JobId = job.JobId,
-                JobStatus = job.JobStatus
             });
 
             return Created($"/api/automaton/jobs/{job.JobId}", job);

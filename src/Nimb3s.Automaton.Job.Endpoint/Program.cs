@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using System.Threading.Tasks;
-using Nimb3s.Automaton.Messages.HttpRequests;
 using NServiceBus;
 
 namespace Nimb3s.Automaton.Job.Endpoint

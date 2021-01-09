@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Nimb3s.Automaton.Core.Entities;
 using Nimb3s.Automaton.Core.Repositories;
-using Nimb3s.Automaton.Messages.HttpRequests;
+using Nimb3s.Automaton.Messages.User;
 using NServiceBus;
 using NServiceBus.Logging;
 using System.Threading.Tasks;

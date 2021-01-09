@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Nimb3s.Automaton.Api.Models;
-using Nimb3s.Automaton.Messages;
-using Nimb3s.Automaton.Messages.HttpRequests;
-using Nimb3s.Automaton.Messages.Jobs;
+using Nimb3s.Automaton.Messages.User;
 using NServiceBus;
 using System;
 using System.Collections.Generic;
@@ -25,7 +23,6 @@ namespace Nimb3s.Automaton.Api.Controllers
             this.messageSession = messageSession;
         }
 
-
         // POST api/automationjob/{jobId}/[controller]
         /// <summary>
         /// Creates a <see cref="WorkItemModel"/> item.
@@ -45,18 +42,18 @@ namespace Nimb3s.Automaton.Api.Controllers
         [HttpPost("api/automaton/{jobId}/[controller]")]
         public async Task<ActionResult> Post(Guid jobId, [FromBody] WorkItemModel workItem)
         {
-            if (workItem.WorkItemStatus != Messages.Jobs.WorkItemStatus.Queued)
+            if (workItem.WorkItemStatus != WorkItemStatus.Queued)
             {
                 return base.BadRequest(new
                 {
                     workItem.WorkItemStatus,
-                    WorkItemStatus_Error = $"You can only set this property to {Enum.GetName(typeof(Messages.Jobs.WorkItemStatus), Messages.Jobs.WorkItemStatus.Queued)}"
+                    WorkItemStatus_Error = $"You can only set this property to {Enum.GetName(typeof(WorkItemStatus), WorkItemStatus.Queued)}"
                 });
             }
 
             workItem.JobId = jobId;
             workItem.WorkItemId = Guid.NewGuid();
-            workItem.WorkItemStatus = Messages.Jobs.WorkItemStatus.Queued;
+            workItem.WorkItemStatus = WorkItemStatus.Queued;
 
             workItem.HttpRequests = new List<HttpRequestModel>
             {
@@ -139,7 +136,7 @@ namespace Nimb3s.Automaton.Api.Controllers
                 JobId = workItem.JobId,
                 WorkItemId = workItem.WorkItemId,
                 WorkItemStatus = workItem.WorkItemStatus,
-                HttpRequests = workItem.HttpRequests.Select(i => new Messages.HttpRequests.HttpRequest
+                HttpRequests = workItem.HttpRequests.Select(i => new Request
                 {
                     AuthenticationConfig = i.AuthenticationConfig,
                     Content = i.Content,

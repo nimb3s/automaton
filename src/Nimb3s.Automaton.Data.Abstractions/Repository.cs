@@ -63,7 +63,7 @@ namespace Nimb3s.Data.Abstractions
         public virtual string Schema => "dbo";
         public Repository()
         {
-            this.dbConnection = new SqlConnection("Data Source=.\\SQLEXPRESS;Initial Catalog=Automaton;Integrated Security=true");
+            this.dbConnection = new SqlConnection("Data Source=.;Initial Catalog=Automaton;Integrated Security=true");
         }
 
         public Repository(IDbConnection dbConnection)
