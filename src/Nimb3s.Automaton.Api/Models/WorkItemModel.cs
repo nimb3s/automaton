@@ -1,5 +1,4 @@
-﻿using Nimb3s.Automaton.Messages;
-using Nimb3s.Automaton.Messages.Jobs;
+﻿using Nimb3s.Automaton.Messages.User;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

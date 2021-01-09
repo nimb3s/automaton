@@ -68,22 +68,13 @@ namespace Nimb3s.Automaton.Job.Endpoint
 
         public async Task Handle(UserSubmittedWorkItemMessage message, IMessageHandlerContext context)
         {
-            await context.SendLocal(new WorkItemCreatedMessage
+            await context.SendLocal(new CreateWorkItemMessage
             {
                 JobId = message.JobId,
                 WorkItemId = message.WorkItemId,
                 WorkItemStatus = message.WorkItemStatus,
                 HttpRequests = message.HttpRequests
             }).ConfigureAwait(false);
-        }
-
-        private void MarkSagaAsComplete()
-        {
-            if (!Data.IsQueueing && Data.IsFinishedQueueing && Data.IsJobStarted && Data.IsJobCompleted)
-            {
-                Data.IsJobCompleted = true;
-                MarkAsComplete();
-            }
         }
     }
 }

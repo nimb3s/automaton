@@ -8,11 +8,11 @@ using System.Text;
 
 namespace Nimb3s.Automaton.Core.Repositories
 {
-    public class JobRepository : Repository<JobEntity, Guid>
+    public class HttpResponseRepository : Repository<HttpResponseEntity, Guid>
     {
-        public override string Schema => "[Job]";
+        public override string Schema => "[Http]";
 
-        public JobRepository(UnitOfWork unitOfWork)
+        public HttpResponseRepository(UnitOfWork unitOfWork)
             : base(unitOfWork)
         {
 

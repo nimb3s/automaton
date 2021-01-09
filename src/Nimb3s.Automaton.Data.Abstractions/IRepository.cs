@@ -9,12 +9,12 @@ namespace Nimb3s.Data.Abstractions
     /// </summary>
     /// <typeparam name="T">The repository type</typeparam>
     /// <typeparam name="K">The data type of key the repository uses for its Id</typeparam>
-    public interface IRepository<T> where T : IEntity<Guid>
+    public interface IRepository<TEntity, TKey>
     {
-        Task<T> GetAsync(int Id);
-        Task<IEnumerable<T>> GetAllAsync();
-        Task AddAsync(T entity);
-        Task DeleteAsync(T entity);
-        Task UpdateAsync(T entity);
+        Task<TEntity> GetAsync(TKey Id);
+        Task<IEnumerable<TEntity>> GetAllAsync();
+        Task UpsertAsync(TEntity entity);
+        Task DeleteAsync(TEntity entity);
+        Task UpdateAsync(TEntity entity);
     }
 }

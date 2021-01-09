@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Nimb3s.Automaton.Api.Models;
-using Nimb3s.Automaton.Messages;
-using Nimb3s.Automaton.Messages.Jobs;
 using Nimb3s.Automaton.Messages.User;
 using NServiceBus;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860

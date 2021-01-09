@@ -61,8 +61,8 @@ namespace Nimb3s.Automaton.Api.Controllers
                 {
                     HttpRequestId = Guid.NewGuid(),
                     WorkItemStatus = WorkItemStatus.Queued,
-                    Url = "http://test.something.com/something/asf/asf/adf",
-                    Method = HttpMethods.Post,
+                    Url = "https://www.jw.org/en/",
+                    Method = HttpMethods.Get,
                     ContentType = "application/json",
                     Content = JsonConvert.SerializeObject(new
                     {
@@ -86,8 +86,8 @@ namespace Nimb3s.Automaton.Api.Controllers
                 {
                     HttpRequestId = Guid.NewGuid(),
                     WorkItemStatus = WorkItemStatus.Queued,
-                    Url = "http://test.something.com/something/asf/asf/adf",
-                    Method = HttpMethods.Post,
+                    Url = "https://www.cnn.com/",
+                    Method = HttpMethods.Get,
                     ContentType = "application/json",
                     Content = JsonConvert.SerializeObject(new
                     {
@@ -113,8 +113,8 @@ namespace Nimb3s.Automaton.Api.Controllers
                 {
                     HttpRequestId = Guid.NewGuid(),
                     WorkItemStatus = WorkItemStatus.Queued,
-                    Url = "http://test.something.com/something/asf/asf/adf",
-                    Method = HttpMethods.Post,
+                    Url = "https://techcrunch.com/",
+                    Method = HttpMethods.Get,
                     ContentType = "application/json",
                     Content = JsonConvert.SerializeObject(new
                     {

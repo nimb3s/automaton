@@ -1,16 +1,8 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using NServiceBus;
-using Nimb3s.Automaton.Messages;
 using Nimb3s.Automaton.Api.Models;
-using Newtonsoft.Json;
-using Nimb3s.Automaton.Messages.Jobs;
+using Nimb3s.Automaton.Messages.User;
+using NServiceBus;
 
 namespace Nimb3s.Automaton.Api
 {

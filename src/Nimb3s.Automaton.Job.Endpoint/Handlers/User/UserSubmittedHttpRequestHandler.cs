@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Nimb3s.Automaton.Core;
 using Nimb3s.Automaton.Core.Entities;
 using Nimb3s.Automaton.Core.Repositories;
 using Nimb3s.Automaton.Messages.User;
@@ -8,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace Nimb3s.Automaton.Job.Endpoint
 {
-    public class UserSubmittedHttpRequestHandler //: IHandleMessages<UserSubmittedHttpRequestMessage>
+    public class UserSubmittedHttpRequestHandler: IHandleMessages<UserSubmittedHttpRequestMessage>
     {
         static ILog log = LogManager.GetLogger<UserSubmittedHttpRequestHandler>();
 
         #region MessageHandler
         public async Task Handle(UserSubmittedHttpRequestMessage message, IMessageHandlerContext context)
         {
-            HttpRequestRepository httpRequestRepository = new HttpRequestRepository();
-
-            await httpRequestRepository.AddAsync(new HttpRequestEntity
+            AutomatonDatabaseContext dbContext = new AutomatonDatabaseContext();
+            
+            await dbContext.HttpRequestRepository.UpsertAsync(new HttpRequestEntity
             {
                 Id = message.HttpRequest.HttpRequestId,
                 WorkItemId = message.WorkItemId,
