@@ -22,7 +22,8 @@ namespace Nimb3s.Automaton.Job.Endpoint
             {
                 Id = message.WorkItemId,
                 JobId = message.JobId,
-                WorkItemStatusId = (short)message.WorkItemStatus
+                WorkItemStatusId = (short)message.WorkItemStatus,
+                InsertTimeStamp = message.CreateDate
             });
 
             log.Info($"MESSAGE: {nameof(WorkItemCreatedMessage)}; HANDLED BY: {nameof(CreateWorkItemHandler)}: {JsonConvert.SerializeObject(message)}");

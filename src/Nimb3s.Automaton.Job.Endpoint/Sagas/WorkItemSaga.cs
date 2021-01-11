@@ -35,7 +35,8 @@ namespace Nimb3s.Automaton.Job.Endpoint
             {
                 JobId = message.JobId,
                 WorkItemId = message.WorkItemId,
-                HttpRequests = message.HttpRequests
+                HttpRequests = message.HttpRequests,
+                CreateDate = message.CreateDate,
             }).ConfigureAwait(false);
 
 
@@ -45,7 +46,8 @@ namespace Nimb3s.Automaton.Job.Endpoint
                 {
                     JobId = message.JobId,
                     WorkItemId = message.WorkItemId,
-                    HttpRequest = item
+                    HttpRequest = item,
+                    CreateDate = message.CreateDate
                 }).ConfigureAwait(false);
             }
         }

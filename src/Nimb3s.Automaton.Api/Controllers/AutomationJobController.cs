@@ -57,7 +57,8 @@ namespace Nimb3s.Automaton.Api.Controllers
             await messageSession.Send(new UserQueueingJobMessage
             {
                 JobId = job.JobId,
-                JobName = job.Name
+                JobName = job.Name,
+                CreateDate = DateTimeOffset.UtcNow,
             });
 
             return Created($"/api/automationjob/{job.JobId}", job);
@@ -88,6 +89,7 @@ namespace Nimb3s.Automaton.Api.Controllers
             await messageSession.Send(new UserFinishedQueueingJobMessage
             {
                 JobId = job.JobId,
+                CreateDate = DateTimeOffset.UtcNow
             });
 
             return Created($"/api/automaton/jobs/{job.JobId}", job);

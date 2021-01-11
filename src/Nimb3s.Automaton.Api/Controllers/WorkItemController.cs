@@ -147,7 +147,8 @@ namespace Nimb3s.Automaton.Api.Controllers
                     RequestHeaders = i.RequestHeaders,
                     Url = i.Url,
                     HttpRequestStatus = HttpRequestStatus.Queued
-                }).ToList()
+                }).ToList(),
+                CreateDate = DateTimeOffset.UtcNow
             });
 
             return Created($"/api/automationjob/{workItem.JobId}/workitem/{workItem.WorkItemId}", workItem);

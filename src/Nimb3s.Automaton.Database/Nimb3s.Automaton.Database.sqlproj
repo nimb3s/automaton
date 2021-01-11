@@ -63,20 +63,41 @@
     <Folder Include="Http" />
     <Folder Include="Http\Tables" />
     <Folder Include="Http\Stored Procedures" />
+    <Folder Include="History" />
+    <Folder Include="History\Tables" />
+    <Folder Include="Storage" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Schemas\Job.sql" />
     <Build Include="Job\Tables\Job.sql" />
-    <Build Include="Job\Tables\JobStatus.sql" />
+    <Build Include="Job\Tables\JobStatusType.sql" />
     <Build Include="Job\Tables\WorkItem.sql" />
-    <Build Include="Job\Tables\WorkItemStatus.sql" />
-    <Build Include="Job\Stored Procedures\p_InsertJob.sql" />
-    <Build Include="Job\Stored Procedures\p_InsertWorkItem.sql" />
+    <Build Include="Job\Tables\WorkItemStatusType.sql" />
+    <Build Include="Job\Stored Procedures\p_UpsertJob.sql" />
+    <Build Include="Job\Stored Procedures\p_UpsertWorkItem.sql" />
     <Build Include="Schemas\Http.sql" />
     <Build Include="Http\Tables\HttpRequest.sql" />
-    <Build Include="Http\Tables\HttpRequestStatus.sql" />
-    <Build Include="Http\Stored Procedures\p_InsertHttpRequest.sql" />
+    <Build Include="Http\Tables\HttpRequestStatusType.sql" />
+    <Build Include="Http\Stored Procedures\p_UpsertHttpRequest.sql" />
     <Build Include="Http\Tables\HttpResponse.sql" />
     <Build Include="Http\Stored Procedures\p_InsertHttpResponse.sql" />
+    <Build Include="Schemas\History.sql" />
+    <Build Include="History\Tables\Http_HttpRequestStatus.sql" />
+    <Build Include="Http\Tables\HttpRequestStatus.sql" />
+    <Build Include="Storage\HttpData.sql" />
+    <Build Include="Job\Tables\JobStatus.sql" />
+    <Build Include="Job\Tables\WorkItemStatus.sql" />
+    <Build Include="Storage\JobData.sql" />
+    <Build Include="Storage\HttpIndex.sql" />
+    <Build Include="Storage\JobIndex.sql" />
+    <Build Include="Storage\HttpLargeBinaryObjects.sql" />
+    <Build Include="History\Tables\Job_JobStatus.sql" />
+    <Build Include="History\Tables\Job_WorkItemStatus.sql" />
+    <Build Include="Http\Stored Procedures\p_UpsertHttpRequestStatus.sql" />
+    <Build Include="Job\Stored Procedures\p_UpsertJobStatus.sql" />
+    <Build Include="Job\Stored Procedures\p_UpsertWorkItemStatus.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Nimb3s.Automaton.Database.publish.xml" />
   </ItemGroup>
 </Project>

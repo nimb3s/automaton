@@ -2,7 +2,8 @@
 (
 	Id uniqueidentifier NOT NULL,
 	JobName varchar(250),
-	JobStatusId smallint not null default(0),
-
-	PRIMARY KEY CLUSTERED(id)
+    [InsertTimeStamp] DATETIMEOFFSET NOT NULL default (SYSUTCDATETIME()),
+	[Db_InsertTimeStamp] DATETIMEOFFSET NOT NULL default (SYSUTCDATETIME()),
+	
+	PRIMARY KEY CLUSTERED (id) WITH (DATA_COMPRESSION = PAGE) ON [JobData]
 )

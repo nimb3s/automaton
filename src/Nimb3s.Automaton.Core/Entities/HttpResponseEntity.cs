@@ -9,6 +9,7 @@ namespace Nimb3s.Automaton.Core.Entities
         public Guid HttpRequestId { get; set; }
         public int StatusCode { get; set; }
         public string Body { get; set; }
+        public DateTimeOffset InsertTimeStamp { get; set; }
 
         public void Dispose()
         {

@@ -10,5 +10,6 @@ namespace Nimb3s.Automaton.Messages.Job
         public Guid WorkItemId { get; set; }
         public WorkItemStatus WorkItemStatus { get; set; }
         public IEnumerable<Request> HttpRequests { get; set; }
+        public DateTimeOffset CreateDate { get; set; }
     }
 }

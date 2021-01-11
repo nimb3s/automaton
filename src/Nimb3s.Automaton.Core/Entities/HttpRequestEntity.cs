@@ -14,11 +14,12 @@ namespace Nimb3s.Automaton.Core.Entities
         public string RequestHeadersInJson { get; set; }
         public string ContentHeadersInJson { get; set; }
         public string AuthenticationConfigInJson { get; set; }
+        public DateTimeOffset InsertTimeStamp { get; set; }
 
         /// <summary>
         /// The HTTP request status.
         /// </summary>
-        public short HttpRequestStatusId { get; set; }
+        public short HttpRequestStatusTypeId { get; set; }
 
         public void Dispose()
         {

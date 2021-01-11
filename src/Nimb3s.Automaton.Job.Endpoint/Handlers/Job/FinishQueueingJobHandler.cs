@@ -21,7 +21,8 @@ namespace Nimb3s.Automaton.Job.Endpoint
             await dbContext.JobRepository.UpsertAsync(new JobEntity
             {
                 Id = message.JobId,
-                JobStatusId = (short)message.JobStatus
+                JobStatusId = (short)message.JobStatus,
+                InsertTimeStamp = message.CreateDate
             });
 
             dbContext.Commit();

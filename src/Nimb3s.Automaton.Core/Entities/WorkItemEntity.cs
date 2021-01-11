@@ -10,6 +10,7 @@ namespace Nimb3s.Automaton.Core.Entities
         public Guid Id { get; set; }
         public Guid JobId { get; set; }
         public short WorkItemStatusId { get; set; }
+        public DateTimeOffset InsertTimeStamp { get; set; }
 
         public void Dispose()
         {

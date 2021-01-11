@@ -47,7 +47,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
                 RequestHeadersInJson = message.HttpRequest.RequestHeaders == null ? null : JsonConvert.SerializeObject(message.HttpRequest.RequestHeaders),
                 ContentHeadersInJson = message.HttpRequest.ContentHeaders == null ? null : JsonConvert.SerializeObject(message.HttpRequest.ContentHeaders),
                 AuthenticationConfigInJson = message.HttpRequest.AuthenticationConfig == null ? null : JsonConvert.SerializeObject(message.HttpRequest.AuthenticationConfig),
-                HttpRequestStatusId = (short)message.HttpRequest.HttpRequestStatus
+                HttpRequestStatusTypeId = (short)message.HttpRequest.HttpRequestStatus
             });
 
             dbContext.Commit();
@@ -84,6 +84,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
                 HttpRequestId = message.HttpRequest.HttpRequestId,
                 StatusCode = (int)responseMessage.StatusCode,
                 Body = await responseMessage.Content?.ReadAsStringAsync(),
+                InsertTimeStamp = message.CreateDate
                 //RequestHeaders = responseMessage.Headers,
                 //ContentHeaders = responseMessage?.Content?.Headers,
             });

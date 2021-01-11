@@ -10,6 +10,7 @@ namespace Nimb3s.Automaton.Messages.User
         public Guid WorkItemId { get; set; }
         public WorkItemStatus WorkItemStatus { get; set; }
         public IEnumerable<Request> HttpRequests { get; set; }
+        public DateTimeOffset CreateDate { get; set; }
     }
 
     /// <summary>
