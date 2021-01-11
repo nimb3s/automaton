@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Nimb3s.Data.Abstractions
 {
+    //https://stackoverflow.com/questions/31298235/how-to-implement-unit-of-work-pattern-with-dapper
     public interface IUnitOfWorkFactory
     {
         UnitOfWork Create();

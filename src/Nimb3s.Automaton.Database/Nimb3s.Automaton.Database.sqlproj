@@ -75,5 +75,8 @@
     <Build Include="Schemas\Http.sql" />
     <Build Include="Http\Tables\HttpRequest.sql" />
     <Build Include="Http\Tables\HttpRequestStatus.sql" />
+    <Build Include="Http\Stored Procedures\p_InsertHttpRequest.sql" />
+    <Build Include="Http\Tables\HttpResponse.sql" />
+    <Build Include="Http\Stored Procedures\p_InsertHttpResponse.sql" />
   </ItemGroup>
 </Project>
