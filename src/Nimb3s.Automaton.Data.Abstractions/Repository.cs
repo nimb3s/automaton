@@ -57,7 +57,7 @@ namespace Nimb3s.Data.Abstractions
         where TEntity: IEntity<TKey>
     {
         private readonly string[] validEntityKeyNames = { "id" };
-        private readonly string entityName = typeof(TEntity).Name.Replace("Entity", string.Empty);
+        protected readonly string entityName = typeof(TEntity).Name.Replace("Entity", string.Empty);
 
         protected readonly IDbConnection connection;
         protected readonly IDbTransaction transaction;
@@ -72,12 +72,16 @@ namespace Nimb3s.Data.Abstractions
 
         public async Task<TEntity> GetAsync(TKey Id)
         {
-            return await connection.QuerySingleAsync<TEntity>($"{Schema}.p_Get{entityName}");
+            DynamicParameters dp = new DynamicParameters();
+
+            dp.Add(nameof(Id), Id);
+
+            return await connection.QuerySingleAsync<TEntity>(sql: $"{Schema}.p_Get{entityName}", param: dp, commandType: CommandType.StoredProcedure, transaction: transaction);
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            return (await connection.QueryAsync<TEntity>(sql: $"{Schema}.p_GetAll{entityName}", commandType: CommandType.StoredProcedure)).AsList();
+            return (await connection.QueryAsync<TEntity>(sql: $"{Schema}.p_GetAll{entityName}", commandType: CommandType.StoredProcedure, transaction: transaction)).AsList();
         }
 
         public async Task UpsertAsync(TEntity entity)
@@ -91,7 +95,7 @@ namespace Nimb3s.Data.Abstractions
                 dp.Add(param.Key, param.Value);
             }
 
-            await connection.ExecuteAsync(sql: $"{Schema}.p_Insert{entityName}", param: dp, commandType: CommandType.StoredProcedure, transaction: transaction);
+            await connection.ExecuteAsync(sql: $"{Schema}.p_Upsert{entityName}", param: dp, commandType: CommandType.StoredProcedure, transaction: transaction);
         }
 
         public async Task DeleteAsync(TEntity entity)
@@ -111,11 +115,6 @@ namespace Nimb3s.Data.Abstractions
             }
 
             await connection.ExecuteAsync(sql: $"{Schema}.p_Delete{entityName}", param: dp, commandType: CommandType.StoredProcedure, transaction: transaction);
-        }
-
-        public Task UpdateAsync(TEntity entity)
-        {
-            throw new NotImplementedException();
         }
     }
 }

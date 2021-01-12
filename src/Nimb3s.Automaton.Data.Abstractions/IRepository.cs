@@ -15,6 +15,5 @@ namespace Nimb3s.Data.Abstractions
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task UpsertAsync(TEntity entity);
         Task DeleteAsync(TEntity entity);
-        Task UpdateAsync(TEntity entity);
     }
 }

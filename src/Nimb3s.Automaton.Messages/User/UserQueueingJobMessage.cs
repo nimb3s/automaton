@@ -7,7 +7,6 @@ namespace Nimb3s.Automaton.Messages.User
     {
         public Guid JobId { get; set; }
         public string JobName { get; set; }
-        public JobStatus JobStatus => JobStatus.Queueing;
         public DateTimeOffset CreateDate { get; set; }
     }
 

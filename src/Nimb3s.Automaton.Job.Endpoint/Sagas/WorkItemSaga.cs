@@ -52,16 +52,21 @@ namespace Nimb3s.Automaton.Job.Endpoint
             }
         }
 
-        public Task Handle(HttpRequestExecutedMessage message, IMessageHandlerContext context)
+        public async Task Handle(HttpRequestExecutedMessage message, IMessageHandlerContext context)
         {
             Data.RequestCounter++;
             
             if(Data.TotalRequests == Data.RequestCounter)
             {
+                await context.SendLocal(new FinishedExecutingHttpRequestMessage
+                {
+                    JobId = message.JobId,
+                    WorkItemId = message.WorkItemId,
+                    HttpRequestId = message.HttpRequest.HttpRequestId
+                }).ConfigureAwait(false);
+                
                 MarkAsComplete();
             }
-
-            return Task.CompletedTask;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿CREATE TABLE History.[Job_WorkItemStatus]
 (
+	Id bigint not null,
 	WorkItemId uniqueidentifier not null,
 	WorkItemStatusId smallint not null,
     [StatusTimeStamp] DATETIMEOFFSET NOT NULL,
@@ -10,6 +11,6 @@
 GO
 
 CREATE INDEX [NCIX_Job_WorkItemStatus] 
-ON History.[Job_WorkItemStatus] ([_SystemRecordStartDateTime], [_SystemRecordEndDateTime], WorkItemId, WorkItemStatusId, [StatusTimeStamp], [Db_StatusTimeStamp]) 
+ON History.[Job_WorkItemStatus] ([_SystemRecordStartDateTime], [_SystemRecordEndDateTime], Id, WorkItemId, WorkItemStatusId, [StatusTimeStamp], [Db_StatusTimeStamp]) 
 WITH (DATA_COMPRESSION = PAGE) ON [JobIndex];
 GO

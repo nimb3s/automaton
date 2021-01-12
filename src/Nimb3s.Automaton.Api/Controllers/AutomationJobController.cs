@@ -39,16 +39,7 @@ namespace Nimb3s.Automaton.Api.Controllers
         [HttpPost("api/automaton/jobs")]
         public async Task<ActionResult> Post([FromBody] JobModel job)
         {
-            if(job.JobStatus != JobStatus.Queueing)
-            {
-                return BadRequest(new
-                {
-                    job.JobStatus,
-                    WorkItemStatus_Error = $"You can only set this property to {Enum.GetName(typeof(JobStatus), JobStatus.Queueing)}"
-                });
-            }
-
-            job.JobId = Guid.NewGuid();
+            job.JobId = job.JobId;
 
             //TODO: if(automation job is not AutomationJobStatus.Queueing then reject the request
             //TODO: if client is trying to set automation job to finished queueing or done do not let them return forbidden?

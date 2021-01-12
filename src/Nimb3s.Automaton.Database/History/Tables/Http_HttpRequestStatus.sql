@@ -1,5 +1,6 @@
 ﻿CREATE TABLE [History].[Http_HttpRequestStatus]
 (
+	Id bigint not null,
 	HttpRequestId uniqueidentifier not null,
 	HttpRequestStatusTypeId smallint not null,
     [StatusTimeStamp] DATETIMEOFFSET NOT NULL,
@@ -13,6 +14,7 @@ CREATE INDEX [NCIX_HttpRequestStatus_HttpRequestId]
 ON [History].[Http_HttpRequestStatus] (
 [_SystemRecordStartDateTime],
 [_SystemRecordEndDateTime],
+Id,
 HttpRequestId,
 HttpRequestStatusTypeId,
 StatusTimeStamp,

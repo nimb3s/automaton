@@ -1,5 +1,6 @@
 ﻿CREATE TABLE [Http].[HttpRequestStatus]
 (
+	Id bigint not null identity(1,1),
 	HttpRequestId uniqueidentifier not null,
 	HttpRequestStatusTypeId smallint not null,
     [StatusTimeStamp] DATETIMEOFFSET NOT NULL default (SYSUTCDATETIME()),
@@ -17,6 +18,6 @@ WITH
 GO
 
 CREATE INDEX [NCIX_HttpRequestStatus_HttpRequestId] 
-ON [Http].[HttpRequestStatus] (HttpRequestId, HttpRequestStatusTypeId, StatusTimeStamp, DB_StatusTimeStamp) 
+ON [Http].[HttpRequestStatus] (Id, HttpRequestId, HttpRequestStatusTypeId, StatusTimeStamp, DB_StatusTimeStamp) 
 WITH (DATA_COMPRESSION = PAGE) ON HttpIndex;
 GO

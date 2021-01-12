@@ -28,11 +28,6 @@ namespace Nimb3s.Automaton.Messages.User
         public Dictionary<string, string> RequestHeaders { get; set; }
         public Dictionary<string, string> ContentHeaders { get; set; }
         public HttpAuthenticationConfig AuthenticationConfig { get; set; }
-
-        /// <summary>
-        /// The HTTP request status.
-        /// </summary>
-        public HttpRequestStatus HttpRequestStatus { get; set; }
     }
 
     public enum HttpRequestStatus

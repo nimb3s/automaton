@@ -1,8 +1,8 @@
 ﻿CREATE TABLE Job.[WorkItemStatus]
 (
+	Id bigint not null identity(1,1),
 	WorkItemId uniqueidentifier not null,
 	WorkItemStatusId smallint not null,
-
     [StatusTimeStamp] DATETIMEOFFSET NOT NULL default(SYSUTCDATETIME()), 
 	[Db_StatusTimeStamp] DATETIMEOFFSET NOT NULL default(SYSUTCDATETIME()), 
 	[_SystemRecordStartDateTime] DATETIME2(7) GENERATED ALWAYS AS ROW START NOT NULL CONSTRAINT DF_WorkItemStatus__SystemRecordStartDateTime DEFAULT(SYSUTCDATETIME()),
@@ -18,6 +18,6 @@ WITH
 GO
 
 CREATE INDEX [NCIX_Job_WorkItemStatus] 
-ON Job.[WorkItemStatus] (WorkItemId, WorkItemStatusId, [StatusTimeStamp], Db_StatusTimeStamp) 
+ON Job.[WorkItemStatus] (Id, WorkItemId, WorkItemStatusId, [StatusTimeStamp], Db_StatusTimeStamp) 
 WITH (DATA_COMPRESSION = PAGE) ON [JobIndex];
 GO

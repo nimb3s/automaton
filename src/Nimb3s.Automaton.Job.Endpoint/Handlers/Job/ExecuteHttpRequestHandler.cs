@@ -16,7 +16,6 @@ namespace Nimb3s.Automaton.Job.Endpoint
     {
         static ILog log = LogManager.GetLogger<ExecuteHttpRequestHandler>();
 
-        #region MessageHandler
         public async Task Handle(ExecuteHttpRequestMessage message, IMessageHandlerContext context)
         {
             await SaveRequestAsync(message);
@@ -26,7 +25,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
             {
                 JobId = message.JobId,
                 WorkItemId = message.WorkItemId,
-                HttpRequest = message.HttpRequest
+                HttpRequest = message.HttpRequest,
             }).ConfigureAwait(false);
 
             log.Info($"MESSAGE: {nameof(ExecuteHttpRequestMessage)}; HANDLED BY: {nameof(ExecuteHttpRequestHandler)}: {JsonConvert.SerializeObject(message)}");
@@ -47,7 +46,14 @@ namespace Nimb3s.Automaton.Job.Endpoint
                 RequestHeadersInJson = message.HttpRequest.RequestHeaders == null ? null : JsonConvert.SerializeObject(message.HttpRequest.RequestHeaders),
                 ContentHeadersInJson = message.HttpRequest.ContentHeaders == null ? null : JsonConvert.SerializeObject(message.HttpRequest.ContentHeaders),
                 AuthenticationConfigInJson = message.HttpRequest.AuthenticationConfig == null ? null : JsonConvert.SerializeObject(message.HttpRequest.AuthenticationConfig),
-                HttpRequestStatusTypeId = (short)message.HttpRequest.HttpRequestStatus
+                InsertTimeStamp = message.CreateDate
+            });
+
+            await dbContext.HttpRequestStatusRepository.UpsertAsync(new HttpRequestStatusEntity
+            {
+                HttpRequestId = message.HttpRequest.HttpRequestId,
+                HttpRequestStatusTypeId = (short)HttpRequestStatus.Started,
+                StatusTimeStamp = DateTimeOffset.UtcNow,
             });
 
             dbContext.Commit();
@@ -85,12 +91,9 @@ namespace Nimb3s.Automaton.Job.Endpoint
                 StatusCode = (int)responseMessage.StatusCode,
                 Body = await responseMessage.Content?.ReadAsStringAsync(),
                 InsertTimeStamp = message.CreateDate
-                //RequestHeaders = responseMessage.Headers,
-                //ContentHeaders = responseMessage?.Content?.Headers,
             });
 
             dbContext.Commit();
         }
-        #endregion
     }
 }

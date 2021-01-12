@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE job.p_UpsertWorkItem
+﻿CREATE PROCEDURE Job.p_UpsertWorkItem
  @Id uniqueidentifier,
  @JobId uniqueidentifier,
  @InsertTimeStamp datetimeoffset

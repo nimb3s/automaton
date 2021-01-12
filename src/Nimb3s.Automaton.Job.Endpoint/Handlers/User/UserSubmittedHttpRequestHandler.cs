@@ -5,6 +5,7 @@ using Nimb3s.Automaton.Core.Repositories;
 using Nimb3s.Automaton.Messages.User;
 using NServiceBus;
 using NServiceBus.Logging;
+using System;
 using System.Threading.Tasks;
 
 namespace Nimb3s.Automaton.Job.Endpoint
@@ -29,7 +30,13 @@ namespace Nimb3s.Automaton.Job.Endpoint
                 RequestHeadersInJson = message.HttpRequest.RequestHeaders == null ? null : JsonConvert.SerializeObject(message.HttpRequest.RequestHeaders),
                 ContentHeadersInJson = message.HttpRequest.ContentHeaders == null ? null : JsonConvert.SerializeObject(message.HttpRequest.ContentHeaders),
                 AuthenticationConfigInJson = message.HttpRequest.AuthenticationConfig == null ? null : JsonConvert.SerializeObject(message.HttpRequest.AuthenticationConfig),
-                HttpRequestStatusTypeId = (short)message.HttpRequest.HttpRequestStatus
+            });
+
+            await dbContext.HttpRequestStatusRepository.UpsertAsync(new HttpRequestStatusEntity
+            {
+                HttpRequestId = message.HttpRequest.HttpRequestId,
+                HttpRequestStatusTypeId = (short)HttpRequestStatus.Queued,
+                StatusTimeStamp = DateTimeOffset.UtcNow,
             });
 
             log.Info($"MESSAGE: {nameof(UserSubmittedHttpRequestMessage)}; HANDLED BY: {nameof(UserSubmittedHttpRequestHandler)}: {JsonConvert.SerializeObject(message)}");

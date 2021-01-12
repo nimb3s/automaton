@@ -1,4 +1,5 @@
 ﻿CREATE PROCEDURE Http.p_UpsertHttpRequestStatus
+ @Id bigint,
  @HttpRequestId uniqueidentifier,
  @HttpRequestStatusTypeId smallint,
  @StatusTimeStamp datetimeoffset

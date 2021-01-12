@@ -5,10 +5,10 @@ using System.Text;
 
 namespace Nimb3s.Automaton.Messages.Job
 {
-    public class QueueJobMessage
+    public class FinishedExecutingHttpRequestMessage
     {
         public Guid JobId { get; set; }
-        public string Name { get; set; }
-        public DateTimeOffset CreateDate { get; set; }
+        public Guid WorkItemId { get; set; }
+        public Guid HttpRequestId { get; set; }
     }
 }

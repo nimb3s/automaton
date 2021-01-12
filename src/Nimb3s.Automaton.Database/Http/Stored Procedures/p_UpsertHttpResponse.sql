@@ -1,26 +1,26 @@
-﻿CREATE PROCEDURE Job.p_UpsertWorkItemStatus
- @Id bigint = null,
- @WorkItemId uniqueidentifier,
- @WorkItemStatusId smallint,
- @StatusTimeStamp datetimeoffset
+﻿CREATE PROCEDURE Http.p_UpsertHttpResponse
+ @Id uniqueidentifier,
+ @HttpRequestId uniqueidentifier,
+ @StatusCode smallint,
+ @Body varchar(max),
+ @InsertTimeStamp datetimeoffset
 as
 begin
 	begin try
 		set nocount on;
 
-		if(not exists(select top 1 WorkItemId from [Job].[WorkItemStatus] where WorkItemId = @WorkItemId))
+		if not exists(select top 1 id from http.HttpResponse where Id = @Id)
 		begin
-			insert into [Job].[WorkItemStatus](WorkItemId, WorkItemStatusId, StatusTimeStamp)
-			values(@WorkItemId, @WorkItemStatusId, @StatusTimeStamp)
+			insert into http.HttpResponse(Id, HttpRequestId, StatusCode, Body, InsertTimeStamp) values(@Id, @HttpRequestId, @StatusCode, @Body, @InsertTimeStamp)
 		end
 		else
 		begin
-			update [Job].[JobStatus]
+			update [Http].HttpResponse 
 			set 
-				@WorkItemStatusId = @WorkItemStatusId,
-				StatusTimeStamp = @StatusTimeStamp
-			where @WorkItemId = @WorkItemId
-		end
+				StatusCode = @StatusCode,
+				Body = @Body
+			where Id = @Id
+		end	
 
 		if @@rowcount = 1
 			return 0;
@@ -34,7 +34,7 @@ begin
 			@ErrorMessage VARCHAR(4000),
 			@ErrorLine INT;
 
-		SELECT @ErrorMessageFormat = 'Procedure : [Job].%s failed with message: (%i) %s at line %i.',
+		SELECT @ErrorMessageFormat = 'Procedure : [Http].%s failed with message: (%i) %s at line %i.',
 			@ErrorSeverity = ERROR_SEVERITY(), 
 			@ErrorState = ERROR_STATE(),
 			@ErrorProcedure = ERROR_PROCEDURE(),

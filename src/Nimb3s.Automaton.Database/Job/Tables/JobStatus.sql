@@ -1,5 +1,6 @@
 ﻿CREATE TABLE Job.[JobStatus]
 (
+	Id bigint identity(1,1),
 	JobId uniqueidentifier not null,
 	JobStatusId smallint not null,
     [StatusTimeStamp] DATETIMEOFFSET NOT NULL default (SYSUTCDATETIME()),

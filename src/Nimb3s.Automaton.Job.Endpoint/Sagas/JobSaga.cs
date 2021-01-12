@@ -46,7 +46,6 @@ namespace Nimb3s.Automaton.Job.Endpoint
             await context.SendLocal(new QueueJobMessage
             {
                 JobId = message.JobId,
-                Status = message.JobStatus,
                 Name = message.JobName,
                 CreateDate = message.CreateDate
             }).ConfigureAwait(false);
@@ -54,16 +53,12 @@ namespace Nimb3s.Automaton.Job.Endpoint
 
         public async Task Handle(UserFinishedQueueingJobMessage message, IMessageHandlerContext context)
         {
-            if (message.JobStatus == JobStatus.FinishedQueueing)
-            {
-                Data.IsFinishedQueueing = true;
-                Data.IsQueueing = false;
-            }
+            Data.IsFinishedQueueing = true;
+            Data.IsQueueing = false;
 
             await context.SendLocal(new FinishedQueueingJobMessage
             {
                 JobId = message.JobId,
-                JobStatus = message.JobStatus,
                 CreateDate = message.CreateDate
             }).ConfigureAwait(false);
         }
@@ -74,7 +69,6 @@ namespace Nimb3s.Automaton.Job.Endpoint
             {
                 JobId = message.JobId,
                 WorkItemId = message.WorkItemId,
-                WorkItemStatus = message.WorkItemStatus,
                 HttpRequests = message.HttpRequests,
                 CreateDate = message.CreateDate
             }).ConfigureAwait(false);

@@ -135,7 +135,6 @@ namespace Nimb3s.Automaton.Api.Controllers
             {
                 JobId = workItem.JobId,
                 WorkItemId = workItem.WorkItemId,
-                WorkItemStatus = workItem.WorkItemStatus,
                 HttpRequests = workItem.HttpRequests.Select(i => new Request
                 {
                     AuthenticationConfig = i.AuthenticationConfig,
@@ -146,7 +145,6 @@ namespace Nimb3s.Automaton.Api.Controllers
                     Method = i.Method,
                     RequestHeaders = i.RequestHeaders,
                     Url = i.Url,
-                    HttpRequestStatus = HttpRequestStatus.Queued
                 }).ToList(),
                 CreateDate = DateTimeOffset.UtcNow
             });

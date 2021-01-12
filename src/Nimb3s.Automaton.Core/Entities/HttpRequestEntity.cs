@@ -3,7 +3,7 @@ using System;
 
 namespace Nimb3s.Automaton.Core.Entities
 {
-    public class HttpRequestEntity : IEntity<Guid>, IDisposable
+    public class HttpRequestEntity : IEntity<Guid>
     {
         public Guid Id { get; set; }
         public Guid WorkItemId { get; set; }
@@ -15,15 +15,5 @@ namespace Nimb3s.Automaton.Core.Entities
         public string ContentHeadersInJson { get; set; }
         public string AuthenticationConfigInJson { get; set; }
         public DateTimeOffset InsertTimeStamp { get; set; }
-
-        /// <summary>
-        /// The HTTP request status.
-        /// </summary>
-        public short HttpRequestStatusTypeId { get; set; }
-
-        public void Dispose()
-        {
-            
-        }
     }
 }
