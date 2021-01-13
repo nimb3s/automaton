@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Nimb3s.Automaton.Messages.User
 {
-    public class UserSubmittedWorkItemMessage : IMessage
+    public class UserCreatedWorkItemMessage : IMessage
     {
         public Guid JobId { get; set; }
         public Guid WorkItemId { get; set; }

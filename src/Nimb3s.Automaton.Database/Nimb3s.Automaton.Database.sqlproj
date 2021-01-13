@@ -96,7 +96,7 @@
     <Build Include="Http\Stored Procedures\p_UpsertHttpRequestStatus.sql" />
     <Build Include="Job\Stored Procedures\p_UpsertJobStatus.sql" />
     <Build Include="Job\Stored Procedures\p_UpsertWorkItemStatus.sql" />
-    <Build Include="Http\Stored Procedures\Copy of p_UpsertHttpRequestStatus.sql" />
+    <Build Include="Http\Stored Procedures\p_SelectHttpRequestStatusByHttpRequestId.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Nimb3s.Automaton.Database.publish.xml" />

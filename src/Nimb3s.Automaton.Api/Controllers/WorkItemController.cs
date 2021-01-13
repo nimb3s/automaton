@@ -34,33 +34,22 @@ namespace Nimb3s.Automaton.Api.Controllers
         ///     {
         ///     }
         /// </remarks>
-        /// <response code="201">Returns the newly created <see cref="WorkItemModel"/></response>
+        /// <response code="201">Returns the newly created <see cref="CreatedWorkItemModel"/></response>
         /// <response code="400">When the jobid for this resource is not found</response> 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpPost("api/automaton/{jobId}/[controller]")]
-        public async Task<ActionResult> Post(Guid jobId, [FromBody] WorkItemModel workItem)
+        public async Task<ActionResult> Post(string jobId, [FromBody] NewWorkItemModel newWorkItem)
         {
-            if (workItem.WorkItemStatus != WorkItemStatus.Queued)
-            {
-                return base.BadRequest(new
-                {
-                    workItem.WorkItemStatus,
-                    WorkItemStatus_Error = $"You can only set this property to {Enum.GetName(typeof(WorkItemStatus), WorkItemStatus.Queued)}"
-                });
-            }
+            Guid workItemId = Guid.NewGuid();
 
-            workItem.JobId = jobId;
-            workItem.WorkItemId = Guid.NewGuid();
-            workItem.WorkItemStatus = WorkItemStatus.Queued;
+            newWorkItem.JobId = Guid.Parse(jobId);
 
-            workItem.HttpRequests = new List<HttpRequestModel>
+            newWorkItem.HttpRequests = new List<NewHttpRequestModel>
             {
-                new HttpRequestModel
+                new NewHttpRequestModel
                 {
-                    HttpRequestId = Guid.NewGuid(),
-                    WorkItemStatus = WorkItemStatus.Queued,
                     Url = "https://www.jw.org/en/",
                     Method = HttpMethods.Get,
                     ContentType = "application/json",
@@ -69,23 +58,21 @@ namespace Nimb3s.Automaton.Api.Controllers
                         Id = Guid.NewGuid(),
                         Status = "some status"
                     }),
-                        AuthenticationConfig = new HttpAuthenticationConfig
+                    AuthenticationConfig = new HttpAuthenticationConfig
+                    {
+                        AuthenticationType = HttpAuthenticationType.OAuth20,
+                        AuthenticationOptions = new OAuth20AuthenticationConfig
                         {
-                            AuthenticationType = HttpAuthenticationType.OAuth20,
-                            AuthenticationOptions = new OAuth20AuthenticationConfig
+                            Grant = new OAuth20ClientGrant
                             {
-                                Grant = new OAuth20ClientGrant
-                                {
-                                    ClientId = Guid.NewGuid().ToString(),
-                                    ClientSecret = Guid.NewGuid().ToString()
-                                }
+                                ClientId = Guid.NewGuid().ToString(),
+                                ClientSecret = Guid.NewGuid().ToString()
                             }
                         }
+                    }
                 },
-                new HttpRequestModel
+                new NewHttpRequestModel
                 {
-                    HttpRequestId = Guid.NewGuid(),
-                    WorkItemStatus = WorkItemStatus.Queued,
                     Url = "https://www.cnn.com/",
                     Method = HttpMethods.Get,
                     ContentType = "application/json",
@@ -109,18 +96,11 @@ namespace Nimb3s.Automaton.Api.Controllers
                         }
                     }
                 },
-                new HttpRequestModel
+                new NewHttpRequestModel
                 {
-                    HttpRequestId = Guid.NewGuid(),
-                    WorkItemStatus = WorkItemStatus.Queued,
                     Url = "https://techcrunch.com/",
                     Method = HttpMethods.Get,
                     ContentType = "application/json",
-                    Content = JsonConvert.SerializeObject(new
-                    {
-                        Id = Guid.NewGuid(),
-                        Status = "some status"
-                    }),
                     AuthenticationConfig = new HttpAuthenticationConfig
                     {
                         AuthenticationType = HttpAuthenticationType.None
@@ -131,11 +111,11 @@ namespace Nimb3s.Automaton.Api.Controllers
             //TODO: if(automation job is not AutomationJobStatus.Queueing then reject the request
             //TODO: if client is trying to set automation job to finished queueing or done do not let them return forbidden?
 
-            await messageSession.Send(new UserSubmittedWorkItemMessage
+            UserCreatedWorkItemMessage message = new UserCreatedWorkItemMessage
             {
-                JobId = workItem.JobId,
-                WorkItemId = workItem.WorkItemId,
-                HttpRequests = workItem.HttpRequests.Select(i => new Request
+                JobId = newWorkItem.JobId,
+                WorkItemId = workItemId,
+                HttpRequests = newWorkItem.HttpRequests.Select(i => new Request
                 {
                     AuthenticationConfig = i.AuthenticationConfig,
                     Content = i.Content,
@@ -147,9 +127,28 @@ namespace Nimb3s.Automaton.Api.Controllers
                     Url = i.Url,
                 }).ToList(),
                 CreateDate = DateTimeOffset.UtcNow
-            });
+            };
 
-            return Created($"/api/automationjob/{workItem.JobId}/workitem/{workItem.WorkItemId}", workItem);
+            await messageSession.Send(message);
+
+            return Created($"/api/automaton/job/{newWorkItem.JobId}/workitem/{workItemId}", new CreatedWorkItemModel
+            {
+                JobId = message.JobId,
+                WorkItemId = message.WorkItemId,
+                HttpRequests = message.HttpRequests.Select(i => new CreatedHttpRequestModel
+                {
+                    HttpRequestId = i.HttpRequestId,
+                    AuthenticationConfig = i.AuthenticationConfig,
+                    Content = i.Content,
+                    ContentHeaders = i.ContentHeaders,
+                    ContentType = i.ContentType,
+                    Method = i.Method,
+                    RequestHeaders = i.RequestHeaders,
+                    Url = i.Url,
+                    HttpRequestStatus = HttpRequestStatus.Queued,
+                }),
+                WorkItemStatus = WorkItemStatus.Queued
+            });
         }
 
         //// DELETE api/<AutomationRequest>/5

@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Nimb3s.Automaton.Messages.User
 {
-    public class UserFinishedQueueingJobMessage: IMessage
+    public class UserRestartedJobMessage : IMessage
     {
         public Guid JobId { get; set; }
-        public DateTimeOffset ActionTookPlaceDate { get; set; }
+        public DateTimeOffset DateActionTookPlace { get; set; }
     }
 }

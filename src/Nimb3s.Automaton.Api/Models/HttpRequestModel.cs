@@ -5,13 +5,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Nimb3s.Automaton.Api.Models
 {
-    public class HttpRequestModel
+    public class HttpRequestBaseModel
     {
-        /// <summary>
-        /// The HTTP request id
-        /// </summary>
-        public Guid HttpRequestId { get; set; }
-
         [Required]
         public string Url { get; set; }
         [Required]
@@ -23,10 +18,23 @@ namespace Nimb3s.Automaton.Api.Models
         public Dictionary<string, string> ContentHeaders { get; set; }
         [Required]
         public HttpAuthenticationConfig AuthenticationConfig { get; set; }
+    }
+
+    public class NewHttpRequestModel : HttpRequestBaseModel
+    {
+
+    }
+
+    public class CreatedHttpRequestModel : HttpRequestBaseModel
+    {
+        /// <summary>
+        /// The HTTP request id
+        /// </summary>
+        public Guid HttpRequestId { get; set; }
 
         /// <summary>
         /// The HTTP request status.
         /// </summary>
-        public WorkItemStatus WorkItemStatus { get; set; }
+        public HttpRequestStatus HttpRequestStatus { get; set; }
     }
 }

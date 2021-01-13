@@ -13,21 +13,21 @@ namespace Nimb3s.Automaton.Job.Endpoint
 {
     public class FinishedExecutingHttpRequestHandler : IHandleMessages<FinishedExecutingHttpRequestMessage>
     {
-        static ILog log = LogManager.GetLogger<FinishQueueingJobHandler>();
+        static ILog log = LogManager.GetLogger<UserFinishedQueueingJobHandler>();
 
         #region MessageHandler
         public async Task Handle(FinishedExecutingHttpRequestMessage message, IMessageHandlerContext context)
         {
-            AutomatonDatabaseContext dbContext = new AutomatonDatabaseContext();
+            //AutomatonDatabaseContext dbContext = new AutomatonDatabaseContext();
 
-            await dbContext.HttpRequestStatusRepository.UpsertAsync(new HttpRequestStatusEntity
-            {
-                HttpRequestId = message.HttpRequestId,
-                HttpRequestStatusTypeId = (short)HttpRequestStatus.Completed,
-                StatusTimeStamp = DateTimeOffset.UtcNow,
-            });
+            //await dbContext.HttpRequestStatusRepository.UpsertAsync(new HttpRequestStatusEntity
+            //{
+            //    HttpRequestId = message.HttpRequestId,
+            //    HttpRequestStatusTypeId = (short)HttpRequestStatus.Completed,
+            //    StatusTimeStamp = DateTimeOffset.UtcNow,
+            //});
 
-            dbContext.Commit();
+            //dbContext.Commit();
 
             log.Info($"MESSAGE: {nameof(FinishedExecutingHttpRequestMessage)}; HANDLED BY: {nameof(FinishedExecutingHttpRequestHandler)}: {JsonConvert.SerializeObject(message)}");
         }

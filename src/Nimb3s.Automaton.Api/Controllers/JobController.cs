@@ -1,0 +1,114 @@
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Nimb3s.Automaton.Api.Models;
+using Nimb3s.Automaton.Messages.User;
+using NServiceBus;
+using System;
+using System.Threading.Tasks;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+namespace Nimb3s.Automaton.Api.Controllers
+{
+    [ApiController]
+    public class JobController : ControllerBase
+    {
+        private readonly IMessageSession messageSession;
+
+        public JobController(IMessageSession messageSession)
+        {
+            this.messageSession = messageSession;
+        }
+
+        /// <summary>
+        /// Creates a <see cref="NewJobModel"/> item.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /asfd
+        ///     {
+        ///     }
+        /// </remarks>
+        /// <response code="200">Returns ok when the automation job is reset to <see cref="JobStatus.Created"/> or <see cref="JobStatus.Started"/> </response>
+        /// <response code="201">Returns the newly created <see cref="NewJobModel"/></response>
+        /// <response code="400">If the item is not found</response> 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost("api/automaton/jobs")]
+        public async Task<ActionResult> Post([FromBody] NewJobModel job)
+        {
+            Guid jobId = Guid.NewGuid();
+
+            await messageSession.Send(new UserCreatedJobMessage
+            {
+                JobId = jobId,
+                JobName = job.Name,
+                DateActionTookPlace = DateTime.UtcNow
+            });
+
+            return Created($"/api/automaton/jobs/{jobId}", new NewJobCreatedModel
+            {
+                JobId = jobId,
+                JobStatus = JobStatus.Created,
+                Name = job.Name
+            });
+        }
+
+        // PUT api/<AutomationRequest>/asdf-asdf-asdf-asdf
+        /// <summary>
+        /// Creates a <see cref="WorkItemModel"/> item.
+        /// </summary>
+        /// <response code="201">Returns the newly created <see cref="WorkItemModel"/></response>
+        /// <response code="400">When the jobid for this resource is not found</response> 
+        ///
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpPut("api/automaton/jobs/{jobId}")]
+        public async Task<ActionResult> Put(Guid jobId, [FromBody] UpdateJobModel job)
+        {
+            ActionResult actionResult = null;
+
+            switch (job.JobStatus)
+            {
+                case JobStatus.Created:
+                case JobStatus.Started:
+                    actionResult =  BadRequest(new
+                    {
+                        job.JobStatus,
+                        WorkItemStatus_Error = $"You can only set this property to {Enum.GetName(typeof(JobStatus), JobStatus.FinishedQueueing)} or {Enum.GetName(typeof(JobStatus), JobStatus.Restart)}"
+                    });
+                    break;
+                case JobStatus.FinishedQueueing:
+                    await messageSession.Send(new UserFinishedQueueingJobMessage
+                    {
+                        JobId = jobId,
+                        ActionTookPlaceDate = DateTimeOffset.UtcNow
+                    });
+                    actionResult = Created($"/api/automaton/jobs/{jobId}", job);
+                    break;
+                case JobStatus.Restart:
+                    await messageSession.Send(new UserRestartedJobMessage
+                    {
+                        JobId = jobId,
+                        DateActionTookPlace = DateTimeOffset.UtcNow
+                    });
+                    actionResult = Created($"/api/automaton/jobs/{jobId}", job);
+                    break;
+                default:
+                    actionResult = NotFound();
+                    break;
+            }
+
+            return actionResult;
+        }
+
+        //// DELETE api/<AutomationRequest>/5
+        //[HttpDelete("{id}")]
+        //public void Delete(int id)
+        //{
+        //}
+    }
+}
