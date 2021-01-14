@@ -1,10 +1,12 @@
-﻿using Nimb3s.Automaton.Core.Entities;
+﻿using Dapper;
+using Nimb3s.Automaton.Core.Entities;
 using Nimb3s.Data.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Nimb3s.Automaton.Core.Repositories
 {
@@ -16,6 +18,16 @@ namespace Nimb3s.Automaton.Core.Repositories
             :base(unitOfWork)
         {
 
+        }
+
+        public async Task<IEnumerable<HttpRequestEntity>> GetAllByJobIdAndStatusAsync(Guid jobId, short workItemStatusId)
+        {
+            DynamicParameters dp = new DynamicParameters();
+
+            dp.Add(nameof(jobId), jobId);
+            dp.Add(nameof(workItemStatusId), workItemStatusId);
+
+            return (await connection.QueryAsync<HttpRequestEntity>(sql: $"{Schema}.p_GetAll{entityName}sByJobIdAndStatus", param: dp, commandType: CommandType.StoredProcedure, transaction: transaction)).AsList();
         }
     }
 }

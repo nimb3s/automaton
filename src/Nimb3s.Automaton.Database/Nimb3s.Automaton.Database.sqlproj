@@ -66,6 +66,11 @@
     <Folder Include="History" />
     <Folder Include="History\Tables" />
     <Folder Include="Storage" />
+    <Folder Include="Scripts" />
+    <Folder Include="Scripts\Post-Deploy" />
+    <Folder Include="Scripts\Post-Deploy\Types" />
+    <Folder Include="Scripts\Post-Deploy\Types\Http" />
+    <Folder Include="Scripts\Post-Deploy\Types\Job" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Schemas\Job.sql" />
@@ -96,9 +101,18 @@
     <Build Include="Http\Stored Procedures\p_UpsertHttpRequestStatus.sql" />
     <Build Include="Job\Stored Procedures\p_UpsertJobStatus.sql" />
     <Build Include="Job\Stored Procedures\p_UpsertWorkItemStatus.sql" />
-    <Build Include="Http\Stored Procedures\p_SelectHttpRequestStatusByHttpRequestId.sql" />
+    <Build Include="Http\Stored Procedures\p_GetHttpRequestStatusByHttpRequestId.sql" />
+    <Build Include="Job\Stored Procedures\p_GetAllWorkItemsByJobId.sql" />
+    <Build Include="Http\Stored Procedures\p_GetAllHttpRequestsByJobIdAndStatus.sql" />
+    <Build Include="Job\Stored Procedures\p_GetJob.sql" />
+    <None Include="Scripts\Post-Deploy\Types\types-runner.sql" />
+    <None Include="Scripts\Post-Deploy\Types\types.sql" />
+    <None Include="Scripts\Post-Deploy\Types\Http\HttpRequestStatusType.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Nimb3s.Automaton.Database.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Script.PostDeployment.sql" />
   </ItemGroup>
 </Project>

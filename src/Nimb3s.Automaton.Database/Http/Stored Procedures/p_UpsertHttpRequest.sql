@@ -1,7 +1,6 @@
 ﻿CREATE PROCEDURE [Http].[p_UpsertHttpRequest]
  @Id uniqueidentifier,
  @WorkItemId uniqueidentifier,
- @HttpRequestStatusTypeId smallint,
  @Url varchar(2000),
  @ContentType varchar(100),
  @Method varchar(10),

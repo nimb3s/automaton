@@ -30,7 +30,7 @@ namespace Nimb3s.Automaton.Api.Controllers
         ///     {
         ///     }
         /// </remarks>
-        /// <response code="200">Returns ok when the automation job is reset to <see cref="JobStatus.Created"/> or <see cref="JobStatus.Started"/> </response>
+        /// <response code="200">Returns ok when the automation job is reset to <see cref="JobStatusType.Created"/> or <see cref="JobStatusType.Started"/> </response>
         /// <response code="201">Returns the newly created <see cref="NewJobModel"/></response>
         /// <response code="400">If the item is not found</response> 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -51,7 +51,7 @@ namespace Nimb3s.Automaton.Api.Controllers
             return Created($"/api/automaton/jobs/{jobId}", new NewJobCreatedModel
             {
                 JobId = jobId,
-                JobStatus = JobStatus.Created,
+                JobStatus = JobStatusType.Created,
                 Name = job.Name
             });
         }
@@ -73,15 +73,15 @@ namespace Nimb3s.Automaton.Api.Controllers
 
             switch (job.JobStatus)
             {
-                case JobStatus.Created:
-                case JobStatus.Started:
+                case JobStatusType.Created:
+                case JobStatusType.Started:
                     actionResult =  BadRequest(new
                     {
                         job.JobStatus,
-                        WorkItemStatus_Error = $"You can only set this property to {Enum.GetName(typeof(JobStatus), JobStatus.FinishedQueueing)} or {Enum.GetName(typeof(JobStatus), JobStatus.Restart)}"
+                        JobStatus_Error = $"You can only set this property to {Enum.GetName(typeof(JobStatusType), JobStatusType.FinishedQueueing)} or {Enum.GetName(typeof(JobStatusType), JobStatusType.Restart)}"
                     });
                     break;
-                case JobStatus.FinishedQueueing:
+                case JobStatusType.FinishedQueueing:
                     await messageSession.Send(new UserFinishedQueueingJobMessage
                     {
                         JobId = jobId,
@@ -89,7 +89,7 @@ namespace Nimb3s.Automaton.Api.Controllers
                     });
                     actionResult = Created($"/api/automaton/jobs/{jobId}", job);
                     break;
-                case JobStatus.Restart:
+                case JobStatusType.Restart:
                     await messageSession.Send(new UserRestartedJobMessage
                     {
                         JobId = jobId,

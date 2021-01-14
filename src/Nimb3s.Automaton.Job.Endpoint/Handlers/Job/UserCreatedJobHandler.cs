@@ -20,19 +20,19 @@ namespace Nimb3s.Automaton.Job.Endpoint
         {
             AutomatonDatabaseContext dbContext = new AutomatonDatabaseContext();
 
-            //await dbContext.JobRepository.UpsertAsync(new JobEntity
-            //{
-            //    Id = message.JobId,
-            //    JobName = message.JobName,
-            //    InsertTimeStamp = message.DateActionTookPlace
-            //});
+            await dbContext.JobRepository.UpsertAsync(new JobEntity
+            {
+                Id = message.JobId,
+                JobName = message.JobName,
+                InsertTimeStamp = message.DateActionTookPlace
+            });
 
-            //await dbContext.JobStatusRepository.UpsertAsync(new JobStatusEntity
-            //{
-            //    JobId = message.JobId,
-            //    JobStatusId = (short)JobStatus.Created,
-            //    StatusTimeStamp =  message.DateActionTookPlace
-            //});
+            await dbContext.JobStatusRepository.UpsertAsync(new JobStatusEntity
+            {
+                JobId = message.JobId,
+                JobStatusId = (short)JobStatusType.Created,
+                StatusTimeStamp = DateTimeOffset.UtcNow
+            });
 
             dbContext.Commit();
 

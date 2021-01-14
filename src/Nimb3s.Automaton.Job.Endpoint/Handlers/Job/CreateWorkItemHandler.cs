@@ -17,14 +17,23 @@ namespace Nimb3s.Automaton.Job.Endpoint
         #region MessageHandler
         public async Task Handle(WorkItemCreatedMessage message, IMessageHandlerContext context)
         {
-            //AutomatonDatabaseContext dbContext = new AutomatonDatabaseContext();
+            AutomatonDatabaseContext dbContext = new AutomatonDatabaseContext();
 
-            //await dbContext.WorkItemRepository.UpsertAsync(new Core.Entities.WorkItemEntity
-            //{
-            //    Id = message.WorkItemId,
-            //    JobId = message.JobId,
-            //    InsertTimeStamp = message.CreateDate
-            //});
+            await dbContext.WorkItemRepository.UpsertAsync(new WorkItemEntity
+            {
+                Id = message.WorkItemId,
+                JobId = message.JobId,
+                InsertTimeStamp = message.CreateDate
+            });
+
+            await dbContext.WorkItemStatusRepository.UpsertAsync(new WorkItemStatusEntity
+            {
+                WorkItemId = message.WorkItemId,
+                WorkItemStatusId = (short)WorkItemStatusType.Queued,
+                StatusTimeStamp = message.CreateDate,
+            });
+
+            dbContext.Commit();
 
 
             log.Info($"MESSAGE: {nameof(WorkItemCreatedMessage)}; HANDLED BY: {nameof(CreateWorkItemHandler)}: {JsonConvert.SerializeObject(message)}");

@@ -11,25 +11,25 @@ using System.Threading.Tasks;
 
 namespace Nimb3s.Automaton.Job.Endpoint
 {
-    public class UserFinishedQueueingJobHandler :IHandleMessages<UserFinishedQueueingJobMessage>
+    public class WorkItemCompletedHandler : IHandleMessages<WorkItemCompletedMessage>
     {
         static ILog log = LogManager.GetLogger<UserFinishedQueueingJobHandler>();
 
         #region MessageHandler
-        public async Task Handle(UserFinishedQueueingJobMessage message, IMessageHandlerContext context)
+        public async Task Handle(WorkItemCompletedMessage message, IMessageHandlerContext context)
         {
             AutomatonDatabaseContext dbContext = new AutomatonDatabaseContext();
 
-            await dbContext.JobStatusRepository.UpsertAsync(new JobStatusEntity
+            await dbContext.WorkItemStatusRepository.UpsertAsync(new WorkItemStatusEntity
             {
-                JobId = message.JobId,
-                JobStatusId = (short)JobStatusType.FinishedQueueing,
-                StatusTimeStamp = message.ActionTookPlaceDate,
+                StatusTimeStamp = message.DateActionTaken,
+                WorkItemId = message.WorkItemId,
+                WorkItemStatusId = (short)WorkItemStatusType.Completed
             });
 
             dbContext.Commit();
 
-            log.Info($"MESSAGE: {nameof(UserFinishedQueueingJobMessage)}; HANDLED BY: {nameof(UserFinishedQueueingJobHandler)}: {JsonConvert.SerializeObject(message)}");
+            log.Info($"MESSAGE: {nameof(WorkItemCompletedMessage)}; HANDLED BY: {nameof(WorkItemCompletedHandler)}: {JsonConvert.SerializeObject(message)}");
         }
         #endregion
     }

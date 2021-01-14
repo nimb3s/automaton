@@ -35,7 +35,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
             await dbContext.HttpRequestStatusRepository.UpsertAsync(new HttpRequestStatusEntity
             {
                 HttpRequestId = message.HttpRequest.HttpRequestId,
-                HttpRequestStatusTypeId = (short)HttpRequestStatus.Queued,
+                HttpRequestStatusTypeId = (short)HttpRequestStatusType.Queued,
                 StatusTimeStamp = DateTimeOffset.UtcNow,
             });
 

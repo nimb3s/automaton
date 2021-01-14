@@ -37,7 +37,7 @@ namespace Nimb3s.Automaton.Api.Models
         /// <summary>
         /// The work item status. When a workitem Starts and finishes.
         /// </summary>
-        public WorkItemStatus WorkItemStatus { get; set; }
+        public WorkItemStatusType WorkItemStatus { get; set; }
 
         /// <summary>
         /// The collection of <see cref="CreatedHttpRequestModel"/> to exeute.

@@ -1,14 +1,15 @@
-﻿using Nimb3s.Automaton.Messages.User;
+﻿using NServiceBus;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
-namespace Nimb3s.Automaton.Messages.Job
+namespace Nimb3s.Automaton.Messages.User
 {
-    public class WorkItemCreatedMessage
+    public class UserRestartedWorkItemMessage : IMessage
     {
         public Guid JobId { get; set; }
         public Guid WorkItemId { get; set; }
         public IEnumerable<UserHttpRequest> HttpRequests { get; set; }
-        public DateTimeOffset CreateDate { get; set; }
+        public DateTimeOffset DateActionTaken { get; set; }
     }
 }

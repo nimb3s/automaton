@@ -12,88 +12,112 @@ using System.Threading.Tasks;
 
 namespace Nimb3s.Automaton.Job.Endpoint
 {
-    public class ExecuteHttpRequestHandler: IHandleMessages<ExecuteHttpRequestMessage>
+    public class ExecuteHttpRequestHandler : IHandleMessages<ExecuteHttpRequestMessage>
     {
         static ILog log = LogManager.GetLogger<ExecuteHttpRequestHandler>();
 
         public async Task Handle(ExecuteHttpRequestMessage message, IMessageHandlerContext context)
         {
-            await SaveRequestAsync(message);
-            await SaveResponseAsync(message);
+            await SetStatusToStarted(message);
+            var httpResponseMessage = await SendHttpRequest(message);
+            await SaveHttpRequestAsync(message, httpResponseMessage);
 
             await context.SendLocal(new HttpRequestExecutedMessage
             {
                 JobId = message.JobId,
                 WorkItemId = message.WorkItemId,
                 HttpRequest = message.HttpRequest,
+                DateActionTaken = DateTime.UtcNow
             }).ConfigureAwait(false);
 
             log.Info($"MESSAGE: {nameof(ExecuteHttpRequestMessage)}; HANDLED BY: {nameof(ExecuteHttpRequestHandler)}: {JsonConvert.SerializeObject(message)}");
         }
 
-        private async Task SaveRequestAsync(ExecuteHttpRequestMessage message)
+        private async Task SetStatusToStarted(ExecuteHttpRequestMessage message)
         {
-            //AutomatonDatabaseContext dbContext = new AutomatonDatabaseContext();
+            AutomatonDatabaseContext dbContext = new AutomatonDatabaseContext();
 
-            //await dbContext.HttpRequestRepository.UpsertAsync(new HttpRequestEntity
-            //{
-            //    Id = message.HttpRequest.HttpRequestId,
-            //    WorkItemId = message.WorkItemId,
-            //    Url = message.HttpRequest.Url,
-            //    ContentType = message.HttpRequest.ContentType,
-            //    Method = message.HttpRequest.Method,
-            //    Content = message.HttpRequest.Content,
-            //    RequestHeadersInJson = message.HttpRequest.RequestHeaders == null ? null : JsonConvert.SerializeObject(message.HttpRequest.RequestHeaders),
-            //    ContentHeadersInJson = message.HttpRequest.ContentHeaders == null ? null : JsonConvert.SerializeObject(message.HttpRequest.ContentHeaders),
-            //    AuthenticationConfigInJson = message.HttpRequest.AuthenticationConfig == null ? null : JsonConvert.SerializeObject(message.HttpRequest.AuthenticationConfig),
-            //    InsertTimeStamp = message.CreateDate
-            //});
+            await dbContext.HttpRequestRepository.UpsertAsync(new HttpRequestEntity
+            {
+                Id = message.HttpRequest.HttpRequestId,
+                WorkItemId = message.WorkItemId,
+                Url = message.HttpRequest.Url,
+                ContentType = message.HttpRequest.ContentType,
+                Method = message.HttpRequest.Method,
+                Content = message.HttpRequest.Content,
+                RequestHeadersInJson = message.HttpRequest.RequestHeaders == null ? null : JsonConvert.SerializeObject(message.HttpRequest.RequestHeaders),
+                ContentHeadersInJson = message.HttpRequest.ContentHeaders == null ? null : JsonConvert.SerializeObject(message.HttpRequest.ContentHeaders),
+                AuthenticationConfigInJson = message.HttpRequest.AuthenticationConfig == null ? null : JsonConvert.SerializeObject(message.HttpRequest.AuthenticationConfig),
+            });
 
-            //await dbContext.HttpRequestStatusRepository.UpsertAsync(new HttpRequestStatusEntity
-            //{
-            //    HttpRequestId = message.HttpRequest.HttpRequestId,
-            //    HttpRequestStatusTypeId = (short)HttpRequestStatus.Started,
-            //    StatusTimeStamp = DateTimeOffset.UtcNow,
-            //});
+            await dbContext.HttpRequestStatusRepository.UpsertAsync(new HttpRequestStatusEntity
+            {
+                HttpRequestId = message.HttpRequest.HttpRequestId,
+                HttpRequestStatusTypeId = (short)HttpRequestStatusType.Started,
+                StatusTimeStamp = DateTimeOffset.UtcNow,
+            });
 
-            //dbContext.Commit();
+            dbContext.Commit();
         }
 
-        private async Task SaveResponseAsync(ExecuteHttpRequestMessage message)
+        private async Task<HttpResponseMessage> SendHttpRequest(ExecuteHttpRequestMessage message)
         {
-            //AutomatonDatabaseContext dbContext = new AutomatonDatabaseContext();
+            HttpResponseMessage httpResponse = new HttpResponseMessage();
 
-            //TODO: Finish the request
-            //HttpClient client = new HttpClient();
-            //HttpRequestMessage requestMessage = new HttpRequestMessage
-            //{
-            //    RequestUri = new Uri(message.HttpRequest.Url),
-            //};
-            //HttpResponseMessage responseMessage = new HttpResponseMessage();
+            try
+            {
+                HttpClient client = new HttpClient();
+                HttpRequestMessage requestMessage = new HttpRequestMessage
+                {
+                    RequestUri = new Uri(message.HttpRequest.Url),
+                };
+                HttpResponseMessage responseMessage = new HttpResponseMessage();
 
-            //switch (message.HttpRequest.Method.ToLower())
-            //{
-            //    case "get":
-            //        requestMessage.Method = HttpMethod.Get;
-            //        break;
-            //    case "post":
-            //        requestMessage.Method = HttpMethod.Post;
-            //        break;
-            //    default:
-            //        break;
-            //}
+                switch (message.HttpRequest.Method.ToLower())
+                {
+                    case "get":
+                        requestMessage.Method = HttpMethod.Get;
+                        break;
+                    case "post":
+                        requestMessage.Method = HttpMethod.Post;
+                        break;
+                    default:
+                        break;
+                }
 
-            //responseMessage = await client.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead);
+                httpResponse = await client.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead);
+            }
+            catch (Exception ex)
+            {
+                httpResponse.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                httpResponse.Content = new StringContent(ex.StackTrace);
+            }
 
-            //await dbContext.HttpResponseRepository.UpsertAsync(new HttpResponseEntity
-            //{
-            //    HttpRequestId = message.HttpRequest.HttpRequestId,
-            //    StatusCode = (int)responseMessage.StatusCode,
-            //    Body = await responseMessage.Content?.ReadAsStringAsync(),
-            //    InsertTimeStamp = message.CreateDate
-            //});
+            return httpResponse;
+        }
 
-            //dbContext.Commit();
+        private async Task SaveHttpRequestAsync(ExecuteHttpRequestMessage message, HttpResponseMessage httpResponseMessage)
+        {
+            AutomatonDatabaseContext dbContext = new AutomatonDatabaseContext();
+            var content = await httpResponseMessage.Content?.ReadAsStringAsync();
+
+            await dbContext.HttpResponseRepository.UpsertAsync(new HttpResponseEntity
+            {
+                Id = Guid.NewGuid(),
+                HttpRequestId = message.HttpRequest.HttpRequestId,
+                StatusCode = (int)httpResponseMessage.StatusCode,
+                Body = content,
+                InsertTimeStamp = message.CreateDate
+            });
+
+            await dbContext.HttpRequestStatusRepository.UpsertAsync(new HttpRequestStatusEntity
+            {
+                HttpRequestId = message.HttpRequest.HttpRequestId,
+                HttpRequestStatusTypeId = (short)HttpRequestStatusType.Completed,
+                StatusTimeStamp = DateTimeOffset.UtcNow,
+            });
+
+            dbContext.Commit();
         }
     }
 }

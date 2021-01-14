@@ -10,5 +10,6 @@ namespace Nimb3s.Automaton.Core.Entities
         public long Id { get; set; }
         public Guid WorkItemId { get; set; }
         public short WorkItemStatusId { get; set; }
+        public DateTimeOffset StatusTimeStamp { get; set; }
     }
 }

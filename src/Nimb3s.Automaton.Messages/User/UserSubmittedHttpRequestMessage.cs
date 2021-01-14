@@ -8,13 +8,13 @@ namespace Nimb3s.Automaton.Messages.User
     {
         public Guid JobId { get; set; }
         public Guid WorkItemId { get; set; }
-        public Request HttpRequest { get; set; }
+        public UserHttpRequest HttpRequest { get; set; }
     }
 
     /// <summary>
     /// The http request to be executed as part of an automation job work item.
     /// </summary>
-    public class Request
+    public class UserHttpRequest
     {
         /// <summary>
         /// The HTTP request id
@@ -30,11 +30,11 @@ namespace Nimb3s.Automaton.Messages.User
         public HttpAuthenticationConfig AuthenticationConfig { get; set; }
     }
 
-    public enum HttpRequestStatus
+    public enum HttpRequestStatusType
     {
-        Queued,
-        Started,
-        Completed
+        Queued = 1,
+        Started = 2,
+        Completed = 3
     }
 
     public class HttpAuthenticationConfig
@@ -45,8 +45,8 @@ namespace Nimb3s.Automaton.Messages.User
 
     public enum HttpAuthenticationType
     {
-        None,
-        OAuth20
+        None = 1,
+        OAuth20 = 2
     }
 
     public class HttpAuthenticationOptions
@@ -69,11 +69,11 @@ namespace Nimb3s.Automaton.Messages.User
         /// <summary>
         /// Supports client id and client secret: client_credentials
         /// </summary>
-        ClientCredentials,
+        ClientCredentials = 1,
         /// <summary>
         /// Supports client id and client secret with username and user password: password
         /// </summary>
-        Password
+        Password = 2
     }
 
     public class OAuth20Grant

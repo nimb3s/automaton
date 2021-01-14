@@ -20,13 +20,13 @@ namespace Nimb3s.Automaton.Core.Repositories
 
         }
 
-        public async Task<WorkItemStatusEntity> GetByWorkItemIdAsync(Guid WorkItemId)
+        public async Task<WorkItemStatusEntity> GetByWorkItemIdAsync(Guid workItemId)
         {
             DynamicParameters dp = new DynamicParameters();
 
-            dp.Add(nameof(WorkItemId), WorkItemId);
+            dp.Add(nameof(workItemId), workItemId);
 
-            return await connection.QuerySingleAsync<WorkItemStatusEntity>(sql: $"{Schema}.p_Get{entityName}By{nameof(WorkItemId)}", param: dp, commandType: CommandType.StoredProcedure, transaction: transaction);
+            return await connection.QuerySingleAsync<WorkItemStatusEntity>(sql: $"{Schema}.p_Get{entityName}By{nameof(workItemId)}", param: dp, commandType: CommandType.StoredProcedure, transaction: transaction);
         }
     }
 }

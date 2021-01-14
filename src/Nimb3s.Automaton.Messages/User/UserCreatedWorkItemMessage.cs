@@ -8,28 +8,33 @@ namespace Nimb3s.Automaton.Messages.User
     {
         public Guid JobId { get; set; }
         public Guid WorkItemId { get; set; }
-        public IEnumerable<Request> HttpRequests { get; set; }
-        public DateTimeOffset CreateDate { get; set; }
+        public IEnumerable<UserHttpRequest> HttpRequests { get; set; }
+        public DateTimeOffset DateActionTaken { get; set; }
     }
 
     /// <summary>
     /// The <see cref="WorkItemModel"/> status. When a work item starts or finishes.
     /// </summary>
-    public enum WorkItemStatus
+    public enum WorkItemStatusType
     {
         /// <summary>
         /// When a work item is queued.
         /// </summary>
-        Queued,
+        Queued = 1,
 
         /// <summary>
         /// When a work item starts running.
         /// </summary>
-        Started,
+        Started = 2,
+
+        /// <summary>
+        /// When a work item starts running.
+        /// </summary>
+        ReStarted = 3,
 
         /// <summary>
         /// When a work item completes.
         /// </summary>
-        Completed
+        Completed = 4
     }
 }

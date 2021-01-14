@@ -19,7 +19,7 @@ namespace Nimb3s.Automaton.Api.Models
         /// <summary>
         /// The automation job status.
         /// </summary>
-        public JobStatus JobStatus { get; set; }
+        public JobStatusType JobStatus { get; set; }
     }
 
     /// <summary>
@@ -41,7 +41,7 @@ namespace Nimb3s.Automaton.Api.Models
         /// <summary>
         /// The automation job status.
         /// </summary>
-        public JobStatus JobStatus { get; set; }
+        public JobStatusType JobStatus { get; set; }
     }
 
     /// <summary>
@@ -52,6 +52,6 @@ namespace Nimb3s.Automaton.Api.Models
         /// <summary>
         /// The automation job status.
         /// </summary>
-        public JobStatus JobStatus { get; set; }
+        public JobStatusType JobStatus { get; set; }
     }
 }

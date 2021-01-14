@@ -115,7 +115,7 @@ namespace Nimb3s.Automaton.Api.Controllers
             {
                 JobId = newWorkItem.JobId,
                 WorkItemId = workItemId,
-                HttpRequests = newWorkItem.HttpRequests.Select(i => new Request
+                HttpRequests = newWorkItem.HttpRequests.Select(i => new UserHttpRequest
                 {
                     AuthenticationConfig = i.AuthenticationConfig,
                     Content = i.Content,
@@ -126,7 +126,7 @@ namespace Nimb3s.Automaton.Api.Controllers
                     RequestHeaders = i.RequestHeaders,
                     Url = i.Url,
                 }).ToList(),
-                CreateDate = DateTimeOffset.UtcNow
+                DateActionTaken = DateTimeOffset.UtcNow
             };
 
             await messageSession.Send(message);
@@ -145,9 +145,9 @@ namespace Nimb3s.Automaton.Api.Controllers
                     Method = i.Method,
                     RequestHeaders = i.RequestHeaders,
                     Url = i.Url,
-                    HttpRequestStatus = HttpRequestStatus.Queued,
+                    HttpRequestStatus = HttpRequestStatusType.Queued,
                 }),
-                WorkItemStatus = WorkItemStatus.Queued
+                WorkItemStatus = WorkItemStatusType.Queued
             });
         }
 

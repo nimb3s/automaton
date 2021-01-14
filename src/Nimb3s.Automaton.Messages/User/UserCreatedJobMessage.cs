@@ -12,40 +12,40 @@ namespace Nimb3s.Automaton.Messages.User
 
     /// <summary>
     /// The status of the automation request.
-    /// <see cref="JobStatus.Created"/>:
+    /// <see cref="JobStatusType.Created"/>:
     /// This status indicates that subsequent endpoint requests should be grouped together. This status is used to support
     /// grouping multiple endpoint requests into a sigle automation job.
-    /// <see cref="JobStatus.FinishedQueueing"/>:
+    /// <see cref="JobStatusType.FinishedQueueing"/>:
     /// This status indicates that endpoint requests will no longer be accepted as part of this job. If a client wishes to only process
-    /// one  endpoint request, the <see cref="JobStatus.FinishedQueueing"/> should be used.
-    /// <see cref="JobStatus.Started"/>:
-    /// After job items have <see cref="JobStatus.FinishedQueueing"/> and all items are <see cref="JobStatus.Completed"/>
+    /// one  endpoint request, the <see cref="JobStatusType.FinishedQueueing"/> should be used.
+    /// <see cref="JobStatusType.Started"/>:
+    /// After job items have <see cref="JobStatusType.FinishedQueueing"/> and all items are <see cref="JobStatusType.Completed"/>
     /// processing, a job can be restarted.
-    /// <see cref="JobStatus.Completed"/>:
-    /// The status is set to <see cref="JobStatus.Completed"/> after all endpoints of a job have finished processsing.
+    /// <see cref="JobStatusType.Completed"/>:
+    /// The status is set to <see cref="JobStatusType.Completed"/> after all endpoints of a job have finished processsing.
     /// </summary>
-    public enum JobStatus
+    public enum JobStatusType
     {
         /// <summary>
         /// When a job is created by a user.
         /// </summary>
-        Created,
+        Created = 1,
 
         /// <summary>
         /// This status indicates that endpoint requests will no longer be accepted as part of this job. If a client wishes to only process
-        /// one  endpoint request, the <see cref="JobStatus.FinishedQueueing"/> should be used.
+        /// one  endpoint request, the <see cref="JobStatusType.FinishedQueueing"/> should be used.
         /// </summary>
-        FinishedQueueing,
+        FinishedQueueing = 2,
 
         /// <summary>
-        /// After job items have <see cref="JobStatus.FinishedQueueing"/> and all items are <see cref="JobStatus.Completed"/>
+        /// After job items have <see cref="JobStatusType.FinishedQueueing"/> and all items are <see cref="JobStatusType.Completed"/>
         /// processing, a job can be restarted.
         /// </summary>
-        Started,
+        Started = 3,
 
         /// <summary>
-        /// The status is set to <see cref="JobStatus.Restart"/> when client wants the entire job to run again.
+        /// The status is set to <see cref="JobStatusType.Restart"/> when client wants the entire job to run again.
         /// </summary>
-        Restart,
+        Restart = 4,
     }
 }

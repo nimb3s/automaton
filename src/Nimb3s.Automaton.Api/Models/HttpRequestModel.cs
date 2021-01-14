@@ -35,6 +35,6 @@ namespace Nimb3s.Automaton.Api.Models
         /// <summary>
         /// The HTTP request status.
         /// </summary>
-        public HttpRequestStatus HttpRequestStatus { get; set; }
+        public HttpRequestStatusType HttpRequestStatus { get; set; }
     }
 }

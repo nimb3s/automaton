@@ -1,29 +1,16 @@
-﻿CREATE PROCEDURE Job.p_UpsertWorkItemStatus
- @Id bigint = null,
- @WorkItemId uniqueidentifier,
- @WorkItemStatusId smallint,
- @StatusTimeStamp datetimeoffset
+﻿CREATE PROCEDURE Job.p_GetAllWorkItemsByJobId
+ @JobId uniqueidentifier
 as
 begin
 	begin try
 		set nocount on;
 
-		if(not exists(select top 1 WorkItemId from [Job].[WorkItemStatus] where WorkItemId = @WorkItemId))
-		begin
-			insert into [Job].[WorkItemStatus](WorkItemId, WorkItemStatusId, StatusTimeStamp)
-			values(@WorkItemId, @WorkItemStatusId, @StatusTimeStamp)
-		end
-		else
-		begin
-			update [Job].[WorkItemStatus]
-			set 
-				WorkItemStatusId = @WorkItemStatusId,
-				StatusTimeStamp = @StatusTimeStamp
-			where WorkItemId = @WorkItemId
-		end
+		select Id,
+			JobId,
+			InsertTimeStamp
+		from job.WorkItem
+		where JobId = @JobId
 
-		if @@rowcount = 1
-			return 0;
 	end try
 	begin catch
 		DECLARE @ErrorMessageFormat VARCHAR(100), 
