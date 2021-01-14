@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE Job.p_UpsertJobStatus
  @Id bigint = null,
  @JobId uniqueidentifier,
- @JobStatusId smallint,
+ @JobStatusTypeId smallint,
  @StatusTimeStamp datetimeoffset
 as
 begin
@@ -10,14 +10,14 @@ begin
 
 		if(not exists(select top 1 JobId from [Job].[JobStatus] where JobId = @JobId))
 		begin
-			insert into [Job].[JobStatus](JobId, JobStatusId, StatusTimeStamp)
-			values(@JobId, @JobStatusId, @StatusTimeStamp)
+			insert into [Job].[JobStatus](JobId, JobStatusTypeId, StatusTimeStamp)
+			values(@JobId, @JobStatusTypeId, @StatusTimeStamp)
 		end
 		else
 		begin
 			update [Job].[JobStatus]
 			set 
-				JobStatusId = @JobStatusId,
+				JobStatusTypeId = @JobStatusTypeId,
 				StatusTimeStamp = @StatusTimeStamp
 			where JobId = @JobId
 		end

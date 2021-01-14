@@ -9,7 +9,7 @@ namespace Nimb3s.Automaton.Core.Entities
     {
         public long Id { get; set; }
         public Guid JobId { get; set; }
-        public short JobStatusId { get; set; }
+        public short JobStatusTypeId { get; set; }
         public DateTimeOffset StatusTimeStamp { get; set; }
     }
 }

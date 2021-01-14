@@ -1,23 +1,24 @@
-﻿CREATE TABLE Job.[JobStatus]
+﻿create table Job.[JobStatus]
 (
 	Id bigint identity(1,1),
 	JobId uniqueidentifier not null,
-	JobStatusId smallint not null,
-    [StatusTimeStamp] DATETIMEOFFSET NOT NULL default (SYSUTCDATETIME()),
-	[Db_StatusTimeStamp] DATETIMEOFFSET NOT NULL default (SYSUTCDATETIME()),
-    [_SystemRecordStartDateTime] DATETIME2(7) GENERATED ALWAYS AS ROW START NOT NULL CONSTRAINT DF_JobStatus__SystemRecordStartDateTime DEFAULT(SYSUTCDATETIME()),
-	[_SystemRecordEndDateTime] DATETIME2(7) GENERATED ALWAYS AS ROW END NOT NULL CONSTRAINT DF_JobStatus__SystemRecordEndDateTime DEFAULT('9999-12-31 23:59:59.9999999'),
+	JobStatusTypeId smallint not null,
+    [StatusTimeStamp] datetimeoffset not null default (sysutcdatetime()),
+	[Db_StatusTimeStamp] datetimeoffset not null default (sysutcdatetime()),
+    [_SystemRecordStartDateTime] datetime2(7) generated always as row start not null constraint DF_JobStatus__SystemRecordStartDateTime default(sysutcdatetime()),
+	[_SystemRecordEndDateTime] datetime2(7) generated always as row end not null constraint DF_JobStatus__SystemRecordEndDateTime default('9999-12-31 23:59:59.9999999'),
 
-	PRIMARY KEY CLUSTERED (JobId) WITH (DATA_COMPRESSION = PAGE) ON [JobData],
-	PERIOD FOR SYSTEM_TIME ([_SystemRecordStartDateTime], [_SystemRecordEndDateTime])
+	primary key clustered (JobId) with (data_compression = page) on [JobData],
+	foreign key(JobStatusTypeId) references job.JobStatusType,
+	period for system_time ([_SystemRecordStartDateTime], [_SystemRecordEndDateTime])
 )
-WITH
+with
 (
-	SYSTEM_VERSIONING = ON ( HISTORY_TABLE = [History].[Job_JobStatus] )
+	system_versioning = on ( HISTORY_TABLE = [History].[Job_JobStatus] )
 );
-GO
+go
 
-CREATE INDEX [NCIX_Job_JobStatus] 
-ON Job.[JobStatus] (JobId, JobStatusId, StatusTimeStamp, [Db_StatusTimeStamp]) 
-WITH (DATA_COMPRESSION = PAGE) ON [JobIndex];
-GO
+create index [NCIX_Job_JobStatus] 
+on Job.[JobStatus] (JobId, JobStatusTypeId, StatusTimeStamp, [Db_StatusTimeStamp]) 
+with (data_compression = page) on [JobIndex];
+go

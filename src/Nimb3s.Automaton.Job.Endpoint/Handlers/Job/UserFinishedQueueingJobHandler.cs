@@ -23,7 +23,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
             await dbContext.JobStatusRepository.UpsertAsync(new JobStatusEntity
             {
                 JobId = message.JobId,
-                JobStatusId = (short)JobStatusType.FinishedQueueing,
+                JobStatusTypeId = (short)JobStatusType.FinishedQueueing,
                 StatusTimeStamp = message.ActionTookPlaceDate,
             });
 

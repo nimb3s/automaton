@@ -2,7 +2,7 @@
 (
 	Id bigint not null,
 	WorkItemId uniqueidentifier not null,
-	WorkItemStatusId smallint not null,
+	WorkItemStatusTypeId smallint not null,
     [StatusTimeStamp] DATETIMEOFFSET NOT NULL,
 	[Db_StatusTimeStamp] DATETIMEOFFSET NOT NULL, 
 	[_SystemRecordStartDateTime] DATETIME2(7) not null,
@@ -11,6 +11,6 @@
 GO
 
 CREATE INDEX [NCIX_Job_WorkItemStatus] 
-ON History.[Job_WorkItemStatus] ([_SystemRecordStartDateTime], [_SystemRecordEndDateTime], Id, WorkItemId, WorkItemStatusId, [StatusTimeStamp], [Db_StatusTimeStamp]) 
+ON History.[Job_WorkItemStatus] ([_SystemRecordStartDateTime], [_SystemRecordEndDateTime], Id, WorkItemId, WorkItemStatusTypeId, [StatusTimeStamp], [Db_StatusTimeStamp]) 
 WITH (DATA_COMPRESSION = PAGE) ON [JobIndex];
 GO

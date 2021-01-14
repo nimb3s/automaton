@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE Http.p_GetAllHttpRequestsByJobIdAndStatus
  @jobId uniqueidentifier,
- @workItemStatusId smallint
+ @workItemStatusTypeId smallint
 as
 begin
 	begin try
@@ -19,7 +19,7 @@ begin
 		from job.WorkItemStatus wis
 			join http.HttpRequest hr
 				on wis.WorkItemId = hr.WorkItemId
-				and wis.WorkItemStatusId = @workItemStatusId
+				and wis.WorkItemStatusTypeId = @workItemStatusTypeId
 	end try
 	begin catch
 		DECLARE @ErrorMessageFormat VARCHAR(100), 

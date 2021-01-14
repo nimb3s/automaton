@@ -1,23 +1,24 @@
-﻿CREATE TABLE [Http].[HttpRequestStatus]
+﻿create table [Http].[HttpRequestStatus]
 (
 	Id bigint not null identity(1,1),
 	HttpRequestId uniqueidentifier not null,
 	HttpRequestStatusTypeId smallint not null,
-    [StatusTimeStamp] DATETIMEOFFSET NOT NULL default (SYSUTCDATETIME()),
-	[DB_StatusTimeStamp] DATETIMEOFFSET NOT NULL default (SYSUTCDATETIME()),
+    [StatusTimeStamp] datetimeoffset NOT NULL default (sysutcdatetime()),
+	[DB_StatusTimeStamp] datetimeoffset NOT NULL default (sysutcdatetime()),
 
-    [_SystemRecordStartDateTime] DATETIME2(7) GENERATED ALWAYS AS ROW START NOT NULL CONSTRAINT DF_HttpRequestStatus__SystemRecordStartDateTime DEFAULT(SYSUTCDATETIME()),
-	[_SystemRecordEndDateTime] DATETIME2(7) GENERATED ALWAYS AS ROW END NOT NULL CONSTRAINT DF_HttpRequestStatus__SystemRecordEndDateTime DEFAULT('9999-12-31 23:59:59.9999999'),
-	PRIMARY KEY CLUSTERED ([HttpRequestId]) WITH (DATA_COMPRESSION = PAGE) ON [HttpData],
-	PERIOD FOR SYSTEM_TIME ([_SystemRecordStartDateTime], [_SystemRecordEndDateTime])
+    [_SystemRecordStartDateTime] DATETIME2(7) generated always as row start not null constraint DF_HttpRequestStatus__SystemRecordStartDateTime default(sysutcdatetime()),
+	[_SystemRecordEndDateTime] DATETIME2(7) generated always as row end not null constraint DF_HttpRequestStatus__SystemRecordEndDateTime default('9999-12-31 23:59:59.9999999'),
+	primary key clustered ([HttpRequestId]) with (data_compression = page) on [HttpData],
+	foreign key(HttpRequestStatusTypeId) references http.HttpRequestStatusType,
+	period for system_time ([_SystemRecordStartDateTime], [_SystemRecordEndDateTime])
 )
 WITH
 (
-	SYSTEM_VERSIONING = ON ( HISTORY_TABLE = [History].[Http_HttpRequestStatus] )
+	system_versioning = on ( HISTORY_TABLE = [History].[Http_HttpRequestStatus] )
 );
 GO
 
-CREATE INDEX [NCIX_HttpRequestStatus_HttpRequestId] 
-ON [Http].[HttpRequestStatus] (Id, HttpRequestId, HttpRequestStatusTypeId, StatusTimeStamp, DB_StatusTimeStamp) 
-WITH (DATA_COMPRESSION = PAGE) ON HttpIndex;
-GO
+create index [NCIX_HttpRequestStatus_HttpRequestId] 
+on [Http].[HttpRequestStatus] (Id, HttpRequestId, HttpRequestStatusTypeId, StatusTimeStamp, DB_StatusTimeStamp) 
+with (data_compression = page) on HttpIndex;
+go

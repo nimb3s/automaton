@@ -20,12 +20,12 @@ namespace Nimb3s.Automaton.Core.Repositories
 
         }
 
-        public async Task<IEnumerable<HttpRequestEntity>> GetAllByJobIdAndStatusAsync(Guid jobId, short workItemStatusId)
+        public async Task<IEnumerable<HttpRequestEntity>> GetAllByJobIdAndStatusAsync(Guid jobId, short workItemStatusTypeId)
         {
             DynamicParameters dp = new DynamicParameters();
 
             dp.Add(nameof(jobId), jobId);
-            dp.Add(nameof(workItemStatusId), workItemStatusId);
+            dp.Add(nameof(workItemStatusTypeId), workItemStatusTypeId);
 
             return (await connection.QueryAsync<HttpRequestEntity>(sql: $"{Schema}.p_GetAll{entityName}sByJobIdAndStatus", param: dp, commandType: CommandType.StoredProcedure, transaction: transaction)).AsList();
         }

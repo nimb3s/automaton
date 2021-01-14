@@ -22,7 +22,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
             await dbContext.WorkItemStatusRepository.UpsertAsync(new WorkItemStatusEntity
             {
                 WorkItemId = message.WorkItemId,
-                WorkItemStatusId = (short)WorkItemStatusType.ReStarted,
+                WorkItemStatusTypeId = (short)WorkItemStatusType.ReStarted,
                 StatusTimeStamp = message.DateActionTaken
             });
 
