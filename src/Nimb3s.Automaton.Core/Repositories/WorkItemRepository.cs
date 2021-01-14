@@ -26,7 +26,11 @@ namespace Nimb3s.Automaton.Core.Repositories
 
             dp.Add(nameof(jobId), jobId);
 
-            return (await connection.QueryAsync<WorkItemEntity>(sql: $"{Schema}.p_GetAll{entityName}sByJobId", param: dp, commandType: CommandType.StoredProcedure, transaction: transaction)).AsList();
+            return (await connection
+                .QueryAsync<WorkItemEntity>(sql: $"{Schema}.p_GetAll{entityName}sByJobId", param: dp, commandType: CommandType.StoredProcedure, transaction: transaction)
+                .ConfigureAwait(false))
+                .AsList();
+
         }
     }
 }

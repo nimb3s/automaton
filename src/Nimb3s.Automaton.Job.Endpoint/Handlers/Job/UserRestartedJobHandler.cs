@@ -20,8 +20,8 @@ namespace Nimb3s.Automaton.Job.Endpoint
         #region MessageHandler
         public async Task Handle(UserRestartedJobMessage message, IMessageHandlerContext context)
         {
-            await RestartJobAsync(message);
-            await RestartWorkItemsAsync(message, context);
+            await RestartJobAsync(message).ConfigureAwait(false);
+            await RestartWorkItemsAsync(message, context).ConfigureAwait(false);
 
             log.Info($"MESSAGE: {nameof(UserRestartedJobMessage)}; HANDLED BY: {nameof(UserCreatedJobHandler)}: {JsonConvert.SerializeObject(message)}");
         }
@@ -30,14 +30,14 @@ namespace Nimb3s.Automaton.Job.Endpoint
         {
             AutomatonDatabaseContext dbContext = new AutomatonDatabaseContext();
 
-            var job = await dbContext.JobRepository.GetAsync(message.JobId);
+            var job = await dbContext.JobRepository.GetAsync(message.JobId).ConfigureAwait(false);
 
             await dbContext.JobStatusRepository.UpsertAsync(new JobStatusEntity
             {
                 JobId = message.JobId,
                 JobStatusTypeId = (short)JobStatusType.Restart,
                 StatusTimeStamp = message.DateActionTookPlace
-            });
+            }).ConfigureAwait(false);
 
             dbContext.Commit();
         }
@@ -46,7 +46,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
         {
             AutomatonDatabaseContext dbContext = new AutomatonDatabaseContext();
 
-            var httpRequests = await dbContext.HttpRequestRepository.GetAllByJobIdAndStatusAsync(message.JobId, (short)WorkItemStatusType.Completed);
+            var httpRequests = await dbContext.HttpRequestRepository.GetAllByJobIdAndStatusAsync(message.JobId, (short)WorkItemStatusType.Completed).ConfigureAwait(false);
 
             dbContext.Commit();
 
@@ -63,21 +63,39 @@ namespace Nimb3s.Automaton.Job.Endpoint
                 restartMessage.JobId = message.JobId;
                 restartMessage.WorkItemId = workItem.WorkItemId;
                 restartMessage.DateActionTaken = message.DateActionTookPlace;
-                restartMessage.HttpRequests = new List<UserHttpRequest>();
+
+                List<UserHttpRequest> userHttpRequests = new List<UserHttpRequest>();
 
                 foreach (var httpRequest in workItem.HttpRequests)
                 {
                     var request = new UserHttpRequest();
 
-                    request.AuthenticationConfig = JsonConvert.DeserializeObject<HttpAuthenticationConfig>(httpRequest.AuthenticationConfigInJson);
-                    request.ContentHeaders = JsonConvert.DeserializeObject<Dictionary<string, string>>(httpRequest.ContentHeadersInJson);
+                    if(httpRequest.AuthenticationConfigInJson != null)
+                    {
+                        request.AuthenticationConfig = JsonConvert.DeserializeObject<HttpAuthenticationConfig>(httpRequest.AuthenticationConfigInJson);
+                    }
+
+                    if(httpRequest.ContentHeadersInJson != null)
+                    {
+                        request.ContentHeaders = JsonConvert.DeserializeObject<Dictionary<string, string>>(httpRequest.ContentHeadersInJson);
+                    }
+                    
                     request.ContentType = httpRequest.ContentType;
                     request.HttpRequestId = httpRequest.Id;
                     request.Method = httpRequest.Method;
-                    request.RequestHeaders = JsonConvert.DeserializeObject<Dictionary<string, string>>(httpRequest.RequestHeadersInJson);
+
+                    if(httpRequest.RequestHeadersInJson != null)
+                    {
+                        request.RequestHeaders = JsonConvert.DeserializeObject<Dictionary<string, string>>(httpRequest.RequestHeadersInJson);
+                    }
+
                     request.Url = httpRequest.Url;
                     request.Content = httpRequest.Content;
+
+                    userHttpRequests.Add(request);
                 }
+
+                restartMessage.HttpRequests = userHttpRequests;
 
                 await context.SendLocal(restartMessage)
                              .ConfigureAwait(false);

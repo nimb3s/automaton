@@ -19,8 +19,8 @@ namespace Nimb3s.Automaton.Job.Endpoint
         public async Task Handle(ExecuteHttpRequestMessage message, IMessageHandlerContext context)
         {
             await SetStatusToStarted(message);
-            var httpResponseMessage = await SendHttpRequest(message);
-            await SaveHttpRequestAsync(message, httpResponseMessage);
+            var httpResponseMessage = await SendHttpRequestAsync(message).ConfigureAwait(false);
+            await SaveHttpRequestAsync(message, httpResponseMessage).ConfigureAwait(false);
 
             await context.SendLocal(new HttpRequestExecutedMessage
             {
@@ -48,19 +48,19 @@ namespace Nimb3s.Automaton.Job.Endpoint
                 RequestHeadersInJson = message.HttpRequest.RequestHeaders == null ? null : JsonConvert.SerializeObject(message.HttpRequest.RequestHeaders),
                 ContentHeadersInJson = message.HttpRequest.ContentHeaders == null ? null : JsonConvert.SerializeObject(message.HttpRequest.ContentHeaders),
                 AuthenticationConfigInJson = message.HttpRequest.AuthenticationConfig == null ? null : JsonConvert.SerializeObject(message.HttpRequest.AuthenticationConfig),
-            });
+            }).ConfigureAwait(false);
 
             await dbContext.HttpRequestStatusRepository.UpsertAsync(new HttpRequestStatusEntity
             {
                 HttpRequestId = message.HttpRequest.HttpRequestId,
                 HttpRequestStatusTypeId = (short)HttpRequestStatusType.Started,
                 StatusTimeStamp = DateTimeOffset.UtcNow,
-            });
+            }).ConfigureAwait(false);
 
             dbContext.Commit();
         }
 
-        private async Task<HttpResponseMessage> SendHttpRequest(ExecuteHttpRequestMessage message)
+        private async Task<HttpResponseMessage> SendHttpRequestAsync(ExecuteHttpRequestMessage message)
         {
             HttpResponseMessage httpResponse = new HttpResponseMessage();
 
@@ -85,7 +85,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
                         break;
                 }
 
-                httpResponse = await client.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead);
+                httpResponse = await client.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -108,14 +108,14 @@ namespace Nimb3s.Automaton.Job.Endpoint
                 StatusCode = (int)httpResponseMessage.StatusCode,
                 Body = content,
                 InsertTimeStamp = message.CreateDate
-            });
+            }).ConfigureAwait(false);
 
             await dbContext.HttpRequestStatusRepository.UpsertAsync(new HttpRequestStatusEntity
             {
                 HttpRequestId = message.HttpRequest.HttpRequestId,
                 HttpRequestStatusTypeId = (short)HttpRequestStatusType.Completed,
                 StatusTimeStamp = DateTimeOffset.UtcNow,
-            });
+            }).ConfigureAwait(false);
 
             dbContext.Commit();
         }

@@ -25,7 +25,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
                 JobId = message.JobId,
                 JobStatusTypeId = (short)JobStatusType.FinishedQueueing,
                 StatusTimeStamp = message.ActionTookPlaceDate,
-            });
+            }).ConfigureAwait(false);
 
             dbContext.Commit();
 

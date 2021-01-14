@@ -26,7 +26,9 @@ namespace Nimb3s.Automaton.Core.Repositories
 
             dp.Add(nameof(HttpRequestId), HttpRequestId);
 
-            return await connection.QuerySingleAsync<HttpRequestStatusEntity>(sql: $"{Schema}.p_Get{entityName}By{nameof(HttpRequestId)}", param: dp, commandType: CommandType.StoredProcedure, transaction: transaction);
+            return await connection
+                .QuerySingleAsync<HttpRequestStatusEntity>(sql: $"{Schema}.p_Get{entityName}By{nameof(HttpRequestId)}", param: dp, commandType: CommandType.StoredProcedure, transaction: transaction)
+                .ConfigureAwait(false);
         }
     }
 }
