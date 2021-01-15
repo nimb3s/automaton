@@ -26,6 +26,8 @@ namespace Nimb3s.Automaton.Job.Endpoint
                 StatusTimeStamp = message.DateActionTaken
             }).ConfigureAwait(false);
 
+            dbContext.Commit();
+
             log.Info($"MESSAGE: {nameof(WorkItemRestartedMessage)}; HANDLED BY: {nameof(CreateWorkItemHandler)}: {JsonConvert.SerializeObject(message)}");
         }
         #endregion

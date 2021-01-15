@@ -50,7 +50,7 @@ namespace Nimb3s.Automaton.Api.Controllers
             {
                 new NewHttpRequestModel
                 {
-                    Url = "https://www.jw.org/en/",
+                    Url = "https://test.lightstream.com/",
                     Method = HttpMethods.Get,
                     ContentType = "application/json",
                     Content = JsonConvert.SerializeObject(new
@@ -107,6 +107,8 @@ namespace Nimb3s.Automaton.Api.Controllers
                     }
                 }
             };
+
+            var wi = JsonConvert.SerializeObject(newWorkItem, Formatting.Indented);
 
             //TODO: if(automation job is not AutomationJobStatus.Queueing then reject the request
             //TODO: if client is trying to set automation job to finished queueing or done do not let them return forbidden?

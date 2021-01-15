@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Nimb3s.Automaton.Core;
 using Nimb3s.Automaton.Core.Entities;
-using Nimb3s.Automaton.Core.Repositories;
+using Nimb3s.Automaton.Job.Endpoint.Factories;
 using Nimb3s.Automaton.Messages.Job;
 using Nimb3s.Automaton.Messages.User;
 using NServiceBus;
@@ -66,6 +66,11 @@ namespace Nimb3s.Automaton.Job.Endpoint
 
             try
             {
+                //TODO: finish the factory and test it
+                //HttpClient client = new HttpClient();
+                //HttpRequestMessage httpRequestMessage = await HttpRequestFactory.CreateRequestAsync(message.HttpRequest);
+                //httpResponse = await client.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+
                 HttpClient client = new HttpClient();
                 HttpRequestMessage requestMessage = new HttpRequestMessage
                 {

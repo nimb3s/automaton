@@ -49,19 +49,44 @@ namespace Nimb3s.Automaton.Messages.User
         OAuth20 = 2
     }
 
+    public enum HttpRequestContentType
+    { 
+        ApplicationFormUrlEncoded = 1,
+    }
+
+
     public class HttpAuthenticationOptions
     {
 
     }
 
+
     #region OAuth20 Auth Config
     public class OAuth20AuthenticationConfig : HttpAuthenticationOptions
     {
         public GrantType GrantType { get; }
+        public OAuth20HttpRequestConfig HttpRequestConfig { get; set; }
 
         public OAuth20Grant Grant { get; set; }
 
         public string Scopes { get; set; }
+    }
+
+    public class OAuth20HttpRequestConfig
+    {
+        public string AuthUrl { get; set; }
+        public string RevocationUrl { get; set; }
+        public HttpRequestContentBase ContentBody { get; set; }
+    }
+
+    public class HttpRequestContentBase
+    {
+        public HttpRequestContentType ContentType { get; set; }
+    }
+
+    public class ApplicationFormUrlEncodedContent : HttpRequestContentBase
+    {
+        public IEnumerable<KeyValuePair<string, string>> NameValueCollection { get; set; }
     }
 
     public enum GrantType
@@ -93,6 +118,13 @@ namespace Nimb3s.Automaton.Messages.User
         public string ClientSecret { get; set; }
         public string Username { get; set; }
         public string UserPassword { get; set; }
+    }
+
+    public class OAuth20AuthResponse
+    {
+        public string access_token { get; set; }
+        public long expires_in { get; set; }
+        public string refresh_token { get; set; }
     }
     #endregion
 }
