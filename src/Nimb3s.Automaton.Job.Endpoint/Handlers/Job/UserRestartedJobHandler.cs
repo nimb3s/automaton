@@ -20,8 +20,8 @@ namespace Nimb3s.Automaton.Job.Endpoint
         #region MessageHandler
         public async Task Handle(UserRestartedJobMessage message, IMessageHandlerContext context)
         {
-            await RestartJobAsync(message).ConfigureAwait(false);
-            await RestartWorkItemsAsync(message, context).ConfigureAwait(false);
+            await RestartJobAsync(message);
+            await RestartWorkItemsAsync(message, context);
 
             log.Info($"MESSAGE: {nameof(UserRestartedJobMessage)}; HANDLED BY: {nameof(UserCreatedJobHandler)}: {JsonConvert.SerializeObject(message)}");
         }
@@ -30,14 +30,14 @@ namespace Nimb3s.Automaton.Job.Endpoint
         {
             AutomatonDatabaseContext dbContext = new AutomatonDatabaseContext();
 
-            var job = await dbContext.JobRepository.GetAsync(message.JobId).ConfigureAwait(false);
+            var job = await dbContext.JobRepository.GetAsync(message.JobId);
 
             await dbContext.JobStatusRepository.UpsertAsync(new JobStatusEntity
             {
                 JobId = message.JobId,
                 JobStatusTypeId = (short)JobStatusType.Restart,
                 StatusTimeStamp = message.DateActionTookPlace
-            }).ConfigureAwait(false);
+            });
 
             dbContext.Commit();
         }
@@ -46,7 +46,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
         {
             AutomatonDatabaseContext dbContext = new AutomatonDatabaseContext();
 
-            var httpRequests = await dbContext.HttpRequestRepository.GetAllByJobIdAndStatusAsync(message.JobId, (short)WorkItemStatusType.Completed).ConfigureAwait(false);
+            var httpRequests = await dbContext.HttpRequestRepository.GetAllByJobIdAndStatusAsync(message.JobId, (short)WorkItemStatusType.Completed);
 
             dbContext.Commit();
 
@@ -91,6 +91,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
 
                     request.Url = httpRequest.Url;
                     request.Content = httpRequest.Content;
+                    request.UserAgent = httpRequest.UserAgent;
 
                     userHttpRequests.Add(request);
                 }
@@ -98,7 +99,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
                 restartMessage.HttpRequests = userHttpRequests;
 
                 await context.SendLocal(restartMessage)
-                             .ConfigureAwait(false);
+                             ;
             }
         }
 

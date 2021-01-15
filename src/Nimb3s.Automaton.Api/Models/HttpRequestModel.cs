@@ -14,6 +14,7 @@ namespace Nimb3s.Automaton.Api.Models
         [Required]
         public string Method { get; set; }
         public string Content { get; set; }
+        public string UserAgent { get; internal set; }
         public Dictionary<string, string> RequestHeaders { get; set; }
         public Dictionary<string, string> ContentHeaders { get; set; }
         [Required]
@@ -22,7 +23,6 @@ namespace Nimb3s.Automaton.Api.Models
 
     public class NewHttpRequestModel : HttpRequestBaseModel
     {
-
     }
 
     public class CreatedHttpRequestModel : HttpRequestBaseModel

@@ -5,6 +5,7 @@
  @ContentType varchar(100),
  @Method varchar(10),
  @Content varchar(max),
+ @UserAgent varchar(500),
  @RequestHeadersInJson varchar(max),
  @ContentHeadersInJson varchar(max),
  @AuthenticationConfigInJson varchar(max),
@@ -16,8 +17,8 @@ begin
 
 		if not exists(select top 1 id from http.HttpRequest where Id = @Id)
 		begin
-			insert into [Http].HttpRequest (Id, WorkItemId, Url, ContentType, Method, Content, RequestHeadersInJson, ContentHeadersInJson, AuthenticationConfigInJson, InsertTimeStamp)
-			values(@Id, @WorkItemId, @Url, @ContentType, @Method, @Content, @RequestHeadersInJson, @ContentHeadersInJson, @AuthenticationConfigInJson, @InsertTimeStamp)
+			insert into [Http].HttpRequest (Id, WorkItemId, Url, ContentType, Method, Content, UserAgent, RequestHeadersInJson, ContentHeadersInJson, AuthenticationConfigInJson, InsertTimeStamp)
+			values(@Id, @WorkItemId, @Url, @ContentType, @Method, @Content, @UserAgent, @RequestHeadersInJson, @ContentHeadersInJson, @AuthenticationConfigInJson, @InsertTimeStamp)
 		end
 		else
 		begin
@@ -27,6 +28,7 @@ begin
 				ContentType = @ContentType,
 				Method = @Method,
 				Content = @Content,
+				UserAgent = @UserAgent,
 				RequestHeadersInJson = @RequestHeadersInJson,
 				ContentHeadersInJson = @ContentHeadersInJson,
 				AuthenticationConfigInJson = @AuthenticationConfigInJson

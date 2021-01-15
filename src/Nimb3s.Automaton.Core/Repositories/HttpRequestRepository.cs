@@ -29,7 +29,7 @@ namespace Nimb3s.Automaton.Core.Repositories
 
             return (await connection
                 .QueryAsync<HttpRequestEntity>(sql: $"{Schema}.p_GetAll{entityName}sByJobIdAndStatus", param: dp, commandType: CommandType.StoredProcedure, transaction: transaction)
-                .ConfigureAwait(false))
+                )
                 .AsList();
         }
     }

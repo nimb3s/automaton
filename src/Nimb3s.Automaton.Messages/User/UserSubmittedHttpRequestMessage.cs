@@ -25,6 +25,7 @@ namespace Nimb3s.Automaton.Messages.User
         public string ContentType { get; set; }
         public string Method { get; set; }
         public string Content { get; set; }
+        public string UserAgent { get; set; }
         public Dictionary<string, string> RequestHeaders { get; set; }
         public Dictionary<string, string> ContentHeaders { get; set; }
         public HttpAuthenticationConfig AuthenticationConfig { get; set; }
@@ -64,29 +65,16 @@ namespace Nimb3s.Automaton.Messages.User
     #region OAuth20 Auth Config
     public class OAuth20AuthenticationConfig : HttpAuthenticationOptions
     {
-        public GrantType GrantType { get; }
         public OAuth20HttpRequestConfig HttpRequestConfig { get; set; }
 
-        public OAuth20Grant Grant { get; set; }
-
-        public string Scopes { get; set; }
+        public OAuth20GrantBase Grant { get; set; }
     }
 
     public class OAuth20HttpRequestConfig
     {
         public string AuthUrl { get; set; }
         public string RevocationUrl { get; set; }
-        public HttpRequestContentBase ContentBody { get; set; }
-    }
-
-    public class HttpRequestContentBase
-    {
         public HttpRequestContentType ContentType { get; set; }
-    }
-
-    public class ApplicationFormUrlEncodedContent : HttpRequestContentBase
-    {
-        public IEnumerable<KeyValuePair<string, string>> NameValueCollection { get; set; }
     }
 
     public enum GrantType
@@ -101,18 +89,19 @@ namespace Nimb3s.Automaton.Messages.User
         Password = 2
     }
 
-    public class OAuth20Grant
+    public class OAuth20GrantBase
     {
-
+        public GrantType GrantType { get; set; }
+        public string Scopes { get; set; }
     }
 
-    public class OAuth20ClientGrant : OAuth20Grant
+    public class OAuth20ClientGrant : OAuth20GrantBase
     {
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
     }
 
-    public class OAuth20PasswordGrant : OAuth20Grant
+    public class OAuth20PasswordGrant : OAuth20GrantBase
     {
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }

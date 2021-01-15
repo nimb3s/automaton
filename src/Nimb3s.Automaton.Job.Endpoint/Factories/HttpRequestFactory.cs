@@ -2,6 +2,7 @@
 using Nimb3s.Automaton.Messages.User;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,11 +12,11 @@ namespace Nimb3s.Automaton.Job.Endpoint.Factories
 
     public static class HttpRequestFactory
     {
-        public static async Task<HttpRequestMessage> CreateRequestAsync(UserHttpRequest userHttpRequest)
+        public static async Task<HttpRequestMessage> Create(UserHttpRequest userHttpRequest)
         {
-            HttpRequestMessage requestMessage = new HttpRequestMessage
-            {
-                RequestUri = new Uri(userHttpRequest.Url),
+            HttpRequestMessage httpRequest = new HttpRequestMessage
+            { 
+                RequestUri = new Uri(userHttpRequest.Url)
             };
 
             switch (userHttpRequest.AuthenticationConfig.AuthenticationType)
@@ -23,42 +24,61 @@ namespace Nimb3s.Automaton.Job.Endpoint.Factories
                 case HttpAuthenticationType.None:
                     break;
                 case HttpAuthenticationType.OAuth20:
-                    requestMessage = await CreateRequestWithOAuth20Async(requestMessage, (OAuth20AuthenticationConfig)userHttpRequest.AuthenticationConfig.AuthenticationOptions);
+                    await SetRequestWithOAuth20Async(httpRequest, (OAuth20AuthenticationConfig)userHttpRequest.AuthenticationConfig.AuthenticationOptions);
                     break;
                 default:
                     break;
             }
 
-            return requestMessage;
+            return httpRequest;
         }
 
-        private static async Task<HttpRequestMessage> CreateRequestWithOAuth20Async(HttpRequestMessage httpRequestMessage, OAuth20AuthenticationConfig authConfig)
+        private static async Task<HttpRequestMessage> SetRequestWithOAuth20Async(HttpRequestMessage httpRequest, OAuth20AuthenticationConfig authConfig)
         {
-            var httpContent = HttpContentFactory.CreateContent(authConfig.HttpRequestConfig.ContentBody);
+            var oauthTokenResponse = await AuthenticateUsingOAuth20Async(httpRequest, authConfig);
 
+            httpRequest.Headers.TryAddWithoutValidation($"{Constants.OAuth20.AUTHORIZATION}", $"{Constants.OAuth20.AUTHORIZATION_BEARER} {oauthTokenResponse.access_token}");
 
-            HttpRequestMessage oAuth20Request = new HttpRequestMessage
+            return httpRequest;
+        }
+
+        private static async Task<OAuth20AuthResponse> AuthenticateUsingOAuth20Async(HttpRequestMessage httpRequest, OAuth20AuthenticationConfig authConfig)
+        {
+            var authRequestContent = HttpOAuth20ContentFactory.Create(authConfig);
+
+            HttpRequestMessage authRequest = new HttpRequestMessage
             {
-                Content = httpContent,
+                Content = authRequestContent,
                 Method = HttpMethod.Post,
                 RequestUri = new Uri(authConfig.HttpRequestConfig.AuthUrl),
             };
 
-            HttpClient httpClient = new HttpClient();
+            authRequest.Headers.UserAgent.TryParseAdd("PostmanRuntime/7.26.8");
 
-            var response = await httpClient.SendAsync(oAuth20Request).ConfigureAwait(false);
+            authRequest.Headers.TryAddWithoutValidation("Accept", "*/*");
+            authRequest.Headers.TryAddWithoutValidation("Cache-Control", "no-cache");
+            authRequest.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate, br");
+            authRequest.Headers.TryAddWithoutValidation("Connection", "keep-alive");
 
-            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var handler = new HttpClientHandler();
 
-            OAuth20AuthResponse oAuthTokens = JsonConvert.DeserializeObject<OAuth20AuthResponse>(content);
+            handler.AllowAutoRedirect = true;
+            handler.UseProxy = false;
+            handler.CheckCertificateRevocationList = false;
 
-            HttpRequestMessage request = new HttpRequestMessage
+            var httpClient = new HttpClient(handler);
+            var authResponse = await httpClient.SendAsync(authRequest);
+
+            var authResponseContent = await authResponse.Content.ReadAsStringAsync();
+
+            if (authResponse.StatusCode != HttpStatusCode.OK)
             {
-                RequestUri = new Uri(authConfig.HttpRequestConfig.AuthUrl),
-               
-            };
+                throw new Exception($"{Constants.OAuth20.OAUTH_20} failed to authenticate. Trying to access resource: {httpRequest.RequestUri}, HttpStatusCode: {authResponse.StatusCode}, Reason: {authResponseContent}, Configuration: {JsonConvert.SerializeObject(authConfig)}");
+            }
 
-            return request;
+            OAuth20AuthResponse oAuthTokens = JsonConvert.DeserializeObject<OAuth20AuthResponse>(authResponseContent);
+
+            return oAuthTokens;
         }
     }
 }

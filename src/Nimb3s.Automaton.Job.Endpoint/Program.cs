@@ -26,11 +26,11 @@ namespace Nimb3s.Automaton.Job.Endpoint
 
            
             var endpointInstance = await NServiceBus.Endpoint.Start(endpointConfiguration)
-                .ConfigureAwait(false);
+                ;
             Console.WriteLine("Press any key to exit");
             Console.ReadKey();
             await endpointInstance.Stop()
-                .ConfigureAwait(false);
+                ;
         }
     }
 }

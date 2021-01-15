@@ -28,7 +28,7 @@ namespace Nimb3s.Automaton.Core.Repositories
 
             return await connection
                 .QuerySingleAsync<WorkItemStatusEntity>(sql: $"{Schema}.p_Get{entityName}By{nameof(workItemId)}", param: dp, commandType: CommandType.StoredProcedure, transaction: transaction)
-                .ConfigureAwait(false);
+                ;
         }
     }
 }

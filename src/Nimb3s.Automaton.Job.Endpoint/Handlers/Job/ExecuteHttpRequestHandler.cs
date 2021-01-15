@@ -7,7 +7,9 @@ using Nimb3s.Automaton.Messages.User;
 using NServiceBus;
 using NServiceBus.Logging;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Nimb3s.Automaton.Job.Endpoint
@@ -19,16 +21,16 @@ namespace Nimb3s.Automaton.Job.Endpoint
         public async Task Handle(ExecuteHttpRequestMessage message, IMessageHandlerContext context)
         {
             await SetStatusToStarted(message);
-            var httpResponseMessage = await SendHttpRequestAsync(message).ConfigureAwait(false);
-            await SaveHttpRequestAsync(message, httpResponseMessage).ConfigureAwait(false);
-
+            var httpResponseMessage = await SendHttpRequestAsync(message);
+            await SaveHttpRequestAsync(message, httpResponseMessage);
+            
             await context.SendLocal(new HttpRequestExecutedMessage
             {
                 JobId = message.JobId,
                 WorkItemId = message.WorkItemId,
                 HttpRequest = message.HttpRequest,
                 DateActionTaken = DateTime.UtcNow
-            }).ConfigureAwait(false);
+            });
 
             log.Info($"MESSAGE: {nameof(ExecuteHttpRequestMessage)}; HANDLED BY: {nameof(ExecuteHttpRequestHandler)}: {JsonConvert.SerializeObject(message)}");
         }
@@ -45,17 +47,18 @@ namespace Nimb3s.Automaton.Job.Endpoint
                 ContentType = message.HttpRequest.ContentType,
                 Method = message.HttpRequest.Method,
                 Content = message.HttpRequest.Content,
+                UserAgent = message.HttpRequest.UserAgent,
                 RequestHeadersInJson = message.HttpRequest.RequestHeaders == null ? null : JsonConvert.SerializeObject(message.HttpRequest.RequestHeaders),
                 ContentHeadersInJson = message.HttpRequest.ContentHeaders == null ? null : JsonConvert.SerializeObject(message.HttpRequest.ContentHeaders),
                 AuthenticationConfigInJson = message.HttpRequest.AuthenticationConfig == null ? null : JsonConvert.SerializeObject(message.HttpRequest.AuthenticationConfig),
-            }).ConfigureAwait(false);
+            });
 
             await dbContext.HttpRequestStatusRepository.UpsertAsync(new HttpRequestStatusEntity
             {
                 HttpRequestId = message.HttpRequest.HttpRequestId,
                 HttpRequestStatusTypeId = (short)HttpRequestStatusType.Started,
                 StatusTimeStamp = DateTimeOffset.UtcNow,
-            }).ConfigureAwait(false);
+            });
 
             dbContext.Commit();
         }
@@ -66,39 +69,105 @@ namespace Nimb3s.Automaton.Job.Endpoint
 
             try
             {
-                //TODO: finish the factory and test it
-                //HttpClient client = new HttpClient();
-                //HttpRequestMessage httpRequestMessage = await HttpRequestFactory.CreateRequestAsync(message.HttpRequest);
-                //httpResponse = await client.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+                HttpRequestMessage httpRequestMessage = await HttpRequestFactory.Create(message.HttpRequest);
 
-                HttpClient client = new HttpClient();
-                HttpRequestMessage requestMessage = new HttpRequestMessage
-                {
-                    RequestUri = new Uri(message.HttpRequest.Url),
-                };
-                HttpResponseMessage responseMessage = new HttpResponseMessage();
+                SetHttpMethod(httpRequestMessage, message.HttpRequest.Method);
+                AddRequestHeaders(httpRequestMessage, message.HttpRequest.RequestHeaders, message.HttpRequest.UserAgent);
+                AddContentHeaders(httpRequestMessage, message.HttpRequest.RequestHeaders);
 
-                switch (message.HttpRequest.Method.ToLower())
-                {
-                    case "get":
-                        requestMessage.Method = HttpMethod.Get;
-                        break;
-                    case "post":
-                        requestMessage.Method = HttpMethod.Post;
-                        break;
-                    default:
-                        break;
-                }
+                var response = await SendAsync(httpRequestMessage, message.HttpRequest);
 
-                httpResponse = await client.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+                return response;
             }
             catch (Exception ex)
             {
                 httpResponse.StatusCode = System.Net.HttpStatusCode.InternalServerError;
-                httpResponse.Content = new StringContent(ex.StackTrace);
+                httpResponse.Content = new StringContent($"Exception: {ex.Message}. StackTrace: {ex.StackTrace}");
             }
 
             return httpResponse;
+        }
+
+        private void SetHttpMethod(HttpRequestMessage httpRequestMessage, string httpMethod)
+        {
+            switch (httpMethod)
+            {
+                case Constants.Http.HTTP_METHOD_GET:
+                    httpRequestMessage.Method = HttpMethod.Get;
+                    break;
+                case Constants.Http.HTTP_METHOD_POST:
+                    httpRequestMessage.Method = HttpMethod.Post;
+                    break;
+                case Constants.Http.HTTP_METHOD_DELETE:
+                    httpRequestMessage.Method = HttpMethod.Delete;
+                    break;
+                case Constants.Http.HTTP_METHOD_PUT:
+                    httpRequestMessage.Method = HttpMethod.Put;
+                    break;
+                default:
+                    //TODO: throw exception when method type not found
+                    break;
+            }
+        }
+
+        private void AddRequestHeaders(HttpRequestMessage httpRequestMessage, Dictionary<string, string> headers, string userAgent)
+        {
+            if (userAgent != null)
+            {
+                httpRequestMessage.Headers.UserAgent.TryParseAdd(userAgent);
+            }
+            else
+            {
+                httpRequestMessage.Headers.UserAgent.TryParseAdd(Constants.Http.DEFAULT_USER_AGENT);
+            }
+
+            if (headers != null)
+            {
+                foreach (var header in headers)
+                {
+                    httpRequestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value);
+                }
+            }
+        }
+
+        private void AddContentHeaders(HttpRequestMessage httpRequestMessage, Dictionary<string, string> headers)
+        {
+            if (headers != null)
+            {
+                foreach (var header in headers)
+                {
+                    httpRequestMessage.Content.Headers.TryAddWithoutValidation(header.Key, header.Value);
+                }
+            }
+        }
+
+        private async Task<HttpResponseMessage> SendAsync(HttpRequestMessage httpRequestMessage, UserHttpRequest userHttpRequest)
+        {
+            HttpClient client = new HttpClient();
+
+            HttpResponseMessage response = null;
+
+            switch (httpRequestMessage.Method.Method.ToLower())
+            {
+                case Constants.Http.HTTP_METHOD_GET:
+                    response = await client.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead);
+                    break;
+                case Constants.Http.HTTP_METHOD_POST:
+                    httpRequestMessage.Content = new StringContent(userHttpRequest.Content, Encoding.UTF8, userHttpRequest.ContentType);
+                    response = await client.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead);
+                    break;
+                case Constants.Http.HTTP_METHOD_DELETE:
+                    httpRequestMessage.Method = HttpMethod.Delete;
+                    break;
+                case Constants.Http.HTTP_METHOD_PUT:
+                    httpRequestMessage.Method = HttpMethod.Put;
+                    break;
+                default:
+                    //TODO: throw exception when method type not found
+                    break;
+            }
+
+            return response;
         }
 
         private async Task SaveHttpRequestAsync(ExecuteHttpRequestMessage message, HttpResponseMessage httpResponseMessage)
@@ -113,14 +182,14 @@ namespace Nimb3s.Automaton.Job.Endpoint
                 StatusCode = (int)httpResponseMessage.StatusCode,
                 Body = content,
                 InsertTimeStamp = message.CreateDate
-            }).ConfigureAwait(false);
+            });
 
             await dbContext.HttpRequestStatusRepository.UpsertAsync(new HttpRequestStatusEntity
             {
                 HttpRequestId = message.HttpRequest.HttpRequestId,
                 HttpRequestStatusTypeId = (short)HttpRequestStatusType.Completed,
                 StatusTimeStamp = DateTimeOffset.UtcNow,
-            }).ConfigureAwait(false);
+            });
 
             dbContext.Commit();
         }

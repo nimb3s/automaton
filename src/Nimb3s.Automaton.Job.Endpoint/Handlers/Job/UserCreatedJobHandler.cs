@@ -25,14 +25,14 @@ namespace Nimb3s.Automaton.Job.Endpoint
                 Id = message.JobId,
                 JobName = message.JobName,
                 InsertTimeStamp = message.DateActionTookPlace
-            }).ConfigureAwait(false);
+            });
 
             await dbContext.JobStatusRepository.UpsertAsync(new JobStatusEntity
             {
                 JobId = message.JobId,
                 JobStatusTypeId = (short)JobStatusType.Created,
                 StatusTimeStamp = DateTimeOffset.UtcNow
-            }).ConfigureAwait(false);
+            });
 
             dbContext.Commit();
 

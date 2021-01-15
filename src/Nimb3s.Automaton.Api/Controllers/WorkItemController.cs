@@ -50,37 +50,9 @@ namespace Nimb3s.Automaton.Api.Controllers
             {
                 new NewHttpRequestModel
                 {
-                    Url = "https://test.lightstream.com/",
+                    Url = "https://test.lightstream.com/api/user/accounts",
                     Method = HttpMethods.Get,
                     ContentType = "application/json",
-                    Content = JsonConvert.SerializeObject(new
-                    {
-                        Id = Guid.NewGuid(),
-                        Status = "some status"
-                    }),
-                    AuthenticationConfig = new HttpAuthenticationConfig
-                    {
-                        AuthenticationType = HttpAuthenticationType.OAuth20,
-                        AuthenticationOptions = new OAuth20AuthenticationConfig
-                        {
-                            Grant = new OAuth20ClientGrant
-                            {
-                                ClientId = Guid.NewGuid().ToString(),
-                                ClientSecret = Guid.NewGuid().ToString()
-                            }
-                        }
-                    }
-                },
-                new NewHttpRequestModel
-                {
-                    Url = "https://www.cnn.com/",
-                    Method = HttpMethods.Get,
-                    ContentType = "application/json",
-                    Content = JsonConvert.SerializeObject(new
-                    {
-                        Id = Guid.NewGuid(),
-                        Status = "some status"
-                    }),
                     AuthenticationConfig = new HttpAuthenticationConfig
                     {
                         AuthenticationType = HttpAuthenticationType.OAuth20,
@@ -88,24 +60,57 @@ namespace Nimb3s.Automaton.Api.Controllers
                         {
                             Grant = new OAuth20PasswordGrant
                             {
-                                ClientId = Guid.NewGuid().ToString(),
-                                ClientSecret = Guid.NewGuid().ToString(),
-                                Username = "some username",
-                                UserPassword = "some password"
+                                ClientId = "A050C5D7-58F7-4A17-8E96-937B47A77D1E",
+                                ClientSecret = "21B5F798-BE55-42BC-8AA8-0025B903DC3B",
+                                GrantType = GrantType.Password,
+                                Scopes = "openid offline_access https://www.lightstream.com/auth/user",
+                                Username = "Tester9040344591131",
+                                UserPassword = "password1",
+                            },
+                            HttpRequestConfig = new OAuth20HttpRequestConfig
+                            {
+                                AuthUrl = "https://test.lightstream.com/connect/token",
+                                ContentType = HttpRequestContentType.ApplicationFormUrlEncoded,
+                                RevocationUrl = "https://test.lightstream.com/connect/revocation"
                             }
                         }
                     }
                 },
-                new NewHttpRequestModel
-                {
-                    Url = "https://techcrunch.com/",
-                    Method = HttpMethods.Get,
-                    ContentType = "application/json",
-                    AuthenticationConfig = new HttpAuthenticationConfig
-                    {
-                        AuthenticationType = HttpAuthenticationType.None
-                    }
-                }
+                //new NewHttpRequestModel
+                //{
+                //    Url = "https://www.cnn.com/",
+                //    Method = HttpMethods.Get,
+                //    ContentType = "application/json",
+                //    Content = JsonConvert.SerializeObject(new
+                //    {
+                //        Id = Guid.NewGuid(),
+                //        Status = "some status"
+                //    }),
+                //    AuthenticationConfig = new HttpAuthenticationConfig
+                //    {
+                //        AuthenticationType = HttpAuthenticationType.OAuth20,
+                //        AuthenticationOptions = new OAuth20AuthenticationConfig
+                //        {
+                //            Grant = new OAuth20PasswordGrant
+                //            {
+                //                ClientId = Guid.NewGuid().ToString(),
+                //                ClientSecret = Guid.NewGuid().ToString(),
+                //                Username = "some username",
+                //                UserPassword = "some password"
+                //            }
+                //        }
+                //    }
+                //},
+                //new NewHttpRequestModel
+                //{
+                //    Url = "https://techcrunch.com/",
+                //    Method = HttpMethods.Get,
+                //    ContentType = "application/json",
+                //    AuthenticationConfig = new HttpAuthenticationConfig
+                //    {
+                //        AuthenticationType = HttpAuthenticationType.None
+                //    }
+                //}
             };
 
             var wi = JsonConvert.SerializeObject(newWorkItem, Formatting.Indented);
@@ -121,6 +126,7 @@ namespace Nimb3s.Automaton.Api.Controllers
                 {
                     AuthenticationConfig = i.AuthenticationConfig,
                     Content = i.Content,
+                    UserAgent = i.UserAgent,
                     ContentHeaders = i.ContentHeaders,
                     ContentType = i.ContentType,
                     HttpRequestId = Guid.NewGuid(),
@@ -142,6 +148,7 @@ namespace Nimb3s.Automaton.Api.Controllers
                     HttpRequestId = i.HttpRequestId,
                     AuthenticationConfig = i.AuthenticationConfig,
                     Content = i.Content,
+                    UserAgent = i .UserAgent,
                     ContentHeaders = i.ContentHeaders,
                     ContentType = i.ContentType,
                     Method = i.Method,

@@ -25,7 +25,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
                 StatusTimeStamp = message.DateActionTaken,
                 WorkItemId = message.WorkItemId,
                 WorkItemStatusTypeId = (short)WorkItemStatusType.Completed
-            }).ConfigureAwait(false);
+            });
 
             dbContext.Commit();
 

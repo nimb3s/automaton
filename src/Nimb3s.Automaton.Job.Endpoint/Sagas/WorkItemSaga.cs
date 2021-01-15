@@ -46,7 +46,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
                 WorkItemId = message.WorkItemId,
                 HttpRequests = message.HttpRequests,
                 CreateDate = message.DateActionTaken,
-            }).ConfigureAwait(false);
+            });
 
 
             foreach (var item in message.HttpRequests)
@@ -57,7 +57,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
                     WorkItemId = message.WorkItemId,
                     HttpRequest = item,
                     CreateDate = DateTime.UtcNow
-                }).ConfigureAwait(false);
+                });
             }
         }
 
@@ -73,7 +73,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
                 WorkItemId = message.WorkItemId,
                 HttpRequests = message.HttpRequests,
                 DateActionTaken = message.DateActionTaken,
-            }).ConfigureAwait(false);
+            });
 
 
             foreach (var item in message.HttpRequests)
@@ -84,7 +84,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
                     WorkItemId = message.WorkItemId,
                     HttpRequest = item,
                     CreateDate = DateTime.UtcNow
-                }).ConfigureAwait(false);
+                });
             }
         } 
 
@@ -101,7 +101,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
                     WorkItemId = message.WorkItemId,
                     HttpRequestId = message.HttpRequest.HttpRequestId,
                     DateActionTaken = message.DateActionTaken,
-                }).ConfigureAwait(false);
+                });
 
                 log.Info($"SAGA - MARKED AS COMPLETE:  MESSAGE - {nameof(HttpRequestExecutedMessage)}; HANDLED BY: {nameof(WorkItemSagaData)}");
                 MarkAsComplete();
