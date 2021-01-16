@@ -7,7 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -38,7 +40,15 @@ namespace Nimb3s.Automaton.Api
                 c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
             });
 
-            services.AddControllersWithViews().AddNewtonsoftJson(i => i.SerializerSettings.Converters.Add(new StringEnumConverter()));
+            services.AddControllersWithViews().AddNewtonsoftJson(i =>
+            {
+                i.SerializerSettings.Converters.Add(new StringEnumConverter());
+
+                i.SerializerSettings.TypeNameHandling = TypeNameHandling.All;
+                i.SerializerSettings.Formatting = Formatting.Indented;
+                i.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                i.SerializerSettings.ContractResolver = new DefaultContractResolver { NamingStrategy = new CamelCaseNamingStrategy() };
+            });
             services.AddSwaggerGenNewtonsoftSupport();
         }
 
