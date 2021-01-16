@@ -22,6 +22,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
         {
             await SetStatusToStarted(message);
             var httpResponseMessage = await SendHttpRequestAsync(message);
+
             await SaveHttpRequestAsync(message, httpResponseMessage);
             
             await context.SendLocal(new HttpRequestExecutedMessage
@@ -69,13 +70,15 @@ namespace Nimb3s.Automaton.Job.Endpoint
 
             try
             {
-                HttpRequestMessage httpRequestMessage = await HttpRequestFactory.Create(message.HttpRequest);
+                var authRequest = await HttpAuthRequestGenerator.Create(message.HttpRequest);
+               
+                SetHttpMethod(authRequest.HttpRequestMessage, message.HttpRequest.Method);
+                AddRequestHeaders(authRequest.HttpRequestMessage, message.HttpRequest.RequestHeaders, message.HttpRequest.UserAgent);
+                AddContentHeaders(authRequest.HttpRequestMessage, message.HttpRequest.RequestHeaders);
+                
+                var response = await SendAsync(authRequest.HttpRequestMessage, message.HttpRequest);
 
-                SetHttpMethod(httpRequestMessage, message.HttpRequest.Method);
-                AddRequestHeaders(httpRequestMessage, message.HttpRequest.RequestHeaders, message.HttpRequest.UserAgent);
-                AddContentHeaders(httpRequestMessage, message.HttpRequest.RequestHeaders);
-
-                var response = await SendAsync(httpRequestMessage, message.HttpRequest);
+                await HandleSignOutsAsync(message.HttpRequest.AuthenticationConfig, authRequest.AuthResponse);
 
                 return response;
             }
@@ -192,6 +195,20 @@ namespace Nimb3s.Automaton.Job.Endpoint
             });
 
             dbContext.Commit();
+        }
+
+        private async Task HandleSignOutsAsync(HttpAuthenticationConfig authenticationConfig, AuthResponseBase authResponse)
+        {
+            switch (authenticationConfig.AuthenticationType)
+            {
+                case HttpAuthenticationType.None:
+                    break;
+                case HttpAuthenticationType.OAuth20:
+                    await HttpAuthRequestGenerator.SignOut((OAuth20AuthenticationConfig)authenticationConfig.AuthenticationOptions, (OAuth20AuthResponse)authResponse);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

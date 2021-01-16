@@ -34,6 +34,12 @@ namespace Nimb3s.Automaton.Job.Endpoint
 
             public const string AUTHORIZATION = "Authorization";
             public const string AUTHORIZATION_BEARER = "Bearer";
+
+            public const string TOKEN = "token";
+            public const string TOKEN_TYPE_HYNT = "token_type_hint";
+            public const string TOKEN_TYPE_HYNT_REFRESH_TOKEN = "refresh_token";
+
+
         }
     }
 }
