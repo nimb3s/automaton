@@ -30,7 +30,7 @@ namespace Nimb3s.Automaton.Job.Endpoint.Factories
 
         private static HttpContent CreateFormUrlEncodedContent(OAuth20AuthenticationConfig oAuthConfig)
         {
-             var formKeyValuePairs = OAuth20FormUrlEncodedGenerator.CreateUsingGrantType(oAuthConfig.Grant);
+             var formKeyValuePairs = OAuth20FormUrlEncodedFactory.CreateUsingGrantType(oAuthConfig.Grant);
 
             return new FormUrlEncodedContent(formKeyValuePairs);
         }

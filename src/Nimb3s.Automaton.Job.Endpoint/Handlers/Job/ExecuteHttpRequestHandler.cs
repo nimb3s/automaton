@@ -70,7 +70,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
 
             try
             {
-                var authRequest = await HttpAuthRequestGenerator.Create(message.HttpRequest);
+                var authRequest = await HttpAuthRequestFactory.Create(message.HttpRequest);
                
                 SetHttpMethod(authRequest.HttpRequestMessage, message.HttpRequest.Method);
                 AddRequestHeaders(authRequest.HttpRequestMessage, message.HttpRequest.RequestHeaders, message.HttpRequest.UserAgent);
@@ -204,7 +204,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
                 case HttpAuthenticationType.None:
                     break;
                 case HttpAuthenticationType.OAuth20:
-                    await HttpAuthRequestGenerator.SignOut((OAuth20AuthenticationConfig)authenticationConfig.AuthenticationOptions, (OAuth20AuthResponse)authResponse);
+                    await HttpAuthRequestFactory.SignOut((OAuth20AuthenticationConfig)authenticationConfig.AuthenticationOptions, (OAuth20AuthResponse)authResponse);
                     break;
                 default:
                     break;

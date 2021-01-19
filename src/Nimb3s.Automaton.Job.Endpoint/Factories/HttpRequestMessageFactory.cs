@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Nimb3s.Automaton.Job.Endpoint.Factories
 {
 
-    public static class HttpRequestFactory
+    public static class HttpRequestMessageFactory
     {
         public static async Task<HttpRequestMessage> Create(UserHttpRequest userHttpRequest)
         {
