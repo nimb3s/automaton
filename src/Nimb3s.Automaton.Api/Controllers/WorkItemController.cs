@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Nimb3s.Automaton.Api.Models;
 using Nimb3s.Automaton.Messages.User;
+using Nimb3s.Automaton.Pocos;
+using Nimb3s.Automaton.Pocos.Models;
 using NServiceBus;
 using System;
 using System.Collections.Generic;
@@ -44,54 +45,7 @@ namespace Nimb3s.Automaton.Api.Controllers
         public async Task<ActionResult> Post(string jobId, [FromBody] NewWorkItemModel newWorkItem)
         {
             Guid workItemId = Guid.NewGuid();
-
             newWorkItem.JobId = Guid.Parse(jobId);
-
-            newWorkItem.HttpRequests = new List<NewHttpRequestModel>
-            {
-                new NewHttpRequestModel
-                {
-                    Url = "https://test.lightstream.com/api/user/accounts",
-                    Method = HttpMethods.Get,
-                    ContentType = "application/json",
-                    AuthenticationConfig = new HttpAuthenticationConfig
-                    {
-                        AuthenticationType = HttpAuthenticationType.OAuth20,
-                        AuthenticationOptions = new OAuth20AuthenticationConfig
-                        {
-                            Grant = new OAuth20PasswordGrant
-                            {
-                                ClientId = "A050C5D7-58F7-4A17-8E96-937B47A77D1E",
-                                ClientSecret = "21B5F798-BE55-42BC-8AA8-0025B903DC3B",
-                                GrantType = GrantType.Password,
-                                Scopes = "openid offline_access https://www.lightstream.com/auth/user",
-                                Username = "Tester9040344591131",
-                                UserPassword = "password1",
-                            },
-                            HttpRequestConfig = new OAuth20HttpRequestConfig
-                            {
-                                AuthUrl = "https://test.lightstream.com/connect/token",
-                                ContentType = HttpRequestContentType.ApplicationFormUrlEncoded,
-                                RevocationUrl = "https://test.lightstream.com/connect/revocation"
-                            }
-                        }
-                    }
-                }
-            };
-
-            var wi = JsonConvert.SerializeObject(newWorkItem, Formatting.Indented, new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All,
-                Formatting = Formatting.Indented,
-                NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = new DefaultContractResolver
-                {
-                    NamingStrategy = new CamelCaseNamingStrategy()
-                }
-            });
-
-            //TODO: if(automation job is not AutomationJobStatus.Queueing then reject the request
-            //TODO: if client is trying to set automation job to finished queueing or done do not let them return forbidden?
 
             UserCreatedWorkItemMessage message = new UserCreatedWorkItemMessage
             {

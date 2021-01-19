@@ -1,12 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Nimb3s.Automaton.Core;
 using Nimb3s.Automaton.Core.Entities;
-using Nimb3s.Automaton.Core.Repositories;
-using Nimb3s.Automaton.Messages.Job;
 using Nimb3s.Automaton.Messages.User;
+using Nimb3s.Automaton.Pocos;
 using NServiceBus;
 using NServiceBus.Logging;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

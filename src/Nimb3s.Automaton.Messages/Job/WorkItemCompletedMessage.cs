@@ -1,7 +1,4 @@
-﻿using Nimb3s.Automaton.Messages.User;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace Nimb3s.Automaton.Messages.Job
 {

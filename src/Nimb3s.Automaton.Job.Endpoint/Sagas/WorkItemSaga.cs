@@ -4,9 +4,7 @@ using Nimb3s.Automaton.Messages.User;
 using NServiceBus;
 using NServiceBus.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Nimb3s.Automaton.Job.Endpoint
