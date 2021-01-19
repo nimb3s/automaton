@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using Nimb3s.Automaton.Api.Models;
 using Nimb3s.Automaton.Messages.User;
+using Nimb3s.Automaton.Pocos.Models;
 using NServiceBus;
 
 namespace Nimb3s.Automaton.Api

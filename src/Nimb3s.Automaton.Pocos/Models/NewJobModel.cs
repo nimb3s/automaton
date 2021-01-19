@@ -1,8 +1,7 @@
-﻿using Nimb3s.Automaton.Messages.User;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Nimb3s.Automaton.Api.Models
+namespace Nimb3s.Automaton.Pocos.Models
 {
 
     /// <summary>
@@ -38,17 +37,6 @@ namespace Nimb3s.Automaton.Api.Models
         [Required]
         public string Name { get; set; }
 
-        /// <summary>
-        /// The automation job status.
-        /// </summary>
-        public JobStatusType JobStatus { get; set; }
-    }
-
-    /// <summary>
-    /// The automation request
-    /// </summary>
-    public class UpdateJobModel
-    {
         /// <summary>
         /// The automation job status.
         /// </summary>

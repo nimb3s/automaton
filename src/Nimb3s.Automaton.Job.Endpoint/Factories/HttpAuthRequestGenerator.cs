@@ -1,10 +1,8 @@
 ﻿using Newtonsoft.Json;
-using Nimb3s.Automaton.Messages.User;
+using Nimb3s.Automaton.Pocos;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Nimb3s.Automaton.Job.Endpoint.Factories
@@ -100,7 +98,7 @@ namespace Nimb3s.Automaton.Job.Endpoint.Factories
 
             if (authResponse.StatusCode != HttpStatusCode.OK)
             {
-                throw new Exception($"{Constants.OAuth20.OAUTH_20} failed to authenticate. Trying to access resource: {httpRequest.RequestUri}, HttpStatusCode: {authResponse.StatusCode}, Reason: {authResponseContent}, Configuration: {JsonConvert.SerializeObject(authConfig)}");
+                throw new Exception($"{Constants.OAuth20.OAUTH_20} failed to authenticate. Reason: {authResponseContent}, Trying to access resource: {httpRequest.RequestUri}, HttpStatusCode: {authResponse.StatusCode}, Configuration: {JsonConvert.SerializeObject(authConfig)}");
             }
 
             OAuth20AuthResponse oAuthTokens = JsonConvert.DeserializeObject<OAuth20AuthResponse>(authResponseContent);
