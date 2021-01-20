@@ -7,13 +7,7 @@ using System.Threading.Tasks;
 
 namespace Nimb3s.Automaton.Job.Endpoint.Factories
 {
-    public class HttpAuthRequest
-    {
-        public HttpRequestMessage HttpRequestMessage { get; set; }
-        public AuthResponseBase AuthResponse { get; set; }
-    }
-
-    public static class HttpAuthRequestGenerator
+    public static class HttpAuthRequestFactory
     {
         public static async Task<HttpAuthRequest> Create(UserHttpRequest userHttpRequest)
         {
@@ -50,7 +44,7 @@ namespace Nimb3s.Automaton.Job.Endpoint.Factories
                 RequestUri = new Uri(authConfig.HttpRequestConfig.RevocationUrl)
             };
 
-            var formKeyValuePairs = OAuth20FormUrlEncodedGenerator.CreateUsingRevocation(authConfig, authResponse);
+            var formKeyValuePairs = OAuth20FormUrlEncodedFactory.CreateUsingRevocation(authConfig, authResponse);
 
             revocationRequest.Content = new FormUrlEncodedContent(formKeyValuePairs);
 

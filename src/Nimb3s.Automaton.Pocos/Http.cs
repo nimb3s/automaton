@@ -1,9 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 
 namespace Nimb3s.Automaton.Pocos
 {
+    public class HttpAuthRequest
+    {
+        public HttpRequestMessage HttpRequestMessage { get; set; }
+        public AuthResponseBase AuthResponse { get; set; }
+    }
+
     /// <summary>
     /// The <see cref="WorkItemModel"/> status. When a work item starts or finishes.
     /// </summary>

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Nimb3s.Automaton.Job.Endpoint.Factories
 {
-    public class OAuth20FormUrlEncodedGenerator
+    public class OAuth20FormUrlEncodedFactory
     {
         public static IEnumerable<KeyValuePair<string,string>> CreateUsingGrantType(OAuth20GrantBase grant)
         {
