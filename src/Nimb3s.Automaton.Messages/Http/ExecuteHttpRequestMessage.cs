@@ -1,9 +1,10 @@
 ﻿using Nimb3s.Automaton.Pocos;
+using NServiceBus;
 using System;
 
-namespace Nimb3s.Automaton.Messages.Job
+namespace Nimb3s.Automaton.Messages.HttpRequest
 {
-    public class ExecuteHttpRequestMessage
+    public class ExecuteHttpRequestMessage : IMessage
     {
         public Guid JobId { get; set; }
         public Guid WorkItemId { get; set; }

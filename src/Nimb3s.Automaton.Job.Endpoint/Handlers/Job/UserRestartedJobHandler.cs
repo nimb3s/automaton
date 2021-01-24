@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
-using Nimb3s.Automaton.Core;
 using Nimb3s.Automaton.Core.Entities;
+using Nimb3s.Automaton.Core.Repositories.Sql;
 using Nimb3s.Automaton.Messages.User;
 using Nimb3s.Automaton.Pocos;
 using NServiceBus;
@@ -21,7 +21,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
             await RestartJobAsync(message);
             await RestartWorkItemsAsync(message, context);
 
-            log.Info($"MESSAGE: {nameof(UserRestartedJobMessage)}; HANDLED BY: {nameof(UserCreatedJobHandler)}: {JsonConvert.SerializeObject(message)}");
+            log.Info($"MESSAGE: {nameof(UserRestartedJobMessage)}; HANDLED BY: {nameof(UserCreatedJobHandler)}; JID:{message.JobId}");
         }
 
         private async Task RestartJobAsync(UserRestartedJobMessage message)

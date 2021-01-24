@@ -1,7 +1,5 @@
 ﻿using Nimb3s.Data.Abstractions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Nimb3s.Automaton.Core.Entities
 {

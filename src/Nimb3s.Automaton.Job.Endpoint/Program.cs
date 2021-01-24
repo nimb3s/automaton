@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Nimb3s.Automaton.Constants;
+using Nimb3s.Automaton.Messages.HttpRequest;
+using NServiceBus;
+using System;
 using System.Reflection;
 using System.Threading.Tasks;
-using NServiceBus;
 
 namespace Nimb3s.Automaton.Job.Endpoint
 {
@@ -15,22 +17,21 @@ namespace Nimb3s.Automaton.Job.Endpoint
             var endpointConfiguration = new EndpointConfiguration($"{assemblyName}");
             endpointConfiguration.UsePersistence<LearningPersistence>();
             endpointConfiguration.UseTransport<LearningTransport>();
-            //var transport = endpointConfiguration.UseTransport<LearningTransport>();
-            //transport.Routing().RouteToEndpoint(
-            //    assembly: typeof(UserSubmittedHttpRequestMessage).Assembly,
-            //    @namespace: typeof(UserSubmittedHttpRequestMessage).Namespace,
-            //    destination: "Nimb3s.Automaton.HttpRequest.Endpoint"
-            //);
+
+            var transport = endpointConfiguration.UseTransport<LearningTransport>();
+            transport.Routing().RouteToEndpoint(
+                assembly: typeof(ExecuteHttpRequestMessage).Assembly,
+                @namespace: typeof(ExecuteHttpRequestMessage).Namespace,
+                destination: AutomatonConstants.MessageBus.HttpRequestEndpoint.ENDPOINT_NAME
+            );
 
             endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
 
            
-            var endpointInstance = await NServiceBus.Endpoint.Start(endpointConfiguration)
-                ;
+            var endpointInstance = await NServiceBus.Endpoint.Start(endpointConfiguration);
             Console.WriteLine("Press any key to exit");
             Console.ReadKey();
-            await endpointInstance.Stop()
-                ;
+            await endpointInstance.Stop();
         }
     }
 }

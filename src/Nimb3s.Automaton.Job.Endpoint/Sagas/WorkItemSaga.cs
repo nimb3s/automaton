@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Nimb3s.Automaton.Messages.HttpRequest;
 using Nimb3s.Automaton.Messages.Job;
 using Nimb3s.Automaton.Messages.User;
 using NServiceBus;
@@ -34,7 +35,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
 
         public async Task Handle(UserCreatedWorkItemMessage message, IMessageHandlerContext context)
         {
-            log.Info($"MESSAGE: {nameof(UserCreatedWorkItemMessage)}; HANDLED BY: {nameof(WorkItemSaga)}: {JsonConvert.SerializeObject(message)}");
+            log.Info($"MESSAGE: {nameof(UserCreatedWorkItemMessage)}; HANDLED BY: {nameof(WorkItemSaga)}; JID:{message.JobId}; WID:{message.WorkItemId}");
 
             Data.TotalRequests = message.HttpRequests.Count();
 
@@ -49,7 +50,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
 
             foreach (var item in message.HttpRequests)
             {
-                await context.SendLocal(new ExecuteHttpRequestMessage
+                await context.Send(new ExecuteHttpRequestMessage
                 {
                     JobId = message.JobId,
                     WorkItemId = message.WorkItemId,
@@ -61,7 +62,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
 
         public async Task Handle(UserRestartedWorkItemMessage message, IMessageHandlerContext context)
         {
-            log.Info($"MESSAGE: {nameof(UserRestartedWorkItemMessage)}; HANDLED BY: {nameof(WorkItemSaga)}: {JsonConvert.SerializeObject(message)}");
+            log.Info($"MESSAGE: {nameof(UserRestartedWorkItemMessage)}; HANDLED BY: {nameof(WorkItemSaga)}; JID:{message.JobId}; WID:{message.WorkItemId}");
 
             Data.TotalRequests = message.HttpRequests.Count();
 
@@ -101,7 +102,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
                     DateActionTaken = message.DateActionTaken,
                 });
 
-                log.Info($"SAGA - MARKED AS COMPLETE:  MESSAGE - {nameof(HttpRequestExecutedMessage)}; HANDLED BY: {nameof(WorkItemSagaData)}");
+                log.Info($"SAGA - MARKED AS COMPLETE:  MESSAGE - {nameof(HttpRequestExecutedMessage)}; HANDLED BY: {nameof(WorkItemSagaData)}; JID:{message.JobId}; WID:{message.WorkItemId}");
                 MarkAsComplete();
             }
         }
