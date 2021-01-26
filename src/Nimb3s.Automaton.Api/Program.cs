@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Nimb3s.Automaton.Constants;
 using Nimb3s.Automaton.Messages.User;
 using Nimb3s.Automaton.Pocos.Models;
 using NServiceBus;
@@ -17,12 +18,12 @@ namespace Nimb3s.Automaton.Api
             Host.CreateDefaultBuilder(args)
                 .UseNServiceBus(context =>
                 {
-                    var endpointConfiguration = new EndpointConfiguration(typeof(NewJobModel).Assembly.GetName().Name);
+                    var endpointConfiguration = new EndpointConfiguration(typeof(JobCreatedModel).Assembly.GetName().Name);
                     var transport = endpointConfiguration.UseTransport<LearningTransport>();
                     transport.Routing().RouteToEndpoint(
                         assembly: typeof(UserCreatedJobMessage).Assembly,
-                        //@namespace: typeof(UserQueueingJobMessage).Namespace,
-                        destination: "Nimb3s.Automaton.Job.Endpoint"
+                        @namespace: typeof(UserCreatedJobMessage).Namespace,
+                        destination: AutomatonConstants.MessageBus.JobEndpoint.ENDPOINT_NAME
                     );
 
                     endpointConfiguration.SendOnly();

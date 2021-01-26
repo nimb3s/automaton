@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
-using Nimb3s.Automaton.Core;
 using Nimb3s.Automaton.Core.Entities;
+using Nimb3s.Automaton.Core.Repositories.Sql;
 using Nimb3s.Automaton.Messages.User;
 using Nimb3s.Automaton.Pocos;
 using NServiceBus;
@@ -27,7 +27,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
 
             dbContext.Commit();
 
-            log.Info($"MESSAGE: {nameof(UserFinishedQueueingJobMessage)}; HANDLED BY: {nameof(UserFinishedQueueingJobHandler)}: {JsonConvert.SerializeObject(message)}");
+            log.Info($"MESSAGE: {nameof(UserFinishedQueueingJobMessage)}; HANDLED BY: {nameof(UserFinishedQueueingJobHandler)}; JID:{message.JobId}");
         }
         #endregion
     }

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
-using Nimb3s.Automaton.Core;
 using Nimb3s.Automaton.Core.Entities;
+using Nimb3s.Automaton.Core.Repositories.Sql;
 using Nimb3s.Automaton.Messages.User;
 using Nimb3s.Automaton.Pocos;
 using NServiceBus;

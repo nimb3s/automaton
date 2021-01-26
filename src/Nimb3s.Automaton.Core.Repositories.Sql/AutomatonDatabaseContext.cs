@@ -1,12 +1,7 @@
-﻿using Nimb3s.Automaton.Core.Entities;
-using Nimb3s.Automaton.Core.Repositories;
-using Nimb3s.Data.Abstractions;
-using System;
-using System.Collections.Generic;
+﻿using Nimb3s.Data.Abstractions;
 using System.Data.SqlClient;
-using System.Text;
 
-namespace Nimb3s.Automaton.Core
+namespace Nimb3s.Automaton.Core.Repositories.Sql
 {
     public class AutomatonDatabaseContext : DbContext
     {
@@ -35,7 +30,7 @@ namespace Nimb3s.Automaton.Core
            workItemStatusRepository ?? (workItemStatusRepository = new WorkItemStatusRepository(UnitOfWork));
 
         public AutomatonDatabaseContext()
-            :base(new UnitOfWorkFactory<SqlConnection>(@"Data Source=.;Initial Catalog=Automaton;Integrated Security=true"))
+            :base(new UnitOfWorkFactory<SqlConnection>(@"Data Source=.\sqlexpress;Initial Catalog=Automaton;Integrated Security=true"))
         {
 
         }

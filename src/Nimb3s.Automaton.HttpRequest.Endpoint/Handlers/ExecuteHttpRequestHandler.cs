@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
-using Nimb3s.Automaton.Core;
+using Nimb3s.Automaton.Constants;
 using Nimb3s.Automaton.Core.Entities;
-using Nimb3s.Automaton.Job.Endpoint.Factories;
+using Nimb3s.Automaton.Core.Repositories.Sql;
+using Nimb3s.Automaton.HttpRequest.Endpoint.Factories;
+using Nimb3s.Automaton.Messages.HttpRequest;
 using Nimb3s.Automaton.Messages.Job;
 using Nimb3s.Automaton.Pocos;
 using NServiceBus;
@@ -25,7 +27,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
 
             await SaveHttpRequestAsync(message, httpResponseMessage);
             
-            await context.SendLocal(new HttpRequestExecutedMessage
+            await context.Send(new HttpRequestExecutedMessage
             {
                 JobId = message.JobId,
                 WorkItemId = message.WorkItemId,
@@ -33,7 +35,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
                 DateActionTaken = DateTime.UtcNow
             });
 
-            log.Info($"MESSAGE: {nameof(ExecuteHttpRequestMessage)}; HANDLED BY: {nameof(ExecuteHttpRequestHandler)}: {JsonConvert.SerializeObject(message)}");
+            log.Info($"MESSAGE: {nameof(ExecuteHttpRequestMessage)}; HANDLED BY: {nameof(ExecuteHttpRequestHandler)}; JID:{message.JobId}; WID:{message.WorkItemId}");
         }
 
         private async Task SetStatusToStarted(ExecuteHttpRequestMessage message)
@@ -93,18 +95,19 @@ namespace Nimb3s.Automaton.Job.Endpoint
 
         private void SetHttpMethod(HttpRequestMessage httpRequestMessage, string httpMethod)
         {
+            
             switch (httpMethod)
             {
-                case Constants.Http.HTTP_METHOD_GET:
+                case AutomatonConstants.Http.HTTP_METHOD_GET:
                     httpRequestMessage.Method = HttpMethod.Get;
                     break;
-                case Constants.Http.HTTP_METHOD_POST:
+                case AutomatonConstants.Http.HTTP_METHOD_POST:
                     httpRequestMessage.Method = HttpMethod.Post;
                     break;
-                case Constants.Http.HTTP_METHOD_DELETE:
+                case AutomatonConstants.Http.HTTP_METHOD_DELETE:
                     httpRequestMessage.Method = HttpMethod.Delete;
                     break;
-                case Constants.Http.HTTP_METHOD_PUT:
+                case AutomatonConstants.Http.HTTP_METHOD_PUT:
                     httpRequestMessage.Method = HttpMethod.Put;
                     break;
                 default:
@@ -121,7 +124,7 @@ namespace Nimb3s.Automaton.Job.Endpoint
             }
             else
             {
-                httpRequestMessage.Headers.UserAgent.TryParseAdd(Constants.Http.DEFAULT_USER_AGENT);
+                httpRequestMessage.Headers.UserAgent.TryParseAdd(AutomatonConstants.Http.DEFAULT_USER_AGENT);
             }
 
             if (headers != null)
@@ -152,17 +155,17 @@ namespace Nimb3s.Automaton.Job.Endpoint
 
             switch (httpRequestMessage.Method.Method.ToLower())
             {
-                case Constants.Http.HTTP_METHOD_GET:
+                case AutomatonConstants.Http.HTTP_METHOD_GET:
                     response = await client.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead);
                     break;
-                case Constants.Http.HTTP_METHOD_POST:
+                case AutomatonConstants.Http.HTTP_METHOD_POST:
                     httpRequestMessage.Content = new StringContent(userHttpRequest.Content, Encoding.UTF8, userHttpRequest.ContentType);
                     response = await client.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead);
                     break;
-                case Constants.Http.HTTP_METHOD_DELETE:
+                case AutomatonConstants.Http.HTTP_METHOD_DELETE:
                     httpRequestMessage.Method = HttpMethod.Delete;
                     break;
-                case Constants.Http.HTTP_METHOD_PUT:
+                case AutomatonConstants.Http.HTTP_METHOD_PUT:
                     httpRequestMessage.Method = HttpMethod.Put;
                     break;
                 default:

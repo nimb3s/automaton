@@ -7,18 +7,13 @@ namespace Nimb3s.Automaton.Pocos.Models
     /// <summary>
     /// The automation request
     /// </summary>
-    public class NewJobModel
+    public class JobCreatedModel
     {
         /// <summary>
         /// The automation job name
         /// </summary>
         [Required]
         public string Name { get; set; }
-
-        /// <summary>
-        /// The automation job status.
-        /// </summary>
-        public JobStatusType JobStatus { get; set; }
     }
 
     /// <summary>

@@ -4,11 +4,9 @@ using Nimb3s.Data.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Nimb3s.Automaton.Core.Repositories
+namespace Nimb3s.Automaton.Core.Repositories.Sql
 {
     public class HttpRequestRepository : Repository<HttpRequestEntity, Guid>
     {
