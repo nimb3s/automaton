@@ -36,7 +36,7 @@ namespace Nimb3s.Automaton.Api.Controllers
         ///     {
         ///     }
         /// </remarks>
-        /// <response code="201">Returns the newly created <see cref="CreatedWorkItemModel"/></response>
+        /// <response code="201">Returns the newly created <see cref="WorkItemCreatedModel"/></response>
         /// <response code="400">When the jobid for this resource is not found</response> 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -68,7 +68,7 @@ namespace Nimb3s.Automaton.Api.Controllers
 
             await messageSession.Send(message);
 
-            return Created($"/api/automaton/job/{newWorkItem.JobId}/workitem/{workItemId}", new CreatedWorkItemModel
+            return Created($"/api/automaton/job/{newWorkItem.JobId}/workitem/{workItemId}", new WorkItemCreatedModel
             {
                 JobId = message.JobId,
                 WorkItemId = message.WorkItemId,

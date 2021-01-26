@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Nimb3s.Automaton.Pocos.Models
 {
-    public class CreatedWorkItemModel : WorkItemModelBase
+    public class WorkItemCreatedModel : WorkItemModelBase
     {
         /// <summary>
         /// The work item id.

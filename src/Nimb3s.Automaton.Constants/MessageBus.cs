@@ -18,7 +18,7 @@ namespace Nimb3s.Automaton.Constants
                 /// <summary>
                 /// If null, then max throughput is used
                 /// </summary>
-                public static readonly int? RateLimitInSeconds = null;
+                public static readonly int? RateLimitInSeconds = 30;
             }
 
             public static class JobEndpoint

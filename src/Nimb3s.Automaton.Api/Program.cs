@@ -18,7 +18,7 @@ namespace Nimb3s.Automaton.Api
             Host.CreateDefaultBuilder(args)
                 .UseNServiceBus(context =>
                 {
-                    var endpointConfiguration = new EndpointConfiguration(typeof(NewJobModel).Assembly.GetName().Name);
+                    var endpointConfiguration = new EndpointConfiguration(typeof(JobCreatedModel).Assembly.GetName().Name);
                     var transport = endpointConfiguration.UseTransport<LearningTransport>();
                     transport.Routing().RouteToEndpoint(
                         assembly: typeof(UserCreatedJobMessage).Assembly,

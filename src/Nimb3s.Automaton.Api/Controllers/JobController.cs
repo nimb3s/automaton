@@ -22,7 +22,7 @@ namespace Nimb3s.Automaton.Api.Controllers
         }
 
         /// <summary>
-        /// Creates a <see cref="NewJobModel"/> item.
+        /// Creates a <see cref="JobCreatedModel"/> item.
         /// </summary>
         /// <remarks>
         /// Sample request:
@@ -32,13 +32,13 @@ namespace Nimb3s.Automaton.Api.Controllers
         ///     }
         /// </remarks>
         /// <response code="200">Returns ok when the automation job is reset to <see cref="JobStatusType.Created"/> or <see cref="JobStatusType.Started"/> </response>
-        /// <response code="201">Returns the newly created <see cref="NewJobModel"/></response>
+        /// <response code="201">Returns the newly created <see cref="JobCreatedModel"/></response>
         /// <response code="400">If the item is not found</response> 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("api/automaton/jobs")]
-        public async Task<ActionResult> Post([FromBody] NewJobModel job)
+        public async Task<ActionResult> Post([FromBody] JobCreatedModel job)
         {
             Guid jobId = Guid.NewGuid();
 
