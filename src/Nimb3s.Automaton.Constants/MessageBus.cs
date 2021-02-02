@@ -14,11 +14,11 @@ namespace Nimb3s.Automaton.Constants
                 /// <summary>
                 /// If null, then max throughput is used
                 /// </summary>
-                public static readonly int? MessageProcessingConcurrency = 1;
+                public static readonly int? MessageProcessingConcurrency = null;//1;
                 /// <summary>
                 /// If null, then max throughput is used
                 /// </summary>
-                public static readonly int? RateLimitInSeconds = 30;
+                public static readonly int? RateLimitInSeconds = null;//30;
             }
 
             public static class JobEndpoint
