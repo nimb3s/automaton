@@ -78,14 +78,15 @@ namespace Nimb3s.Data.Abstractions
 
             return await connection
                 .QuerySingleAsync<TEntity>(sql: $"{Schema}.p_Get{entityName}", param: dp, commandType: CommandType.StoredProcedure, transaction: transaction)
-                ;
+                .ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             return (await connection
                 .QueryAsync<TEntity>(sql: $"{Schema}.p_GetAll{entityName}", commandType: CommandType.StoredProcedure, transaction: transaction)
-                ).AsList();
+                .ConfigureAwait(false))
+                .AsList();
         }
 
         public async Task UpsertAsync(TEntity entity)
@@ -99,7 +100,8 @@ namespace Nimb3s.Data.Abstractions
                 dp.Add(param.Key, param.Value);
             }
 
-            await connection.ExecuteAsync(sql: $"{Schema}.p_Upsert{entityName}", param: dp, commandType: CommandType.StoredProcedure, transaction: transaction);
+            await connection.ExecuteAsync(sql: $"{Schema}.p_Upsert{entityName}", param: dp, commandType: CommandType.StoredProcedure, transaction: transaction)
+                            .ConfigureAwait(false);
         }
 
         public async Task DeleteAsync(TEntity entity)
@@ -118,7 +120,8 @@ namespace Nimb3s.Data.Abstractions
                 dp.Add(id.Keys.First(), id.Values.First());
             }
 
-            await connection.ExecuteAsync(sql: $"{Schema}.p_Delete{entityName}", param: dp, commandType: CommandType.StoredProcedure, transaction: transaction);
+            await connection.ExecuteAsync(sql: $"{Schema}.p_Delete{entityName}", param: dp, commandType: CommandType.StoredProcedure, transaction: transaction)
+                            .ConfigureAwait(false);
         }
     }
 }
