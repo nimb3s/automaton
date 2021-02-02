@@ -34,7 +34,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solutio
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{6E0B4C7D-AE92-4303-998F-59562A833594}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nimb3s.Automaton.Samples.CreateJobConsoleApp", "samples\Nimb3s.Automaton.Samples.CreateJobConsoleApp\Nimb3s.Automaton.Samples.CreateJobConsoleApp.csproj", "{BE40ACE6-C708-434F-AB6E-B7A1905829D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nimb3s.Automaton.Samples.CreateJobConsoleApp", "samples\Nimb3s.Automaton.Samples.CreateJobConsoleApp\Nimb3s.Automaton.Samples.CreateJobConsoleApp.csproj", "{BE40ACE6-C708-434F-AB6E-B7A1905829D2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E6C43C06-1A57-4E1F-BE47-5D5EDD85ABAC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -86,7 +86,7 @@ namespace Nimb3s.Data.Abstractions
             return (await connection
                 .QueryAsync<TEntity>(sql: $"{Schema}.p_GetAll{entityName}", commandType: CommandType.StoredProcedure, transaction: transaction)
                 .ConfigureAwait(false))
-                .AsList()
+                .AsList();
         }
 
         public async Task UpsertAsync(TEntity entity)
