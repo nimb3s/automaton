@@ -25,13 +25,17 @@ namespace Nimb3s.Automaton.Api.Controllers
         // Gets Job status of job using the Job Id
 
         [HttpGet("api/automaton/jobs/{jobId}")]
-        public string GetJobStatus(Guid jobId)
+        public JobStatusModel GetJobStatus(Guid jobId)
         {
             JobData sqlJobData = new JobData();
 
             var row = sqlJobData.GetJobStatusById(jobId);
 
-            return $"Job Name: { row.JobName } Job Status: { row.Enumeration }";
+            return new JobStatusModel
+            {
+                JobName = row.JobName,
+                Enumeration = row.Enumeration
+            };
         }
 
 
