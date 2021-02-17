@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Nimb3s.Automaton.DataAccess;
 using Nimb3s.Automaton.Messages.User;
 using Nimb3s.Automaton.Pocos;
 using Nimb3s.Automaton.Pocos.Models;
@@ -21,6 +22,19 @@ namespace Nimb3s.Automaton.Api.Controllers
             this.messageSession = messageSession;
         }
 
+        // Gets Job status of job using the Job Id
+
+        [HttpGet("api/automaton/jobs/{jobId}")]
+        public string GetJobStatus(Guid jobId)
+        {
+            JobData sqlJobData = new JobData();
+
+            var row = sqlJobData.GetJobStatusById(jobId);
+
+            return $"Job Name: { row.JobName } Job Status: { row.Enumeration }";
+        }
+
+
         /// <summary>
         /// Creates a <see cref="JobCreatedModel"/> item.
         /// </summary>
@@ -34,6 +48,9 @@ namespace Nimb3s.Automaton.Api.Controllers
         /// <response code="200">Returns ok when the automation job is reset to <see cref="JobStatusType.Created"/> or <see cref="JobStatusType.Started"/> </response>
         /// <response code="201">Returns the newly created <see cref="JobCreatedModel"/></response>
         /// <response code="400">If the item is not found</response> 
+        /// 
+        /// Get the job status of a job to the client
+
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

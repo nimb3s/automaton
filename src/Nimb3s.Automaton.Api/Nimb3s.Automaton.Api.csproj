@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Nimb3s.Automaton.DataAccess\Nimb3s.Automaton.DataAccess.csproj" />
     <ProjectReference Include="..\Nimb3s.Automaton.Constants\Nimb3s.Automaton.Constants.csproj" />
     <ProjectReference Include="..\Nimb3s.Automaton.Messages\Nimb3s.Automaton.Messages.csproj" />
   </ItemGroup>
