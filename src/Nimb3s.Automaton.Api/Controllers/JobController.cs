@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Nimb3s.Automaton.DataAccess;
 using Nimb3s.Automaton.Messages.User;
 using Nimb3s.Automaton.Pocos;
 using Nimb3s.Automaton.Pocos.Models;
+using Nimb3s.Automaton.Core.Repositories.Sql;
 using NServiceBus;
 using System;
 using System.Threading.Tasks;
+using Nimb3s.Automaton.Core.Entities;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,20 +23,34 @@ namespace Nimb3s.Automaton.Api.Controllers
             this.messageSession = messageSession;
         }
 
-        // Gets Job status of job using the Job Id
 
+        /// <summary>
+        /// Gets job status of a job using the job id.
+        /// </summary>
+        /// /// <remarks>
+        /// Sample request:
+        ///
+        ///  GET api/automaton/jobs/jobId
+        ///
+        /// </remarks>
+        /// <returns>returns a <see cref="JobStatusModel"/></returns>
+        /// <response code="200">Returns the job status model if job id is found</response>
+        /// <response code="400">If the item is not found</response>            
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("api/automaton/jobs/{jobId}")]
-        public JobStatusModel GetJobStatus(Guid jobId)
+        public async Task<ActionResult> GetJobStatus(Guid jobId)
         {
-            JobData sqlJobData = new JobData();
+            AutomatonDatabaseContext dbContext = new AutomatonDatabaseContext();
 
-            var row = sqlJobData.GetJobStatusById(jobId);
+            var job = await dbContext.JobStatusRepository.GetByJobStatusIdAsync(jobId);
+            var jobStatusNum = job.JobStatusTypeId;
 
-            return new JobStatusModel
+            return Ok(new JobStatusModel
             {
-                JobName = row.JobName,
-                Enumeration = row.Enumeration
-            };
+                JobName = job.JobName,
+                JobStatus = (JobStatusType)jobStatusNum
+            });
         }
 
 
@@ -52,9 +67,6 @@ namespace Nimb3s.Automaton.Api.Controllers
         /// <response code="200">Returns ok when the automation job is reset to <see cref="JobStatusType.Created"/> or <see cref="JobStatusType.Started"/> </response>
         /// <response code="201">Returns the newly created <see cref="JobCreatedModel"/></response>
         /// <response code="400">If the item is not found</response> 
-        /// 
-        /// Get the job status of a job to the client
-
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
