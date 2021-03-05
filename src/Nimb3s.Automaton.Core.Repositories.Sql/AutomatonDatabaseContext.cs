@@ -30,7 +30,7 @@ namespace Nimb3s.Automaton.Core.Repositories.Sql
            workItemStatusRepository ?? (workItemStatusRepository = new WorkItemStatusRepository(UnitOfWork));
 
         public AutomatonDatabaseContext()
-            :base(new UnitOfWorkFactory<SqlConnection>(@"Data Source=.\sqlexpress;Initial Catalog=Automaton;Integrated Security=true"))
+            :base(new UnitOfWorkFactory<SqlConnection>(@"Data Source=.;Initial Catalog=Automaton;Integrated Security=true"))
         {
 
         }

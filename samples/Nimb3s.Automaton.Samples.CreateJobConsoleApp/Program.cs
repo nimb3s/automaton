@@ -12,8 +12,11 @@ namespace Nimb3s.Automaton.Samples.CreateJobConsoleApp
 
             Console.Title = assemblyName;
 
+            await new NewsJobCreator().RunAsync();
+
             Console.WriteLine("Press any key to exit");
             Console.ReadKey();
         }
+
     }
 }
