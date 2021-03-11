@@ -109,6 +109,7 @@
     <None Include="Scripts\Post-Deploy\Types\types.sql" />
     <None Include="Scripts\Post-Deploy\Types\Http\HttpRequestStatusType.sql" />
     <Build Include="Job\Stored Procedures\p_GetJobStatusDetailsByJobId.sql" />
+    <Build Include="Job\Stored Procedures\p_GetWorkItemStatusDetailsByJobId.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Nimb3s.Automaton.Database.publish.xml" />

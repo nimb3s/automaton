@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Nimb3s.Automaton.Core.Repositories.Sql;
 using Nimb3s.Automaton.Messages.User;
 using Nimb3s.Automaton.Pocos;
 using Nimb3s.Automaton.Pocos.Models;
@@ -25,7 +26,38 @@ namespace Nimb3s.Automaton.Api.Controllers
             this.messageSession = messageSession;
         }
 
+        /// <summary>
+        /// Gets work item status using the job id.
+        /// </summary>
+        /// /// <remarks>
+        /// Sample request:
+        ///
+        ///  GET api/automaton/jobId/workitem
+        ///
+        /// </remarks>
+        /// <returns>returns a <see cref="WorkItemStatusModel"/></returns>
+        /// <response code="200">Returns the work item status model if job id is found</response>
+        /// <response code="400">If the item is not found</response>   
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpGet("api/automaton/{jobId}/workitem")]
+        public async Task<ActionResult> GetWorkItemStatus(Guid jobId)
+        {
+            AutomatonDatabaseContext dbContext = new AutomatonDatabaseContext();
+
+            var workItem = await dbContext.WorkItemStatusRepository.GetWorkItemStatusByJobIdAsync(jobId);
+            var workItemStatusNum = workItem.WorkItemStatusTypeId;
+
+            return Ok(new WorkItemStatusModel 
+            {
+                WorkItemStatus = (WorkItemStatusType)workItemStatusNum
+            });
+
+        }
+
+
         // POST api/automationjob/{jobId}/[controller]
+
         /// <summary>
         /// Creates a <see cref="WorkItemModel"/> item.
         /// </summary>
