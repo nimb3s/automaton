@@ -36,8 +36,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{6E0B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nimb3s.Automaton.Samples.CreateJobConsoleApp", "samples\Nimb3s.Automaton.Samples.CreateJobConsoleApp\Nimb3s.Automaton.Samples.CreateJobConsoleApp.csproj", "{BE40ACE6-C708-434F-AB6E-B7A1905829D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nimb3s.Automaton.DataAccess", "Nimb3s.Automaton.DataAccess\Nimb3s.Automaton.DataAccess.csproj", "{1D786C96-E090-445A-BA7C-C41ADFCFF9AB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
