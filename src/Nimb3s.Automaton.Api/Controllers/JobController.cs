@@ -67,9 +67,6 @@ namespace Nimb3s.Automaton.Api.Controllers
         /// <response code="200">Returns ok when the automation job is reset to <see cref="JobStatusType.Created"/> or <see cref="JobStatusType.Started"/> </response>
         /// <response code="201">Returns the newly created <see cref="JobCreatedModel"/></response>
         /// <response code="400">If the item is not found</response> 
-        /// 
-        /// Get the job status of a job to the client
-
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
