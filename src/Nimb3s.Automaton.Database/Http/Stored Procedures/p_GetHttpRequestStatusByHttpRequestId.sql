@@ -5,12 +5,13 @@ begin
 	begin try
 		set nocount on;
 
-		select Id,
-			HttpRequestId,
-			HttpRequestStatusTypeId,
-			StatusTimeStamp
-		from Http.HttpRequestStatus
-		where HttpRequestId = @HttpRequestId
+		SELECT hr.Id, hrs.HttpRequestStatusTypeId, hr.Url, hhr.StatusCode, hhr.Body
+		FROM Http.HttpRequest hr
+		INNER JOIN Http.HttpResponse hhr
+		ON hr.Id = hhr.HttpRequestId
+		INNER JOIN Http.HttpRequestStatus hrs
+		ON hhr.HttpRequestId = hrs.HttpRequestId
+		WHERE hr.Id = @HttpRequestId;
 	end try
 	begin catch
 		DECLARE @ErrorMessageFormat VARCHAR(100), 
