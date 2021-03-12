@@ -34,7 +34,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solutio
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{6E0B4C7D-AE92-4303-998F-59562A833594}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nimb3s.Automaton.Samples.CreateJobConsoleApp", "samples\Nimb3s.Automaton.Samples.CreateJobConsoleApp\Nimb3s.Automaton.Samples.CreateJobConsoleApp.csproj", "{BE40ACE6-C708-434F-AB6E-B7A1905829D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nimb3s.Automaton.Samples.CreateJobConsoleApp", "samples\Nimb3s.Automaton.Samples.CreateJobConsoleApp\Nimb3s.Automaton.Samples.CreateJobConsoleApp.csproj", "{BE40ACE6-C708-434F-AB6E-B7A1905829D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -88,6 +88,10 @@ Global
 		{BE40ACE6-C708-434F-AB6E-B7A1905829D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE40ACE6-C708-434F-AB6E-B7A1905829D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE40ACE6-C708-434F-AB6E-B7A1905829D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D786C96-E090-445A-BA7C-C41ADFCFF9AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D786C96-E090-445A-BA7C-C41ADFCFF9AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D786C96-E090-445A-BA7C-C41ADFCFF9AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D786C96-E090-445A-BA7C-C41ADFCFF9AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,6 +108,7 @@ Global
 		{91B5301F-7F54-4E3C-9CA3-7B0E6722E0FC} = {665DD023-5AD2-46C7-810A-64C5316B5D03}
 		{38CF2504-37BA-4DAA-8FF4-6CCB052F2C59} = {665DD023-5AD2-46C7-810A-64C5316B5D03}
 		{BE40ACE6-C708-434F-AB6E-B7A1905829D2} = {6E0B4C7D-AE92-4303-998F-59562A833594}
+		{1D786C96-E090-445A-BA7C-C41ADFCFF9AB} = {665DD023-5AD2-46C7-810A-64C5316B5D03}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C3C19803-9776-4C48-8EC4-F0FEEFEE798A}
