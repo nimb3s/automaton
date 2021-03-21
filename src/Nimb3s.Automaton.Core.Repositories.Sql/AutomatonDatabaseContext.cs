@@ -3,7 +3,7 @@ using System.Data.SqlClient;
 
 namespace Nimb3s.Automaton.Core.Repositories.Sql
 {
-    public class AutomatonDatabaseContext : DbContext
+    public class AutomatonDatabaseContext : DbContext, IAutomatonDatabaseContext
     {
         private HttpRequestRepository httpRequestRepository;
         private HttpRequestStatusRepository httpRequestStatusRepository;
@@ -30,14 +30,14 @@ namespace Nimb3s.Automaton.Core.Repositories.Sql
            workItemStatusRepository ?? (workItemStatusRepository = new WorkItemStatusRepository(UnitOfWork));
 
         public AutomatonDatabaseContext()
-            :base(new UnitOfWorkFactory<SqlConnection>(@"Data Source=.;Initial Catalog=Automaton;Integrated Security=true"))
+            : base(new UnitOfWorkFactory<SqlConnection>(@"Data Source=.;Initial Catalog=Automaton;Integrated Security=true"))
         {
 
         }
 
 
         public AutomatonDatabaseContext(IUnitOfWorkFactory unitOfWorkFactory)
-            :base(unitOfWorkFactory)
+            : base(unitOfWorkFactory)
         {
 
         }

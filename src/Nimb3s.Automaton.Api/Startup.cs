@@ -10,6 +10,8 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using Nimb3s.Automaton.Core.Repositories.Sql;
+using Nimb3s.Data.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -31,7 +33,7 @@ namespace Nimb3s.Automaton.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddTransient<IAutomatonDatabaseContext, AutomatonDatabaseContext>();
             services.AddControllers();
             services.AddSwaggerGenNewtonsoftSupport();
             services.AddSwaggerGen(c =>
