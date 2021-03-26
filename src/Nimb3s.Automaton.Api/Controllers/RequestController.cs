@@ -37,7 +37,9 @@ namespace Nimb3s.Automaton.Api.Controllers
         [HttpGet("api/automaton/requests/{httpRequestId}")]
         public async Task<ActionResult> GetHttpRequestStatusAndResponse(Guid httpRequestId)
         {
-            var request = await _dbContext.HttpRequestStatusRepository.GetByHttpRequestIdAsync(httpRequestId);
+            AutomatonDatabaseContext dbContext = new AutomatonDatabaseContext();
+
+            var request = await dbContext.HttpRequestStatusRepository.GetByHttpRequestIdAsync(httpRequestId);
             var requestStatusNum = request.HttpRequestStatusTypeId;
 
             return Ok(new HttpRequestStatusModel
