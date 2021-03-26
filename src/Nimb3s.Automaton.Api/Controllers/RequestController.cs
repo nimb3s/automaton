@@ -13,6 +13,12 @@ namespace Nimb3s.Automaton.Api.Controllers
     [ApiController]
     public class RequestController : ControllerBase
     {
+        private readonly IAutomatonDatabaseContext _dbContext;
+
+        public RequestController(IAutomatonDatabaseContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
         /// <summary>
         /// Gets status of a request using the http request id.

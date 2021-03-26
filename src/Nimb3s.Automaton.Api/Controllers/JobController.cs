@@ -8,6 +8,7 @@ using NServiceBus;
 using System;
 using System.Threading.Tasks;
 using Nimb3s.Automaton.Core.Entities;
+using Nimb3s.Data.Abstractions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,13 +17,14 @@ namespace Nimb3s.Automaton.Api.Controllers
     [ApiController]
     public class JobController : ControllerBase
     {
+        private readonly IAutomatonDatabaseContext _dbContext;
         private readonly IMessageSession messageSession;
 
-        public JobController(IMessageSession messageSession)
+        public JobController(IAutomatonDatabaseContext dbContext, IMessageSession messageSession)
         {
+            _dbContext = dbContext;
             this.messageSession = messageSession;
         }
-
 
         /// <summary>
         /// Gets job status of a job using the job id.
@@ -41,9 +43,7 @@ namespace Nimb3s.Automaton.Api.Controllers
         [HttpGet("api/automaton/jobs/{jobId}")]
         public async Task<ActionResult> GetJobStatus(Guid jobId)
         {
-            AutomatonDatabaseContext dbContext = new AutomatonDatabaseContext();
-
-            var job = await dbContext.JobStatusRepository.GetByJobStatusIdAsync(jobId);
+            var job = await _dbContext.JobStatusRepository.GetByJobStatusIdAsync(jobId);
             var jobStatusNum = job.JobStatusTypeId;
 
             return Ok(new JobStatusModel
