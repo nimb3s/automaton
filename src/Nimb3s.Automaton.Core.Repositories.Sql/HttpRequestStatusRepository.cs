@@ -17,14 +17,14 @@ namespace Nimb3s.Automaton.Core.Repositories.Sql
 
         }
 
-        public async Task<HttpRequestStatusEntity> GetByHttpRequestIdAsync(Guid HttpRequestId)
+        public async Task<HttpRequestStatusDetailsEntity> GetByHttpRequestIdAsync(Guid HttpRequestId)
         {
             DynamicParameters dp = new DynamicParameters();
 
             dp.Add(nameof(HttpRequestId), HttpRequestId);
 
             return await connection
-                .QuerySingleAsync<HttpRequestStatusEntity>(sql: $"{Schema}.p_Get{entityName}By{nameof(HttpRequestId)}", param: dp, commandType: CommandType.StoredProcedure, transaction: transaction)
+                .QuerySingleAsync<HttpRequestStatusDetailsEntity>(sql: $"{Schema}.p_Get{entityName}By{nameof(HttpRequestId)}", param: dp, commandType: CommandType.StoredProcedure, transaction: transaction)
                 .ConfigureAwait(false);
         }
     }
