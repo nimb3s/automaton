@@ -6,11 +6,11 @@ services:
           context: .
           dockerfile: src/Nimb3s.Automaton.Api/Dockerfile
         environment:
-            ASPNETCORE_URLS: "http://+:81"
-            ASPNETCORE_HTTPS_PORT: "82"
+            ASPNETCORE_URLS: "http://+:8000"
+            ASPNETCORE_HTTPS_PORT: "8001"
         ports:
-            - "8000:81"
-            - "8001:82"
+            - "8000:8000"
+            - "8001:8001"
         depends_on:
             - db
     db:
