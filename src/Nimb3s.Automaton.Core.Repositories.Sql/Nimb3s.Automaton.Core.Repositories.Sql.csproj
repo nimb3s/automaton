@@ -1,8 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<Company>Nimb3s</Company>
+		<Authors>Nimb3s</Authors>
+		<Product>Nimb3s.Automaton.Core.Repositories.Sql</Product>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageId>Nimb3s.Automaton.Core.Repositories.Sql</PackageId>
+		<PackageProjectUrl>https://github.com/nimb3s/automaton</PackageProjectUrl>
+	</PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Nimb3s.Automaton.Core\Nimb3s.Automaton.Core.Entities.csproj" />

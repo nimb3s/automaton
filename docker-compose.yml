@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+#    api:
+#        container_name: Nimb3s.Identity.Api
+#        build:
+#          context: .
+#          dockerfile: src/Nimb3s.Identity.Api/Dockerfile
+#        environment:
+#            ASPNETCORE_URLS: "http://+:81"
+#            ASPNETCORE_HTTPS_PORT: "82"
+#        ports:
+#            - "8000:81"
+#            - "8001:82"
+#        depends_on:
+#            - db
+    db:
+        container_name: Nimb3s.Automaton.Database
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        environment:
+            SA_PASSWORD: "1234qwerASDF"
+            ACCEPT_EULA: "Y"
+            MSSQL_PID: Express
+        ports:
+            - "1433:1433"

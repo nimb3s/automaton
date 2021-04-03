@@ -1,8 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<Company>Nimb3s</Company>
+		<Authors>Nimb3s</Authors>
+		<Product>Nimb3s.Data.Abstractions</Product>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageId>Nimb3s.Data.Abstractions</PackageId>
+		<PackageProjectUrl>https://github.com/nimb3s/automaton</PackageProjectUrl>
+	</PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.78" />
