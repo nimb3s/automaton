@@ -111,6 +111,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Nimb3s.Automaton.Database.publish.xml" />
+    <None Include="Dockerfile" />
+    <None Include="create-database.sql" />
+    <None Include="entrypoint.sh" />
+    <None Include="run-initialization.sh" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
