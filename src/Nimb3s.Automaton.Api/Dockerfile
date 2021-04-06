@@ -4,6 +4,7 @@
 #For more information, please see https://aka.ms/containercompat
 
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+RUN mkdir -p /app/.learningtransport
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
@@ -13,7 +14,7 @@ WORKDIR /src
 COPY ["src/Nimb3s.Automaton.Api/Nimb3s.Automaton.Api.csproj", "src/Nimb3s.Automaton.Api/"]
 RUN dotnet restore "src/Nimb3s.Automaton.Api/Nimb3s.Automaton.Api.csproj"
 COPY . .
-WORKDIR "/src/src/Nimb3s.Automaton.Api"
+WORKDIR "/src/Nimb3s.Automaton.Api"
 RUN dotnet build "Nimb3s.Automaton.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish

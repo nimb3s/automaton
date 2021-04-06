@@ -4,6 +4,8 @@ using Nimb3s.Automaton.Constants;
 using Nimb3s.Automaton.Messages.User;
 using Nimb3s.Automaton.Pocos.Models;
 using NServiceBus;
+using System.Diagnostics;
+using System.IO;
 
 namespace Nimb3s.Automaton.Api
 {
@@ -16,26 +18,27 @@ namespace Nimb3s.Automaton.Api
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                //.UseNServiceBus(context =>
-                //{
-                //    var endpointConfiguration = new EndpointConfiguration(typeof(JobCreatedModel).Assembly.GetName().Name);
-                //    var transport = endpointConfiguration.UseTransport<LearningTransport>();
-                //    transport.Routing().RouteToEndpoint(
-                //        assembly: typeof(UserCreatedJobMessage).Assembly,
-                //        @namespace: typeof(UserCreatedJobMessage).Namespace,
-                //        destination: AutomatonConstants.MessageBus.JobEndpoint.ENDPOINT_NAME
-                //    );
+                .UseNServiceBus(context =>
+                {                    
+                    var endpointConfiguration = new EndpointConfiguration(typeof(JobCreatedModel).Assembly.GetName().Name);
+                    var transport = endpointConfiguration.UseTransport<LearningTransport>();
+                    transport.StorageDirectory(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName));
+                    transport.Routing().RouteToEndpoint(
+                        assembly: typeof(UserCreatedJobMessage).Assembly,
+                        @namespace: typeof(UserCreatedJobMessage).Namespace,
+                        destination: AutomatonConstants.MessageBus.JobEndpoint.ENDPOINT_NAME
+                    );
 
-                //    endpointConfiguration.SendOnly();
-                //    endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
-                //        //.Settings(new JsonSerializerSettings
-                //        //{
-                //        //    TypeNameHandling = TypeNameHandling.Auto,
-                //        //    TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Full
-                //        //});
+                    endpointConfiguration.SendOnly();
+                    endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
+                    //.Settings(new JsonSerializerSettings
+                    //{
+                    //    TypeNameHandling = TypeNameHandling.Auto,
+                    //    TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Full
+                    //});
 
-                //    return endpointConfiguration;
-                //})
+                    return endpointConfiguration;
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
