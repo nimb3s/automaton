@@ -14,7 +14,7 @@ WORKDIR /src
 COPY ["src/Nimb3s.Automaton.Api/Nimb3s.Automaton.Api.csproj", "src/Nimb3s.Automaton.Api/"]
 RUN dotnet restore "src/Nimb3s.Automaton.Api/Nimb3s.Automaton.Api.csproj"
 COPY . .
-WORKDIR "/src/Nimb3s.Automaton.Api"
+WORKDIR "/src/src/Nimb3s.Automaton.Api"
 RUN dotnet build "Nimb3s.Automaton.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish

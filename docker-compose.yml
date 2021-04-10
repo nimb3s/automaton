@@ -6,19 +6,29 @@ services:
           context: .
           dockerfile: src/Nimb3s.Automaton.Api/Dockerfile
         environment:
-            ASPNETCORE_URLS: "http://+:8000"
-            ASPNETCORE_HTTPS_PORT: "8001"
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_URLS=http://+:80
+#            - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+#            - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+#        volumes:
+#            - ~/.aspnet/https:/https:ro
         ports:
-            - "8000:8000"
-            - "8001:8001"
+            - "8000:80"
         depends_on:
             - db
     db:
         container_name: Nimb3s.Automaton.Database
-        image: mcr.microsoft.com/mssql/server:2019-latest
+        image: nimb3s/automaton.database
+        #build:
+         # context: .
+          #dockerfile: src/Nimb3s.Automaton.Database/Dockerfile
+
         environment:
             SA_PASSWORD: "1234qwerASDF"
             ACCEPT_EULA: "Y"
             MSSQL_PID: Express
         ports:
             - "1433:1433"
+#docker build -f "C:\git\automaton\src\Nimb3s.Automaton.Database\Dockerfile" -t nimb3s/automaton.database --force-rm --label "com.microsoft.created-by=visual-studio" --label "com.microsoft.visual-studio.project-name=Nimb3s.Automaton.Database" "C:\git\automaton" --progress plain --no-cache
+#docker-compose build --no-cache --progress plain --pull
+#docker-compose up -d

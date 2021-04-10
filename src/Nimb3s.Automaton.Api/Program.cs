@@ -23,6 +23,7 @@ namespace Nimb3s.Automaton.Api
                     var endpointConfiguration = new EndpointConfiguration(typeof(JobCreatedModel).Assembly.GetName().Name);
                     var transport = endpointConfiguration.UseTransport<LearningTransport>();
                     transport.StorageDirectory(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName));
+                    // transport.ConnectionString(@"Data Source=.;Initial Catalog=Automaton;Integrated Security=true");
                     transport.Routing().RouteToEndpoint(
                         assembly: typeof(UserCreatedJobMessage).Assembly,
                         @namespace: typeof(UserCreatedJobMessage).Namespace,
