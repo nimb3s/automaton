@@ -17,12 +17,12 @@ namespace Nimb3s.Automaton.Api.Controllers
     [ApiController]
     public class JobController : ControllerBase
     {
-        private readonly IAutomatonDatabaseContext _dbContext;
+        private readonly IAutomatonInMemoryContext _inMemoryDbContext;
         private readonly IMessageSession messageSession;
 
-        public JobController(IAutomatonDatabaseContext dbContext, IMessageSession messageSession)
+        public JobController(IAutomatonInMemoryContext inMemoryDbContext, IMessageSession messageSession)
         {
-            _dbContext = dbContext;
+            _inMemoryDbContext = inMemoryDbContext;
             this.messageSession = messageSession;
         }
 
@@ -43,7 +43,7 @@ namespace Nimb3s.Automaton.Api.Controllers
         [HttpGet("api/automaton/jobs/{jobId}")]
         public async Task<ActionResult> GetJobStatus(Guid jobId)
         {
-            var job = await _dbContext.JobStatusRepository.GetByJobStatusIdAsync(jobId);
+            var job = await _inMemoryDbContext.JobStatusInMemoryRepository.Get(jobId);
             var jobStatusNum = job.JobStatusTypeId;
 
             return Ok(new JobStatusModel

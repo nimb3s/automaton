@@ -13,11 +13,11 @@ namespace Nimb3s.Automaton.Api.Controllers
     [ApiController]
     public class RequestController : ControllerBase
     {
-        private readonly IAutomatonDatabaseContext _dbContext;
+        private readonly IAutomatonInMemoryContext _inMemoryDbContext;
 
-        public RequestController(IAutomatonDatabaseContext dbContext)
+        public RequestController(IAutomatonInMemoryContext inMemoryDbContext)
         {
-            _dbContext = dbContext;
+            _inMemoryDbContext = inMemoryDbContext;
         }
 
         /// <summary>
@@ -37,9 +37,7 @@ namespace Nimb3s.Automaton.Api.Controllers
         [HttpGet("api/automaton/requests/{httpRequestId}")]
         public async Task<ActionResult> GetHttpRequestStatusAndResponse(Guid httpRequestId)
         {
-            AutomatonDatabaseContext dbContext = new AutomatonDatabaseContext();
-
-            var request = await dbContext.HttpRequestStatusRepository.GetByHttpRequestIdAsync(httpRequestId);
+            var request = await _inMemoryDbContext.HttpRequestStatusInMemoryRepository.Get(httpRequestId);
             var requestStatusNum = request.HttpRequestStatusTypeId;
 
             return Ok(new HttpRequestStatusModel
