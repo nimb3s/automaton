@@ -38,7 +38,7 @@ COPY --from=build /app/build/Nimb3s.Automaton.Database.dacpac /tmp/db/Nimb3s.Aut
 RUN ls -R
 
 # Configure external build arguments to allow configurability.
-ARG DBNAME=Identity
+ARG DBNAME=Automaton
 ARG PASSWORD=1234qwerASDF
  
 # Configure the required environmental variables
