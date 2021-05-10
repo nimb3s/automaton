@@ -17,12 +17,12 @@ namespace Nimb3s.Automaton.Api.Controllers
     [ApiController]
     public class JobController : ControllerBase
     {
-        private readonly IAutomatonDatabaseContext _dbContext;
+        private readonly IAutomatonInMemoryContext _inMemoryDbContext;
         private readonly IMessageSession messageSession;
 
-        public JobController(IAutomatonDatabaseContext dbContext, IMessageSession messageSession)
+        public JobController(IAutomatonInMemoryContext inMemoryDbContext, IMessageSession messageSession)
         {
-            _dbContext = dbContext;
+            _inMemoryDbContext = inMemoryDbContext;
             this.messageSession = messageSession;
         }
 
@@ -43,7 +43,7 @@ namespace Nimb3s.Automaton.Api.Controllers
         [HttpGet("api/automaton/jobs/{jobId}")]
         public async Task<ActionResult> GetJobStatus(Guid jobId)
         {
-            var job = await _dbContext.JobStatusRepository.GetByJobStatusIdAsync(jobId);
+            var job = await _inMemoryDbContext.JobStatusInMemoryRepository.Get(jobId);
             var jobStatusNum = job.JobStatusTypeId;
 
             return Ok(new JobStatusModel
@@ -67,6 +67,9 @@ namespace Nimb3s.Automaton.Api.Controllers
         /// <response code="200">Returns ok when the automation job is reset to <see cref="JobStatusType.Created"/> or <see cref="JobStatusType.Started"/> </response>
         /// <response code="201">Returns the newly created <see cref="JobCreatedModel"/></response>
         /// <response code="400">If the item is not found</response> 
+        /// 
+        /// Get the job status of a job to the client
+
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

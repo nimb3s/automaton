@@ -19,12 +19,12 @@ namespace Nimb3s.Automaton.Api.Controllers
     [ApiController]
     public class WorkItemController : ControllerBase
     {
-        private readonly IAutomatonDatabaseContext _dbContext;
+        private readonly IAutomatonInMemoryContext _inMemoryDbContext;
         private readonly IMessageSession messageSession;
 
-        public WorkItemController(IAutomatonDatabaseContext dbContext, IMessageSession messageSession)
+        public WorkItemController(IAutomatonInMemoryContext inMemoryDbContext, IMessageSession messageSession)
         {
-            _dbContext = dbContext;
+            _inMemoryDbContext = inMemoryDbContext;
             this.messageSession = messageSession;
         }
 
@@ -45,7 +45,7 @@ namespace Nimb3s.Automaton.Api.Controllers
         [HttpGet("api/automaton/{jobId}/workitem")]
         public async Task<ActionResult> GetWorkItemStatus(Guid jobId)
         {
-            var workItem = await _dbContext.WorkItemStatusRepository.GetWorkItemStatusByJobIdAsync(jobId);
+            var workItem = await _inMemoryDbContext.WorkItemStatusInMemoryRepository.Get(jobId);
             var workItemStatusNum = workItem.WorkItemStatusTypeId;
 
             return Ok(new WorkItemStatusModel 
